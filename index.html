@@ -558,6 +558,31 @@
         align-items: flex-start;
         padding: 4px 2px 28px;
       }
+      .support-topbar {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        align-self: center;
+        padding: 7px 9px 7px 12px;
+        border: 1px solid rgba(246, 183, 74, .24);
+        border-radius: 999px;
+        background: rgba(247, 183, 77, .07);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, .12);
+      }
+      .support-topbar-label {
+        color: var(--paper-muted);
+        font: 500 9px var(--mono);
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .support-topbar .button {
+        min-height: 30px;
+        padding: 0 11px;
+        border-radius: 999px;
+        font-size: 10px;
+      }
+      .support-topbar .pix-button { color: #bceaff; }
 
       .brand-lockup {
         display: flex;
@@ -2862,6 +2887,7 @@
         .topbar {
           align-items: center;
         }
+        .support-topbar { order: 3; }
         .top-actions {
           max-width: 220px;
         }
@@ -2910,6 +2936,12 @@
           align-items: flex-start;
           flex-direction: column;
           gap: 18px;
+        }
+        .support-topbar {
+          align-self: stretch;
+          justify-content: center;
+          flex-wrap: wrap;
+          border-radius: 14px;
         }
         .top-actions {
           max-width: none;
@@ -3272,6 +3304,11 @@
             </p>
           </div>
         </div>
+        <aside class="support-topbar" aria-label="Apoie o PokéBazar">
+          <span class="support-topbar-label">Apoie o projeto</span>
+          <a class="button amber" href="https://www.buymeacoffee.com/bellussi" target="_blank" rel="noopener noreferrer">☕ Apoiar</a>
+          <button class="button pix-button" type="button" data-pix-key="6d639344-ce33-48ff-b2ba-649096353372">▣ Pix</button>
+        </aside>
         <div class="top-actions">
           <div class="api-status loading" id="apiStatus" aria-live="polite">
             <span class="status-dot"></span
@@ -7938,19 +7975,20 @@
         $("#helpButton").addEventListener("click", openHelp);
         $("#settingsButton").addEventListener("click", openSettings);
         $("#rankingButton").addEventListener("click", openRanking);
-        $("#pixSupportButton").addEventListener("click", async (event) => {
-          const button = event.currentTarget;
-          const key = button.dataset.pixKey;
-          if (!key || key.includes("COLOQUE_SUA")) {
-            showToast("Configure sua chave Pix no index.html.", "error");
-            return;
-          }
-          try {
-            await navigator.clipboard.writeText(key);
-            showToast("Chave Pix copiada. Obrigado pelo apoio!");
-          } catch {
-            showToast("Não foi possível copiar a chave Pix.", "error");
-          }
+        document.querySelectorAll("[data-pix-key]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            const key = button.dataset.pixKey;
+            if (!key || key.includes("COLOQUE_SUA")) {
+              showToast("Configure sua chave Pix no index.html.", "error");
+              return;
+            }
+            try {
+              await navigator.clipboard.writeText(key);
+              showToast("Chave Pix copiada. Obrigado pelo apoio!");
+            } catch {
+              showToast("Não foi possível copiar a chave Pix.", "error");
+            }
+          });
         });
         $("#configBackButton").addEventListener("click", closeAdventureConfig);
         $("#adventureForm").addEventListener("submit", startAdventure);
