@@ -27,10 +27,13 @@ jobs:
       - name: Preparar o GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Gerar bundle minificado
+        run: node minify-html.js
+
       - name: Empacotar o site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: ./dist
 
       - name: Publicar
         id: deployment

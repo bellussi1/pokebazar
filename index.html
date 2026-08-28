@@ -733,10 +733,9 @@
 
       .board-grid {
         display: grid;
-        grid-template-columns: minmax(220px, 0.83fr) minmax(
-            420px,
-            1.6fr
-          ) minmax(220px, 0.83fr);
+        grid-template-columns:
+          minmax(220px, 0.83fr) minmax(420px, 1.6fr)
+          minmax(220px, 0.83fr);
         gap: 16px;
         align-items: stretch;
       }
@@ -2818,10 +2817,9 @@
 
       @media (max-width: 1120px) {
         .board-grid {
-          grid-template-columns: minmax(205px, 0.75fr) minmax(
-              390px,
-              1.5fr
-            ) minmax(205px, 0.75fr);
+          grid-template-columns:
+            minmax(205px, 0.75fr) minmax(390px, 1.5fr)
+            minmax(205px, 0.75fr);
         }
         .player-card {
           padding-inline: 15px;
@@ -4160,9 +4158,9 @@
           151, 251, 385, 386, 489, 490, 491, 492, 493, 494, 647, 648, 649,
         ]);
         const LEGENDARY_POKEMON_IDS = new Set([
-          144, 145, 146, 150, 243, 244, 245, 249, 250, 377, 378, 379, 380,
-          381, 382, 383, 384, 480, 481, 482, 483, 484, 485, 638, 639, 640,
-          641, 642, 643,
+          144, 145, 146, 150, 243, 244, 245, 249, 250, 377, 378, 379, 380, 381,
+          382, 383, 384, 480, 481, 482, 483, 484, 485, 638, 639, 640, 641, 642,
+          643,
         ]);
         const ONBOARDING_STEPS = [
           {
@@ -5158,10 +5156,16 @@
           );
         }
 
+        function canStartBattleNow() {
+          return state.players.every(
+            (player) =>
+              player.team.length > 0 &&
+              (player.team.length >= MAX_TEAM_SIZE || player.points < 1),
+          );
+        }
+
         function maybeFinishWhenNoBudget() {
-          if (
-            state.players.every((player) => player.team.length >= MAX_TEAM_SIZE)
-          ) {
+          if (canStartBattleNow()) {
             beginBattleSetup();
             return true;
           }
@@ -5174,7 +5178,7 @@
             state.auction = null;
             state.currentPokemon = null;
             addHistory(
-              "A mesa encerrou antes de formar os dois times completos.",
+              "A mesa encerrou sem Pokémon suficiente para iniciar uma batalha.",
               "system",
             );
             saveState();
@@ -5591,9 +5595,7 @@
         }
 
         function getTypeProfile(types = []) {
-          const normalized = [
-            ...new Set(types.length ? types : ["normal"]),
-          ];
+          const normalized = [...new Set(types.length ? types : ["normal"])];
           const typeKeys = Object.keys(TYPE_EFFECTIVENESS);
           const offensiveCoverage =
             typeKeys.reduce(
@@ -5685,7 +5687,9 @@
             ? CAMPAIGN_STAGES[state.campaign.stage]
             : null;
           const stageMatch =
-            stage && stage.theme !== "balanced" && pokemonTypes.includes(stage.theme)
+            stage &&
+            stage.theme !== "balanced" &&
+            pokemonTypes.includes(stage.theme)
               ? 1
               : 0;
           return clampNumber(
@@ -5738,16 +5742,15 @@
         }
 
         function getBotProfile() {
-          const difficultyProfile =
-            {
-              normal: { evaluation: 0.82, patience: 0.55, randomness: 0.4 },
-              medium: { evaluation: 1, patience: 0.8, randomness: 0.2 },
-              hard: { evaluation: 1.08, patience: 0.95, randomness: 0.08 },
-            }[settings.botDifficulty] || {
-              evaluation: 0.82,
-              patience: 0.55,
-              randomness: 0.4,
-            };
+          const difficultyProfile = {
+            normal: { evaluation: 0.82, patience: 0.55, randomness: 0.4 },
+            medium: { evaluation: 1, patience: 0.8, randomness: 0.2 },
+            hard: { evaluation: 1.08, patience: 0.95, randomness: 0.08 },
+          }[settings.botDifficulty] || {
+            evaluation: 0.82,
+            patience: 0.55,
+            randomness: 0.4,
+          };
           const personality =
             BOT_PERSONALITIES[state.botPersonality] ||
             BOT_PERSONALITIES.balanced;
@@ -5780,18 +5783,32 @@
             BOT_MIN_RESERVE + profile.reserveBonus,
             remainingSlots - 1 + profile.reserveBonus,
           );
-          const reserve = Math.min(
-            reserveTarget,
-            Math.max(0, bot.points - 1),
-          );
+          const reserve = Math.min(reserveTarget, Math.max(0, bot.points - 1));
           const spendable = Math.max(0, bot.points - reserve);
           const fit = getBotTeamFitScore(pokemon, bot.team);
+          const role = getPokemonRoleScore(pokemon);
+          const baseScore = getPokemonPowerScore(pokemon, bot.team);
+          const rarity = getPokemonRarity(pokemon);
+          const rarityBonus =
+            {
+              Comum: 0,
+              Incomum: 3,
+              Raro: 7,
+              "Muito raro": 11,
+              Lendário: 15,
+              Mítico: 18,
+            }[rarity] || 0;
+          const marketValue = clampNumber(
+            Math.round(baseScore * 0.64 + fit * 0.2 + role * 0.1 + rarityBonus),
+            1,
+            100,
+          );
           const score = Math.max(
             1,
             Math.min(
               100,
               Math.round(
-                getPokemonPowerScore(pokemon, bot.team) * profile.evaluation +
+                marketValue * profile.evaluation +
                   fit * 0.08 * profile.coverageWeight,
               ),
             ),
@@ -5800,16 +5817,44 @@
             1,
             Math.round(
               1 +
-                (score / 13) * profile.patience +
-                (fit / 32) * profile.coverageWeight,
+                (marketValue / 13) * profile.patience +
+                (fit / 38) * profile.coverageWeight +
+                rarityBonus / 12,
             ),
           );
           return {
             ceiling: Math.min(spendable, marketCeiling),
             score,
             fit,
+            role,
+            marketValue,
+            rarity,
+            isPremium:
+              marketValue >= 74 || rarity === "Lendário" || rarity === "Mítico",
+            isWeak: marketValue < 40,
             reserve,
           };
+        }
+
+        function yieldBotOpening(decision) {
+          if (canPlayerBid(0)) {
+            state.auction.turn = 0;
+            addHistory(
+              "BOT deixou passar " +
+                formatPokemonName(state.currentPokemon.name) +
+                " e espera sua avaliação.",
+              "system",
+            );
+            saveState();
+            render();
+            showToast("O BOT não se interessou pelo primeiro lance.");
+            return;
+          }
+          if (canPlayerBid(1)) {
+            placeBid(1, true);
+            return;
+          }
+          resolveAutomaticWinner();
         }
 
         function getBattleOrderScore(pokemon, team) {
@@ -5819,7 +5864,9 @@
             ? CAMPAIGN_STAGES[state.campaign.stage]
             : null;
           const stageMatch =
-            stage && stage.theme !== "balanced" && pokemon.types?.includes(stage.theme)
+            stage &&
+            stage.theme !== "balanced" &&
+            pokemon.types?.includes(stage.theme)
               ? 12
               : 0;
           return (
@@ -5865,12 +5912,21 @@
             const decision = getBotBidCeiling(state.currentPokemon);
             const profile = getBotProfile();
             const hasLead = state.auction.leadingPlayer !== null;
+            const priceRatio = nextBid / Math.max(1, decision.ceiling);
+            const valueMargin = decision.marketValue - nextBid * 8;
+            const wantsPremium = decision.isPremium && priceRatio <= 1;
+            const toleratesAverage =
+              !decision.isWeak &&
+              valueMargin > 0 &&
+              (nextBid === 1 || Math.random() > profile.randomness * 0.55);
+            const gamblesOnWeak =
+              decision.isWeak &&
+              nextBid === 1 &&
+              Math.random() < Math.max(0.06, profile.randomness * 0.38);
             const shouldBid =
               canPlayerBid(1) &&
               nextBid <= decision.ceiling &&
-              (!hasLead ||
-                decision.score >= 48 ||
-                Math.random() > profile.randomness);
+              (wantsPremium || toleratesAverage || gamblesOnWeak);
             if (shouldBid) {
               placeBid(1, true);
               return;
@@ -5879,9 +5935,7 @@
               passAuction(1, true);
               return;
             }
-            if (canPlayerBid(1) && bot.points > decision.reserve)
-              placeBid(1, true);
-            else resolveAutomaticWinner();
+            yieldBotOpening(decision);
           }, 560);
         }
 
@@ -6333,6 +6387,7 @@
           saveState();
           render();
           showToast("O lote ficou sem vencedor.", "error");
+          if (!maybeFinishWhenNoBudget()) render();
         }
 
         function finishGame() {
@@ -6341,11 +6396,9 @@
             openResults();
             return;
           }
-          if (
-            state.players.some((player) => player.team.length < MAX_TEAM_SIZE)
-          ) {
+          if (!canStartBattleNow()) {
             showToast(
-              `Monte seis Pokémon em cada time para liberar a batalha.`,
+              "A batalha começa quando cada lado tiver 6 Pokémon ou ficar sem pontos. Cada time precisa ter pelo menos 1 Pokémon.",
               "error",
             );
             return;
@@ -6370,6 +6423,9 @@
               `Partida finalizada manualmente; ${name} não foi vendido.`,
               "system",
             );
+            state.auction = null;
+            state.currentPokemon = null;
+            state.phase = "ready";
           }
           beginBattleSetup();
         }
@@ -6465,7 +6521,8 @@
             (challenge.key === "economy" &&
               Number(state.players[0]?.spent || 0) <= 15) ||
             (challenge.key === "types" &&
-              new Set(team.flatMap((pokemon) => pokemon.types || [])).size >= 6) ||
+              new Set(team.flatMap((pokemon) => pokemon.types || [])).size >=
+                6) ||
             (challenge.key === "recruits" &&
               team.filter((pokemon) => Number(pokemon.baseTotal || 0) < 400)
                 .length >= 2);
@@ -6475,12 +6532,81 @@
           };
         }
 
+        function cloneBattlePokemon(pokemon) {
+          return {
+            ...pokemon,
+            types: [...(pokemon.types || ["normal"])],
+            stats: { ...(pokemon.stats || {}) },
+            abilities: [...(pokemon.abilities || [])],
+            moves: (pokemon.moves || []).map((move) => ({ ...move })),
+          };
+        }
+
+        function getCampaignCandidatePool(sourceTeam) {
+          const sourceIds = new Set(
+            sourceTeam.map((pokemon) => Number(pokemon.id)),
+          );
+          const entries = catalogue.length
+            ? catalogue
+            : Array.from({ length: getMaxPokemonId() }, (_, index) => ({
+                id: index + 1,
+                name: "pokemon-" + String(index + 1).padStart(3, "0"),
+                url:
+                  "https://pokeapi.co/api/v2/pokemon/" +
+                  String(index + 1) +
+                  "/",
+              }));
+          return entries
+            .filter((entry) => !sourceIds.has(Number(entry.id)))
+            .map((entry) =>
+              cloneBattlePokemon(
+                pokemonCache[String(entry.id)] || createFallbackPokemon(entry),
+              ),
+            );
+        }
+
+        function selectCampaignBaseTeam(stageIndex, sourceTeam) {
+          const stage = CAMPAIGN_STAGES[stageIndex];
+          const candidates = getCampaignCandidatePool(sourceTeam);
+          const selected = [];
+          while (selected.length < MAX_TEAM_SIZE && candidates.length) {
+            candidates.sort((left, right) => {
+              const score = (pokemon) => {
+                const types = pokemon.types || ["normal"];
+                const stageMatch =
+                  stage.theme !== "balanced" && types.includes(stage.theme)
+                    ? 22
+                    : 0;
+                const existingTypes = new Set(
+                  selected.flatMap((member) => member.types || []),
+                );
+                const diversity = types.filter(
+                  (type) => !existingTypes.has(type),
+                ).length;
+                return (
+                  getPokemonPowerScore(pokemon, selected) * 0.62 +
+                  getBotTeamFitScore(pokemon, selected) * 0.22 +
+                  getPokemonRoleScore(pokemon) * 0.08 +
+                  diversity * 8 +
+                  stageMatch +
+                  Math.random() * 7
+                );
+              };
+              return score(right) - score(left);
+            });
+            selected.push(candidates.shift());
+          }
+          return selected;
+        }
+
         function createCampaignTeam(stageIndex, sourceTeam) {
           const difficultyScale =
-            { normal: 0.92, medium: 1, hard: 1.08 }[settings.botDifficulty] || 0.92;
+            { normal: 0.92, medium: 1, hard: 1.08 }[settings.botDifficulty] ||
+            0.92;
           const scale = (0.82 + stageIndex * 0.045) * difficultyScale;
           const stage = CAMPAIGN_STAGES[stageIndex];
-          return sourceTeam.map((pokemon, index) => {
+          const baseTeam = selectCampaignBaseTeam(stageIndex, sourceTeam);
+          return baseTeam.map((pokemon, index) => {
             const stats = Object.fromEntries(
               Object.entries(pokemon.stats || {}).map(([key, value]) => [
                 key,
@@ -6498,7 +6624,7 @@
                       type && list.indexOf(type) === typeIndex,
                   );
             return {
-              ...pokemon,
+              ...cloneBattlePokemon(pokemon),
               id: 5000 + stageIndex * 10 + index,
               stats,
               types,
@@ -6515,7 +6641,11 @@
         function chooseTeamBattleOrder(team) {
           return team
             .slice()
-            .sort((left, right) => getBattleOrderScore(right, team) - getBattleOrderScore(left, team))
+            .sort(
+              (left, right) =>
+                getBattleOrderScore(right, team) -
+                getBattleOrderScore(left, team),
+            )
             .map((pokemon) => pokemon.id);
         }
 
@@ -6535,13 +6665,13 @@
           );
         }
 
+        function getBattleRemainingCount(playerIndex) {
+          const teamSize = getBattleTeam(playerIndex).length;
+          return Math.max(0, teamSize - (state.battle?.active?.[playerIndex] || 0));
+        }
+
         function beginBattleSetup() {
-          if (
-            !state.players.every(
-              (player) => player.team.length >= MAX_TEAM_SIZE,
-            )
-          )
-            return false;
+          if (!canStartBattleNow()) return false;
           if (state.phase === "battleSetup" || state.phase === "battle") {
             openBattleModal();
             return true;
@@ -6552,7 +6682,7 @@
             state.campaign = state.campaign || createCampaignState();
             state.battle.campaignStage = state.campaign.stage;
             state.battle.teams = [
-              state.players[0].team.map((pokemon) => ({ ...pokemon })),
+              state.players[0].team.map(cloneBattlePokemon),
               createCampaignTeam(state.campaign.stage, state.players[0].team),
             ];
             state.battle.labels = [
@@ -6563,10 +6693,10 @@
               state.battle.teams[1],
             );
             state.battle.ready[1] =
-              state.battle.orders[1].length === MAX_TEAM_SIZE;
+              state.battle.orders[1].length === state.battle.teams[1].length;
           }
           addHistory(
-            "Os dois times estão completos. Escolham a ordem da batalha final.",
+            "Não há mais compras possíveis. Escolham a ordem dos times para a batalha.",
             "system",
           );
           saveState();
@@ -6585,7 +6715,7 @@
                 .map(String)
                 .filter((id) => validIds.has(id)),
             ),
-          ].slice(0, MAX_TEAM_SIZE);
+          ].slice(0, getBattleTeam(playerIndex).length);
         }
 
         function updateBattleOrder(playerIndex, order, fromNetwork = false) {
@@ -6593,7 +6723,8 @@
           if (fromNetwork && connectionRole !== "host") return;
           const normalized = normalizeBattleOrder(playerIndex, order);
           state.battle.orders[playerIndex] = normalized;
-          state.battle.ready[playerIndex] = normalized.length === MAX_TEAM_SIZE;
+          state.battle.ready[playerIndex] =
+            normalized.length === getBattleTeam(playerIndex).length;
           saveState();
           render();
         }
@@ -6638,7 +6769,8 @@
               nextOrder,
             );
             state.battle.ready[playerIndex] =
-              state.battle.orders[playerIndex].length === MAX_TEAM_SIZE;
+              state.battle.orders[playerIndex].length ===
+              getBattleTeam(playerIndex).length;
             saveState();
             render();
             sendNetworkMessage("action", {
@@ -6679,7 +6811,7 @@
           }
           if (!state.battle || !state.battle.ready.every(Boolean)) {
             showToast(
-              "Cada jogador precisa escolher os seis Pokémon.",
+              "Cada lado precisa organizar todos os Pokémon disponíveis.",
               "error",
             );
             return;
@@ -6700,12 +6832,19 @@
           state.battle.statuses = state.battle.orders.map((order) =>
             order.map(() => "healthy"),
           );
-          state.battle.statusTurns = state.battle.orders.map((order) =>
-            order.map(() => 0),
-          );
-          state.battle.log = [
-            {
-              text: `A batalha começou: ${formatPokemonName(getBattlePokemon(0).name)} contra ${formatPokemonName(getBattlePokemon(1).name)}.`,
+         state.battle.statusTurns = state.battle.orders.map((order) =>
+           order.map(() => 0),
+         );
+          const firstPokemon = getBattlePokemon(0);
+          const secondPokemon = getBattlePokemon(1);
+         state.battle.log = [
+           {
+              text:
+                "A batalha começou: " +
+                formatPokemonName(firstPokemon.name) +
+                " contra " +
+                formatPokemonName(secondPokemon.name) +
+                ".",
               tone: "system",
             },
           ];
@@ -6939,7 +7078,7 @@
             state.campaign.challenge = challenge;
             state.campaign.score +=
               state.players[0].points * 5 +
-              Math.max(0, MAX_TEAM_SIZE - state.battle.active[0]) * 25;
+              getBattleRemainingCount(0) * 25;
             if (challenge.completed) {
               state.campaign.score += challenge.bonus;
               addHistory(
@@ -6965,9 +7104,11 @@
               score: state.campaign.score,
               date: new Date().toLocaleDateString("pt-BR"),
               generation: `#${getMaxPokemonId()}`,
-              difficulty: { normal: "Normal", medium: "Médio", hard: "Difícil" }[
-                settings.botDifficulty
-              ],
+              difficulty: {
+                normal: "Normal",
+                medium: "Médio",
+                hard: "Difícil",
+              }[settings.botDifficulty],
               challenge: challenge.completed
                 ? challenge.label + " ✓"
                 : challenge.label,
@@ -7007,7 +7148,7 @@
           state.battle = createBattleSetupState();
           state.battle.campaignStage = state.campaign.stage;
           state.battle.teams = [
-            state.players[0].team.map((pokemon) => ({ ...pokemon })),
+            state.players[0].team.map(cloneBattlePokemon),
             createCampaignTeam(state.campaign.stage, state.players[0].team),
           ];
           state.battle.labels = [
@@ -7016,9 +7157,10 @@
           ];
           state.battle.orders[0] = normalizeBattleOrder(0, previousOrder);
           state.battle.ready[0] =
-            state.battle.orders[0].length === MAX_TEAM_SIZE;
+            state.battle.orders[0].length === state.battle.teams[0].length;
           state.battle.orders[1] = chooseTeamBattleOrder(state.battle.teams[1]);
-          state.battle.ready[1] = true;
+          state.battle.ready[1] =
+            state.battle.orders[1].length === state.battle.teams[1].length;
           state.phase = "battleSetup";
           addHistory(
             `${stage.name} está pronto. Você pode revisar sua ordem.`,
@@ -7256,14 +7398,14 @@
             ? `Ordem · ${stage.name}`
             : "Monte a ordem da batalha";
           $("#battleIntro").textContent = stage
-            ? `${stage.leader} usa uma estratégia de ${stage.strategy}. Organize os seis Pokémon; o BOT já escolheu sua ordem.`
-            : "Clique nos seis Pokémon na ordem em que cada um deve entrar. O vencedor continua em campo com o HP restante.";
+            ? `${stage.leader} usa uma estratégia de ${stage.strategy}. Organize os Pokémon do seu time; o BOT já escolheu a própria ordem.`
+            : "Clique em cada Pokémon na ordem em que ele deve entrar. O vencedor continua em campo com o HP restante.";
           const totalChosen = battle.orders.reduce(
             (total, order) => total + order.length,
             0,
           );
           $("#battleCounter").textContent =
-            `${totalChosen} / ${MAX_TEAM_SIZE * 2} escolhidos`;
+            `${totalChosen} / ${battle.teams.reduce((total, team) => total + team.length, 0)} escolhidos`;
           $("#battleOrderGrid").innerHTML = state.players
             .map((player, playerIndex) => {
               const team = getBattleTeam(playerIndex);
@@ -7289,6 +7431,23 @@
                 )}</div><div class="battle-ready${battle.ready[playerIndex] ? " is-ready" : ""}">${battle.ready[playerIndex] ? "ordem confirmada" : "escolha os seis para confirmar"}</div></section>`;
             })
             .join("");
+          document
+            .querySelectorAll("#battleOrderGrid .battle-order-card")
+            .forEach((card, playerIndex) => {
+              const teamSize = getBattleTeam(playerIndex).length;
+              const order = battle.orders[playerIndex] || [];
+              const heading = card.querySelector(
+                ".battle-order-heading span",
+              );
+              const ready = card.querySelector(".battle-ready");
+              if (heading)
+                heading.textContent =
+                  order.length + "/" + teamSize + " selecionados";
+              if (ready)
+                ready.textContent = battle.ready[playerIndex]
+                  ? "ordem confirmada"
+                  : "escolha os " + teamSize + " para confirmar";
+            });
           const allReady = battle.ready.every(Boolean);
           $("#battleStartButton").disabled =
             !allReady || (isOnline() && connectionRole !== "host");
@@ -7296,11 +7455,12 @@
             ? "Aguardando anfitrião"
             : allReady
               ? "Começar batalha ↗"
-              : "Escolha os 6 Pokémon";
+              : "Escolha todos os Pokémon";
         }
 
         function renderFighterCard(playerIndex) {
           const battle = state.battle;
+          const MAX_TEAM_SIZE = getBattleTeam(playerIndex).length;
           const slot = battle.active[playerIndex];
           const pokemon = getBattlePokemon(playerIndex);
           const fighterClass =
@@ -7336,7 +7496,7 @@
             ? "batalha concluída"
             : `turno ${battle.turn + 1}`;
           $("#battleScore").innerHTML =
-            `<span>${getBattlePlayerLabel(0)} <strong>${Math.max(0, MAX_TEAM_SIZE - battle.active[0])}</strong> restantes</span><strong>${battle.finished ? `${getBattlePlayerLabel(battle.winner)} venceu` : `duelo ${battle.turn + 1}${winner}`}</strong><span><strong>${Math.max(0, MAX_TEAM_SIZE - battle.active[1])}</strong> restantes ${getBattlePlayerLabel(1)}</span>`;
+            `<span>${getBattlePlayerLabel(0)} <strong>${getBattleRemainingCount(0)}</strong> restantes</span><strong>${battle.finished ? `${getBattlePlayerLabel(battle.winner)} venceu` : `duelo ${battle.turn + 1}${winner}`}</strong><span><strong>${getBattleRemainingCount(1)}</strong> restantes ${getBattlePlayerLabel(1)}</span>`;
           $("#battleDuel").innerHTML =
             `${renderFighterCard(0)}<div class="battle-vs">VS</div>${renderFighterCard(1)}`;
           $("#battleLog").innerHTML = battle.log
@@ -7435,8 +7595,8 @@
             $(`#points${index}`).textContent = player.points;
             $(`#spent${index}`).textContent = player.spent;
             $(`#count${index}`).textContent = player.team.length;
-           $(`#teamLabel${index}`).textContent =
-             `${player.team.length} adquirido${player.team.length === 1 ? "" : "s"}`;
+            $(`#teamLabel${index}`).textContent =
+              `${player.team.length} adquirido${player.team.length === 1 ? "" : "s"}`;
             if (index === 1 && gameMode === "bot") {
               const profile = getBotProfile();
               card.querySelector(".player-note").innerHTML =
@@ -7446,7 +7606,7 @@
                 profile.personalityDescription +
                 ". O BOT reserva pontos para completar o time.";
             }
-           $(`#budgetFill${index}`).style.width =
+            $(`#budgetFill${index}`).style.width =
               `${(player.points / getStartingPoints()) * 100}%`;
             const list = $(`#teamList${index}`);
             if (!player.team.length) {
@@ -7503,8 +7663,7 @@
               <img class="pokemon-art" src="${pokemon.image}" alt="${formatPokemonName(pokemon.name)}" onerror="this.style.visibility='hidden'">
             </div>
             <div class="pokemon-meta">
-             <div class="pokemon-number">POKÉDEX · #${String(pokemon.id).padStart(3, "0")}</div>
-              <div class="pokemon-number">POKÉDEX · #${String(pokemon.id).padStart(3, "0")} <span class="rarity-badge rarity-${getRarityClass(rarity)}">${rarity}</span></div>
+             <div class="pokemon-number">POKÉDEX · #${String(pokemon.id).padStart(3, "0")} <span class="rarity-badge rarity-${getRarityClass(rarity)}">${rarity}</span></div>
               <h2 class="pokemon-name">${formatPokemonName(pokemon.name)}</h2>
               <div class="type-list">${pokemon.types.map((type) => `<span class="type-badge type-${type}">${type}</span>`).join("")}</div>
               <div class="pokemon-stat-grid">${[
@@ -7533,7 +7692,7 @@
              <button class="button amber" type="button" data-action="bid" data-player="${turn}" ${canPlayerBid(turn) && canAct ? "" : "disabled"}>${actionLabel}</button>
              <button class="button ghost" type="button" data-action="pass" data-player="${turn}" ${state.auction.leadingPlayer === null || !canAct ? "disabled" : ""}>Desistir</button>
               ${canSkip ? '<button class="button ghost lot-option skip-button" type="button" data-action="skip">Pular lote</button>' : ""}
-              ${canReroll ? '<button class="button ghost lot-option reroll-button" type="button" data-action="reroll">Rolar outro · ' + state.rerollsRemaining + 'x</button>' : ""}
+              ${canReroll ? '<button class="button ghost lot-option reroll-button" type="button" data-action="reroll">Rolar outro · ' + state.rerollsRemaining + "x</button>" : ""}
            </div>
             <div class="console-hint">O valor sobe de 1 em 1 · saldo de ${player.name}: ${player.points} pt${isOnline() ? ` · ${connectionRole === "host" ? "você é o Jogador 1" : "você é o Jogador 2"}` : ""}</div>
             <div class="next-starter"><span class="spark"></span><span>Depois deste lote, ${state.players[state.nextStarter].name} abre a próxima rodada.</span></div>`;
@@ -7549,7 +7708,7 @@
                 : state.phase === "campaignNext"
                   ? "próximo desafio"
                   : "ordem da batalha";
-            stage.innerHTML = `<div class="stage-placeholder"><div class="placeholder-mark">VS</div><p>${state.phase === "battle" ? "A arena está ativa.<br>A batalha segue automaticamente." : state.phase === "campaignNext" ? `Vitória registrada.<br>${CAMPAIGN_STAGES[state.campaign.stage + 1].name} aguarda.` : "Os dois times estão completos.<br>Escolham a ordem para começar."}</p></div>`;
+            stage.innerHTML = `<div class="stage-placeholder"><div class="placeholder-mark">VS</div><p>${state.phase === "battle" ? "A arena está ativa.<br>A batalha segue automaticamente." : state.phase === "campaignNext" ? `Vitória registrada.<br>${CAMPAIGN_STAGES[state.campaign.stage + 1].name} aguarda.` : "Os times estão prontos.<br>Escolham a ordem para começar."}</p></div>`;
             consoleNode.className = "auction-console empty";
             consoleNode.innerHTML = `<button class="button amber wide" type="button" data-action="battle">${state.phase === "battle" ? "ABRIR ARENA" : state.phase === "campaignNext" ? "PRÓXIMO DESAFIO" : "ESCOLHER ORDEM"} <span class="arrow">↗</span></button>`;
           } else if (state.phase === "complete" && state.battle?.finished) {
