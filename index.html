@@ -1384,6 +1384,51 @@
       .console-actions.with-lot-options > button:first-child {
         grid-column: 1 / -1;
       }
+      .console-actions.auction-bid-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .auction-bid-layout > .console-actions { width: 100%; }
+      .bid-controls {
+        display: grid;
+        grid-template-columns: 42px minmax(80px, 1fr) 42px;
+        gap: 7px;
+        max-width: 260px;
+        margin: 14px auto 0;
+      }
+      .bid-controls .button,
+      .bid-submit {
+        min-height: 40px;
+      }
+      .bid-step {
+        padding: 0;
+        color: var(--paper);
+        font: 800 17px var(--display);
+      }
+      .bid-input {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid rgba(247, 183, 77, .42);
+        border-radius: 10px;
+        color: var(--amber);
+        background: rgba(5, 10, 18, .52);
+        text-align: center;
+        font: 800 20px var(--display);
+      }
+      .bid-input:focus { outline: 2px solid var(--amber); outline-offset: 2px; }
+      .bid-submit {
+        display: block;
+        width: min(260px, 100%);
+        margin: 8px auto 0;
+      }
+      .bid-limit {
+        min-height: 14px;
+        margin-top: 7px;
+        color: var(--muted);
+        text-align: center;
+        font: 9px var(--mono);
+      }
       .lot-option {
         min-height: 36px;
         padding: 8px 10px;
@@ -1434,6 +1479,73 @@
         border-radius: 16px;
         padding: 18px 20px;
       }
+      .campaign-progress {
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+      .campaign-progress-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: baseline;
+      }
+      .campaign-progress-head strong {
+        color: var(--paper);
+        font: 700 14px var(--display);
+      }
+      .campaign-progress-head span {
+        color: var(--amber);
+        font: 9px var(--mono);
+        text-transform: uppercase;
+      }
+      .badge-track {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 5px;
+        margin-top: 11px;
+      }
+      .campaign-badge {
+        display: grid;
+        gap: 4px;
+        justify-items: center;
+        color: #68778b;
+        font: 8px var(--mono);
+        text-transform: uppercase;
+      }
+      .campaign-badge-mark {
+        display: grid;
+        place-items: center;
+        width: 27px;
+        height: 27px;
+        border: 1px solid rgba(248,244,236,.16);
+        border-radius: 50%;
+        color: #627086;
+        background: rgba(248,244,236,.05);
+        font: 800 11px var(--display);
+      }
+      .campaign-badge.is-won { color: var(--amber); }
+      .campaign-badge.is-won .campaign-badge-mark {
+        border-color: var(--amber);
+        color: var(--ink);
+        background: var(--amber);
+        box-shadow: 0 0 0 4px rgba(247,183,77,.1), 0 0 18px rgba(247,183,77,.24);
+        animation: badge-pop .5s both;
+      }
+      .campaign-badge.is-current .campaign-badge-mark { border-color: var(--mint); color: var(--mint); }
+      .elite-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 12px; }
+      .elite-track span, .champion-lock {
+        padding: 7px 4px;
+        border: 1px solid rgba(248,244,236,.11);
+        border-radius: 8px;
+        color: #68778b;
+        background: rgba(248,244,236,.035);
+        text-align: center;
+        font: 8px var(--mono);
+      }
+      .elite-track span.is-won { border-color: rgba(134,214,189,.4); color: var(--mint); background: rgba(134,214,189,.08); }
+      .champion-lock { display: block; margin-top: 7px; }
+      .champion-lock.is-unlocked { border-color: rgba(240,110,93,.45); color: #ffd3a5; background: rgba(240,110,93,.08); }
       .lower-heading {
         display: flex;
         justify-content: space-between;
@@ -1788,6 +1900,13 @@
         color: var(--amber);
         background: rgba(247, 183, 77, 0.08);
         font: 500 10px var(--mono);
+        text-transform: uppercase;
+      }
+      .battle-header-meta { display: grid; gap: 8px; justify-items: end; flex: 0 0 auto; }
+      .battle-campaign-status {
+        color: var(--mint);
+        font: 9px var(--mono);
+        letter-spacing: .04em;
         text-transform: uppercase;
       }
       .battle-order-grid {
@@ -2176,6 +2295,20 @@
       .battle-log-line .status-effect {
         color: var(--blue);
         font-weight: 800;
+      }
+      .battle-log-line .speed-advantage {
+        color: var(--amber);
+        font-weight: 800;
+      }
+      .battle-log-line .critical-hit {
+        color: #ffd36f;
+        font-weight: 800;
+      }
+      .battle-log-line .badge-earned {
+        display: inline-block;
+        color: var(--amber);
+        font-weight: 800;
+        animation: badge-pop .6s both;
       }
       .battle-result-banner {
         margin-top: 15px;
@@ -2725,6 +2858,11 @@
           transform: translateY(0);
         }
       }
+      @keyframes badge-pop {
+        0% { opacity: 0; transform: scale(.55) rotate(-12deg); }
+        70% { transform: scale(1.14) rotate(4deg); }
+        100% { opacity: 1; transform: scale(1) rotate(0); }
+      }
       @keyframes float-art {
         0%,
         100% {
@@ -3009,6 +3147,11 @@
         }
         .battle-header {
           gap: 10px;
+          flex-direction: column;
+        }
+        .battle-header-meta {
+          width: 100%;
+          justify-items: start;
         }
         .battle-counter {
           font-size: 8px;
@@ -3384,8 +3527,8 @@
             </div>
             <div class="team-list" id="teamList0"></div>
             <p class="player-note">
-              <strong>Estratégia:</strong> cada ponto importa. O lance mínimo é
-              1 e sobe de um em um.
+              <strong>Estratégia:</strong> cada ponto importa. Reserve recursos
+              para completar seu time.
             </p>
           </article>
 
@@ -3488,8 +3631,8 @@
               <div class="rule-row">
                 <b>02</b
                 ><span
-                  ><strong>Dar lance</strong> aumenta o valor em exatamente 1
-                  ponto.</span
+                  ><strong>Dar lance</strong> confirma um valor acima do lance
+                  atual, dentro do seu orçamento.</span
                 >
               </div>
               <div class="rule-row">
@@ -3502,10 +3645,16 @@
               <div class="rule-row">
                 <b>04</b
                 ><span
-                  ><strong>Seis Pokémon</strong> liberam a batalha final e a
-                  escolha da ordem.</span
+                  ><strong>Time pronto</strong> libera a batalha quando não há
+                  mais compras possíveis.</span
                 >
               </div>
+            </div>
+            <div class="campaign-progress" id="campaignProgress" aria-label="Progresso da campanha">
+              <div class="campaign-progress-head"><strong>Suas insígnias</strong><span>campanha bloqueada</span></div>
+              <div class="badge-track"></div>
+              <div class="elite-track"></div>
+              <div class="champion-lock">CAMPEÃO · bloqueado</div>
             </div>
           </aside>
         </section>
@@ -3686,7 +3835,7 @@
           <div>
             <b>01 · Draft</b
             ><span
-              >Sortee um Pokémon e dispute o lote com lances de um em um.</span
+              >Sortee um Pokémon e dispute o lote com lances personalizados.</span
             >
           </div>
           <div>
@@ -3759,11 +3908,14 @@
             <div class="eyebrow">Fase final · arena de tipos</div>
             <h2 id="battleTitle">Monte a ordem da batalha</h2>
             <p id="battleIntro">
-              Clique nos seis Pokémon na ordem em que cada um deve entrar. O
+              Clique nos Pokémon na ordem em que cada um deve entrar. O
               vencedor continua em campo com o HP restante.
             </p>
           </div>
-          <div class="battle-counter" id="battleCounter">0 / 12 prontos</div>
+          <div class="battle-header-meta">
+            <div class="battle-campaign-status" id="battleCampaignStatus">0/8 insígnias</div>
+            <div class="battle-counter" id="battleCounter">0 / 12 prontos</div>
+          </div>
         </div>
         <div id="battleSetupView">
           <div class="battle-order-grid" id="battleOrderGrid"></div>
@@ -4025,6 +4177,24 @@
         const ONBOARDING_KEY = "pokebazar-onboarding-seen-v1";
         const STARTING_POINTS = 20;
         const MAX_TEAM_SIZE = 6;
+        const BATTLE_CONFIG = {
+          level: 50,
+          stabMultiplier: 1.5,
+          criticalChance: 0.06,
+          criticalMultiplier: 1.5,
+          randomDamageMin: 0.85,
+          randomDamageMax: 1,
+          burnPhysicalMultiplier: 0.5,
+          burnDamagePercent: 0.02,
+          poisonDamagePercent: 0.025,
+          paralysisSpeedMultiplier: 0.5,
+          paralysisActionChance: 0.25,
+          freezeThawChance: 0.2,
+          sleepMinCycles: 1,
+          sleepMaxCycles: 3,
+          speedMinMultiplier: 0.75,
+          speedMaxMultiplier: 2.25,
+        };
         const BOT_MIN_RESERVE = 3;
         const GENERATION_OPTIONS = [
           { value: 151, label: "Geração I · #001–#151" },
@@ -4246,7 +4416,7 @@
           {
             icon: "◎",
             title: "Seu objetivo",
-            text: "Monte uma equipe de seis Pokémon e atravesse a campanha contra o BOT.",
+            text: "Monte uma equipe de até seis Pokémon e atravesse a campanha contra o BOT.",
             bullets: [
               "Você começa com 20 pontos.",
               "Cada escolha muda suas opções na arena.",
@@ -4273,7 +4443,7 @@
           {
             icon: "6",
             title: "Feche seu time",
-            text: "Seu time precisa ter seis Pokémon. O BOT também respeita o próprio caixa e procura sinergia.",
+            text: "Seu time pode ter até seis Pokémon. Quando o caixa acaba, a batalha começa com o que você conseguiu montar.",
             bullets: [
               "BST não é tudo: tipos, velocidade e cobertura importam.",
               "Economizar pode valer mais do que comprar a estrela do lote.",
@@ -4961,6 +5131,7 @@
           clearTimeout(resultTimer);
           state = createInitialState();
           state.config.challengeMode = settings.challengeMode;
+          state.campaign = createCampaignState();
           applyGameMode("bot");
           $("#appShell").classList.remove("menu-mode", "config-mode");
           $("#configView").setAttribute("aria-hidden", "true");
@@ -5216,20 +5387,43 @@
           const nextBid = state.auction?.currentBid
             ? state.auction.currentBid + 1
             : 1;
-          return Boolean(
-            player &&
-            player.team.length < MAX_TEAM_SIZE &&
-            player.points >= nextBid,
+          return Boolean(player && getMaximumValidBid(player, nextBid - 1) >= nextBid);
+        }
+
+        function getMaximumValidBid(player, currentBid = 0) {
+          if (!player || player.team.length >= MAX_TEAM_SIZE) return 0;
+          const slotsAfterPurchase = Math.max(
+            0,
+            MAX_TEAM_SIZE - player.team.length - 1,
           );
+          return Math.max(0, Math.floor(player.points) - slotsAfterPurchase);
+        }
+
+        function validateBid(player, bid, currentBid = 0) {
+          const value = Number(bid);
+          const current = Number(currentBid);
+          if (!player || !Number.isInteger(value)) return false;
+          if (value < 1 || value <= current) return false;
+          if (value > Number(player.points || 0)) return false;
+          return value <= getMaximumValidBid(player, current);
+        }
+
+        function getBidValidationMessage(player, bid, currentBid) {
+          const value = Number(bid);
+          const maxBid = getMaximumValidBid(player, currentBid);
+          if (!Number.isInteger(value) || value < 1)
+            return "Digite um lance inteiro e positivo.";
+          if (value <= currentBid)
+            return `O lance precisa ser maior que ${currentBid} pt.`;
+          if (value > maxBid)
+            return `Seu lance máximo agora é ${maxBid} pt para preservar o time.`;
+          return "Lance inválido.";
         }
 
         function canStartAuction() {
           const catalogReady = isOnlineGuest() ? isConnected() : isApiReady;
           return (
-            state.players.some(
-              (player) =>
-                player.team.length < MAX_TEAM_SIZE && player.points >= 1,
-            ) &&
+            state.players.some((player) => canPlayerBid(player.id)) &&
             state.phase === "ready" &&
             catalogReady &&
             !isDrawing
@@ -5240,7 +5434,9 @@
           return state.players.every(
             (player) =>
               player.team.length > 0 &&
-              (player.team.length >= MAX_TEAM_SIZE || player.points < 1),
+              (player.team.length >= MAX_TEAM_SIZE ||
+                player.points < 1 ||
+                !canPlayerBid(player.id)),
           );
         }
 
@@ -5250,8 +5446,7 @@
             return true;
           }
           const canStillBuild = state.players.some(
-            (player) =>
-              player.team.length < MAX_TEAM_SIZE && player.points >= 1,
+            (player) => canPlayerBid(player.id),
           );
           if (!canStillBuild) {
             state.phase = "complete";
@@ -5855,7 +6050,7 @@
           };
         }
 
-        function getBotBidCeiling(pokemon) {
+        function calculateMaximumBid(pokemon) {
           const bot = state.players[1];
           const profile = getBotProfile();
           const remainingSlots = Math.max(0, MAX_TEAM_SIZE - bot.team.length);
@@ -5914,6 +6109,10 @@
             isWeak: marketValue < 40,
             reserve,
           };
+        }
+
+        function getBotBidCeiling(pokemon) {
+          return calculateMaximumBid(pokemon);
         }
 
         function yieldBotOpening(decision) {
@@ -6008,7 +6207,13 @@
               nextBid <= decision.ceiling &&
               (wantsPremium || toleratesAverage || gamblesOnWeak);
             if (shouldBid) {
-              placeBid(1, true);
+              const jump =
+                decision.ceiling > nextBid &&
+                (wantsPremium || Math.random() > profile.randomness)
+                  ? Math.max(0, Math.floor(Math.random() * 3))
+                  : 0;
+              const botBid = Math.min(decision.ceiling, nextBid + jump);
+              placeBid(1, true, botBid);
               return;
             }
             if (hasLead) {
@@ -6323,7 +6528,7 @@
           showToast("Conexão encerrada. A mesa voltou ao modo local.");
         }
 
-        function placeBid(playerIndex, fromNetwork = false) {
+        function placeBid(playerIndex, fromNetwork = false, requestedBid = null) {
           if (fromNetwork && connectionRole !== "host" && gameMode !== "bot")
             return;
           if (!fromNetwork && isOnlineGuest()) {
@@ -6342,9 +6547,18 @@
           )
             return;
           const player = state.players[playerIndex];
-          const nextBid = state.auction.currentBid + 1;
-          if (player.points < nextBid) {
-            resolveAutomaticWinner();
+          const currentBid = state.auction.currentBid;
+          const nextBid =
+            requestedBid === null || requestedBid === undefined
+              ? currentBid + 1
+              : Number(requestedBid);
+          if (!validateBid(player, nextBid, currentBid)) {
+            if (fromNetwork) resolveAutomaticWinner();
+            else
+              showToast(
+                getBidValidationMessage(player, nextBid, currentBid),
+                "error",
+              );
             return;
           }
           state.auction.currentBid = nextBid;
@@ -6409,9 +6623,9 @@
             }
             return;
           }
-          if (state.players[turn].points < currentBid + 1) {
+          if (!canPlayerBid(turn)) {
             addHistory(
-              `${state.players[turn].name} não consegue cobrir ${currentBid + 1} pontos.`,
+              `${state.players[turn].name} não consegue cobrir ${currentBid + 1} pontos sem comprometer o próprio time.`,
               "system",
             );
             settleAuction(leadingPlayer);
@@ -6556,6 +6770,7 @@
             hp: [[], []],
             statuses: [[], []],
             statusTurns: [[], []],
+            actionGauge: [[], []],
             log: [],
             turn: 0,
             winner: null,
@@ -6912,9 +7127,12 @@
           state.battle.statuses = state.battle.orders.map((order) =>
             order.map(() => "healthy"),
           );
-         state.battle.statusTurns = state.battle.orders.map((order) =>
-           order.map(() => 0),
-         );
+          state.battle.statusTurns = state.battle.orders.map((order) =>
+            order.map(() => 0),
+          );
+          state.battle.actionGauge = state.battle.orders.map((order) =>
+            order.map(() => Math.random() * 0.1),
+          );
           const firstPokemon = getBattlePokemon(0);
           const secondPokemon = getBattlePokemon(1);
          state.battle.log = [
@@ -6967,6 +7185,8 @@
 
         function getEffectivenessText(multiplier) {
           if (multiplier === 0) return "não teve efeito.";
+          if (multiplier >= 4)
+            return '<span class="super-effective">super efetivo ×4!</span>';
           if (multiplier > 1)
             return '<span class="super-effective">super efetivo!</span>';
           if (multiplier < 1)
@@ -6974,7 +7194,7 @@
           return "";
         }
 
-        function chooseBattleMove(attacker, defender) {
+        function chooseBestMove(attacker, defender, battleState = state.battle) {
           const moves = (attacker.moves || []).filter(
             (move) => Number(move.power) > 0,
           );
@@ -6985,21 +7205,53 @@
               power: 40,
               category: "physical",
             };
-          return moves.slice().sort((left, right) => {
-            const rightValue =
-              Number(right.power) *
-              getTypeMultiplier(right.type, defender.types);
-            const leftValue =
-              Number(left.power) * getTypeMultiplier(left.type, defender.types);
-            return rightValue - leftValue;
-          })[0];
+          const defenderSlot = 0;
+          const defenderHp = calculateBattleMaxHp(defender);
+          return moves
+            .slice()
+            .sort((left, right) => {
+              const score = (move) => {
+                const attackKey =
+                  move.category === "special" ? "special-attack" : "attack";
+                const defenseKey =
+                  move.category === "special" ? "special-defense" : "defense";
+                const typeMultiplier = getTypeMultiplier(move.type, defender.types);
+                const stab = attacker.types?.includes(move.type)
+                  ? BATTLE_CONFIG.stabMultiplier
+                  : 1;
+                const attackRatio = statValue(attacker, attackKey) / Math.max(1, statValue(defender, defenseKey));
+                const expectedDamage =
+                  (((2 * BATTLE_CONFIG.level) / 5 + 2) * Number(move.power || 40) * attackRatio) /
+                    50 +
+                  2;
+                const koBonus = expectedDamage * typeMultiplier * stab >= defenderHp ? 30 : 0;
+                const statusBonus =
+                  move.status && !battleState?.statuses?.[1]?.[defenderSlot]
+                    ? Number(move.statusChance || 0) * 85
+                    : 0;
+                return expectedDamage * typeMultiplier * stab + koBonus + statusBonus;
+              };
+              return score(right) - score(left);
+            })[0];
         }
 
-        function calculateBattleDamage(
+        function chooseBattleMove(attacker, defender) {
+          return chooseBestMove(attacker, defender, state.battle);
+        }
+
+        function getEffectiveSpeed(pokemon, status = "healthy") {
+          const multiplier =
+            status === "paralyzed"
+              ? BATTLE_CONFIG.paralysisSpeedMultiplier
+              : 1;
+          return Math.max(1, statValue(pokemon, "speed") * multiplier);
+        }
+
+        function calculateDamage(
           attacker,
           defender,
           move,
-          attackerStatus,
+          battleState = {},
         ) {
           const specialTypes = new Set([
             "fire",
@@ -7019,20 +7271,30 @@
             (move.category !== "physical" && specialTypes.has(attackType));
           const attack =
             statValue(attacker, isSpecial ? "special-attack" : "attack") *
-            (attackerStatus === "burned" ? 0.85 : 1);
+            (!isSpecial && battleState.attackerStatus === "burned"
+              ? BATTLE_CONFIG.burnPhysicalMultiplier
+              : 1);
           const defense = statValue(
             defender,
             isSpecial ? "special-defense" : "defense",
           );
           const base =
-            (((2 * 50) / 5 + 2) * Number(move.power || 40) * attack) /
+            (((2 * BATTLE_CONFIG.level) / 5 + 2) * Number(move.power || 40) * attack) /
               Math.max(1, defense) /
               50 +
             2;
-          const stab = attacker.types?.includes(attackType) ? 1.5 : 1;
+          const stab = attacker.types?.includes(attackType)
+            ? BATTLE_CONFIG.stabMultiplier
+            : 1;
           const multiplier = getTypeMultiplier(attackType, defender.types);
-          const critical = Math.random() < 0.06 ? 1.5 : 1;
-          const randomFactor = 0.9 + Math.random() * 0.1;
+          const critical =
+            Math.random() < BATTLE_CONFIG.criticalChance
+              ? BATTLE_CONFIG.criticalMultiplier
+              : 1;
+          const randomFactor =
+            BATTLE_CONFIG.randomDamageMin +
+            Math.random() *
+              (BATTLE_CONFIG.randomDamageMax - BATTLE_CONFIG.randomDamageMin);
           return {
             damage:
               multiplier === 0
@@ -7046,6 +7308,10 @@
             multiplier,
             critical: critical > 1,
           };
+        }
+
+        function calculateBattleDamage(attacker, defender, move, attackerStatus) {
+          return calculateDamage(attacker, defender, move, { attackerStatus });
         }
 
         function applyStatusEffect(
@@ -7080,12 +7346,16 @@
           )
             return;
           state.battle.statuses[targetIndex][targetSlot] = nextStatus;
-          state.battle.statusTurns[targetIndex][targetSlot] = [
-            "asleep",
-            "frozen",
-          ].includes(nextStatus)
-            ? 1
-            : 0;
+          state.battle.statusTurns[targetIndex][targetSlot] =
+            nextStatus === "asleep"
+              ? Math.floor(
+                  BATTLE_CONFIG.sleepMinCycles +
+                    Math.random() *
+                      (BATTLE_CONFIG.sleepMaxCycles -
+                        BATTLE_CONFIG.sleepMinCycles +
+                        1),
+                )
+              : 0;
           messages.push(
             `<strong>${formatPokemonName(attacker.name)}</strong> deixou o rival <span class="status-effect">${STATUS_LABELS[nextStatus]}!</span>`,
           );
@@ -7109,10 +7379,15 @@
             return;
           }
           const next = getBattlePokemon(playerIndex);
-          if (next)
+          if (next) {
+            if (!Array.isArray(battle.actionGauge[playerIndex]))
+              battle.actionGauge[playerIndex] = [];
+            battle.actionGauge[playerIndex][battle.active[playerIndex]] =
+              Math.random() * 0.1;
             messages.push(
               `${getBattlePlayerLabel(playerIndex)} envia <strong>${formatPokemonName(next.name)}</strong>.`,
             );
+          }
         }
 
         function finishBattle(winnerIndex, messages) {
@@ -7132,6 +7407,10 @@
             const stage = CAMPAIGN_STAGES[state.battle.campaignStage];
             state.campaign.wins = state.battle.campaignStage + 1;
             state.campaign.score += stage.reward;
+            if (state.battle.campaignStage < 8)
+              messages.push(
+                `<span class="badge-earned">INSÍGNIA CONQUISTADA!</span> ${stage.name} agora faz parte da sua coleção.`,
+              );
             if (state.battle.campaignStage < CAMPAIGN_STAGES.length - 1) {
               state.phase = "campaignNext";
               state.battle.campaignPending = true;
@@ -7262,7 +7541,9 @@
             1,
             Math.round(
               battle.maxHp[playerIndex][slot] *
-                (status === "burned" ? 0.04 : 0.05),
+                status === "burned"
+                  ? BATTLE_CONFIG.burnDamagePercent
+                  : BATTLE_CONFIG.poisonDamagePercent,
             ),
           );
           battle.hp[playerIndex][slot] = Math.max(
@@ -7298,8 +7579,16 @@
           const attackerStatus = battle.statuses[attackerIndex][attackerSlot];
           if (["asleep", "frozen"].includes(attackerStatus)) {
             const turns = battle.statusTurns[attackerIndex][attackerSlot];
-            if (attackerStatus === "frozen" && Math.random() < 0.35) {
+            if (
+              attackerStatus === "frozen" &&
+              Math.random() < BATTLE_CONFIG.freezeThawChance
+            ) {
               battle.statuses[attackerIndex][attackerSlot] = "healthy";
+            } else if (attackerStatus === "frozen") {
+              messages.push(
+                `<strong>${formatPokemonName(attacker.name)}</strong> continua congelado e perdeu a vez.`,
+              );
+              return 0;
             } else if (turns > 0) {
               battle.statusTurns[attackerIndex][attackerSlot] = turns - 1;
               messages.push(
@@ -7308,7 +7597,10 @@
               return 0;
             } else battle.statuses[attackerIndex][attackerSlot] = "healthy";
           }
-          if (attackerStatus === "paralyzed" && Math.random() < 0.2) {
+          if (
+            attackerStatus === "paralyzed" &&
+            Math.random() < BATTLE_CONFIG.paralysisActionChance
+          ) {
             messages.push(
               `<strong>${formatPokemonName(attacker.name)}</strong> está paralisado e não conseguiu agir.`,
             );
@@ -7333,9 +7625,11 @@
             id: `${Date.now()}-${Math.random()}`,
           };
           const effectiveness = getEffectivenessText(result.multiplier);
-          const criticalText = result.critical ? " crítico" : "";
+          const criticalText = result.critical
+            ? ' <span class="critical-hit">CRITICAL HIT!</span>'
+            : "";
           messages.push(
-            `<strong>${formatPokemonName(attacker.name)}</strong> usou ${move.name} (${attackType}) e causou <strong>${result.damage} de dano${criticalText}</strong> em ${formatPokemonName(defender.name)}. ${effectiveness}`,
+            `<strong>${formatPokemonName(attacker.name)}</strong> usou ${move.name} (${attackType}) e causou <strong>${result.damage} de dano</strong>${criticalText} em ${formatPokemonName(defender.name)}. ${effectiveness}`,
           );
           if (result.damage > 0 && battle.hp[targetIndex][targetSlot] > 0)
             applyStatusEffect(
@@ -7394,57 +7688,79 @@
             render();
             return;
           }
-          const activeAtStart = battle.active.slice();
-          const actorIds = activeAtStart.map((slot, playerIndex) =>
-            String(battle.orders[playerIndex][slot]),
-          );
-          const attackOrder = [0, 1].sort((left, right) => {
-            const leftPokemon = getBattlePokemon(left, activeAtStart[left]);
-            const rightPokemon = getBattlePokemon(right, activeAtStart[right]);
-            const leftSpeed =
-              statValue(leftPokemon, "speed") *
-              (battle.statuses[left][activeAtStart[left]] === "paralyzed"
-                ? 0.5
-                : 1);
-            const rightSpeed =
-              statValue(rightPokemon, "speed") *
-              (battle.statuses[right][activeAtStart[right]] === "paralyzed"
-                ? 0.5
-                : 1);
-            return rightSpeed - leftSpeed || left - right;
-          });
-          let totalDamage = 0;
-          attackOrder.forEach((attackerIndex) => {
-            if (battle.finished) return;
-            const targetIndex = 1 - attackerIndex;
-            if (
-              battle.active[attackerIndex] !== activeAtStart[attackerIndex] ||
-              battle.active[targetIndex] !== activeAtStart[targetIndex]
-            )
-              return;
-            totalDamage += performBattleAttack(
-              attackerIndex,
-              actorIds[attackerIndex],
-              actorIds[targetIndex],
-              messages,
+          if (!Array.isArray(battle.actionGauge?.[0]))
+            battle.actionGauge = battle.orders.map((order) =>
+              order.map(() => Math.random() * 0.1),
             );
-          });
-          if (!battle.finished && totalDamage === 0) {
-            const attackerIndex = attackOrder[0];
+          const activeAtStart = battle.active.slice();
+          const activePokemon = activeAtStart.map((slot, playerIndex) =>
+            getBattlePokemon(playerIndex, slot),
+          );
+          const speeds = activePokemon.map((pokemon, playerIndex) =>
+            getEffectiveSpeed(
+              pokemon,
+              battle.statuses[playerIndex]?.[activeAtStart[playerIndex]],
+            ),
+          );
+          const ratio = clampNumber(
+            speeds[0] / Math.max(1, speeds[1]),
+            BATTLE_CONFIG.speedMinMultiplier,
+            BATTLE_CONFIG.speedMaxMultiplier,
+          );
+          const inverseRatio = clampNumber(
+            speeds[1] / Math.max(1, speeds[0]),
+            BATTLE_CONFIG.speedMinMultiplier,
+            BATTLE_CONFIG.speedMaxMultiplier,
+          );
+          battle.actionGauge[0][activeAtStart[0]] =
+            Number(battle.actionGauge[0][activeAtStart[0]] || 0) + ratio * 0.55;
+          battle.actionGauge[1][activeAtStart[1]] =
+            Number(battle.actionGauge[1][activeAtStart[1]] || 0) +
+            inverseRatio * 0.55;
+          let actions = 0;
+          while (!battle.finished && actions < 4) {
+            const ready = [0, 1]
+              .filter((playerIndex) => {
+                const slot = battle.active[playerIndex];
+                return (
+                  slot < battle.orders[playerIndex].length &&
+                  Number(battle.actionGauge[playerIndex]?.[slot] || 0) >= 1
+                );
+              })
+              .sort((left, right) => {
+                const leftSlot = battle.active[left];
+                const rightSlot = battle.active[right];
+                const gaugeDifference =
+                  battle.actionGauge[right][rightSlot] -
+                  battle.actionGauge[left][leftSlot];
+                const leftSpeed = getEffectiveSpeed(
+                  getBattlePokemon(left, leftSlot),
+                  battle.statuses[left]?.[leftSlot],
+                );
+                const rightSpeed = getEffectiveSpeed(
+                  getBattlePokemon(right, rightSlot),
+                  battle.statuses[right]?.[rightSlot],
+                );
+                return gaugeDifference || rightSpeed - leftSpeed || left - right;
+              });
+            if (!ready.length) break;
+            const attackerIndex = ready[0];
             const targetIndex = 1 - attackerIndex;
+            const attackerSlot = battle.active[attackerIndex];
             const targetSlot = battle.active[targetIndex];
-            if (battle.hp[targetIndex][targetSlot] > 0) {
-              battle.hp[targetIndex][targetSlot] = Math.max(
-                0,
-                battle.hp[targetIndex][targetSlot] - 1,
-              );
+            const actorId = String(battle.orders[attackerIndex][attackerSlot]);
+            const targetId = String(battle.orders[targetIndex][targetSlot]);
+            battle.actionGauge[attackerIndex][attackerSlot] -= 1;
+            const wasRepeated = actions > 0 && ready.length === 1;
+            performBattleAttack(attackerIndex, actorId, targetId, messages);
+            if (wasRepeated)
               messages.push(
-                "Os tipos se anularam; a disputa causou 1 de dano residual.",
+                `<span class="speed-advantage">${formatPokemonName(activePokemon[attackerIndex]?.name)} teve vantagem de velocidade!</span>`,
               );
-              if (battle.hp[targetIndex][targetSlot] <= 0)
-                advanceBattleActive(targetIndex, messages);
-            }
+            actions += 1;
           }
+          if (!battle.finished && actions === 0)
+            messages.push("A arena acumula energia para o próximo ataque.");
           battle.turn += 1;
           battle.log = [
             ...battle.log,
@@ -7470,6 +7786,7 @@
 
         function renderBattleSetup() {
           const battle = state.battle;
+          $("#battleNextButton").classList.add("is-hidden");
           const stage =
             battle.campaignStage !== null
               ? CAMPAIGN_STAGES[battle.campaignStage]
@@ -7508,7 +7825,7 @@
                 })
                 .join(
                   "",
-                )}</div><div class="battle-ready${battle.ready[playerIndex] ? " is-ready" : ""}">${battle.ready[playerIndex] ? "ordem confirmada" : "escolha os seis para confirmar"}</div></section>`;
+                )}</div><div class="battle-ready${battle.ready[playerIndex] ? " is-ready" : ""}">${battle.ready[playerIndex] ? "ordem confirmada" : "escolha a ordem para confirmar"}</div></section>`;
             })
             .join("");
           document
@@ -7589,6 +7906,10 @@
             .join("");
           const canAdvanceCampaign = battle.campaignPending && !isOnlineGuest();
           $("#battleNextButton").disabled = !canAdvanceCampaign;
+          $("#battleNextButton").classList.toggle(
+            "is-hidden",
+            !canAdvanceCampaign,
+          );
           $("#battleNextButton").textContent = battle.campaignPending
             ? "Próximo desafio ↗"
             : battle.finished
@@ -7640,6 +7961,46 @@
           else simulateBattleTurn();
         }
 
+        function renderCampaignProgress() {
+          const node = $("#campaignProgress");
+          if (!node) return;
+          const campaign = state.campaign;
+          const wins = Math.max(0, Number(campaign?.wins || 0));
+          const gymWins = Math.min(8, wins);
+          const eliteWins = Math.max(0, Math.min(4, wins - 8));
+          const campaignStarted = Boolean(campaign?.active);
+          const gymNames = CAMPAIGN_STAGES.slice(0, 8);
+          node.querySelector(".campaign-progress-head span").textContent =
+            campaignStarted
+              ? `${gymWins}/8 insígnias · ${campaign.score || 0} pts`
+              : "campanha bloqueada";
+          node.querySelector(".badge-track").innerHTML = gymNames
+            .map(
+              (stage, index) =>
+                `<span class="campaign-badge${index < gymWins ? " is-won" : ""}${campaign?.stage === index && state.phase !== "complete" ? " is-current" : ""}" title="${stage.name} · ${stage.theme}"><span class="campaign-badge-mark">${index < gymWins ? "✓" : index + 1}</span><span>G${index + 1}</span></span>`,
+            )
+            .join("");
+          node.querySelector(".elite-track").innerHTML = [0, 1, 2, 3]
+            .map(
+              (index) =>
+                `<span class="${index < eliteWins ? "is-won" : ""}">${index < eliteWins ? "✓" : "🔒"} E${index + 1}</span>`,
+            )
+            .join("");
+          const champion = node.querySelector(".champion-lock");
+          champion.classList.toggle("is-unlocked", wins >= 12);
+          champion.textContent = wins >= 12
+            ? "CAMPEÃO · desbloqueado"
+            : `CAMPEÃO · ${wins >= 12 ? "desbloqueado" : "bloqueado"}`;
+          const battleStatus = $("#battleCampaignStatus");
+          if (battleStatus)
+            battleStatus.textContent =
+              wins >= 12
+                ? "Campeão · confronto final"
+                : wins >= 8
+                  ? `Elite Four · ${eliteWins}/4 derrotados`
+                  : `Ginásios · ${gymWins}/8 insígnias`;
+        }
+
         function render() {
           document.body.classList.toggle(
             "high-contrast",
@@ -7648,6 +8009,7 @@
           renderPlayers();
           renderSpotlight();
           renderHistory();
+          renderCampaignProgress();
           renderResult();
           renderBattleModal();
           $("#finishButton").disabled =
@@ -7737,6 +8099,9 @@
               : botThinking
                 ? "BOT está pensando..."
                 : `Aguardando ${player.name}`;
+            const maximumBid = getMaximumValidBid(player, state.auction.currentBid);
+            const bidInputValue = Math.min(maximumBid, Math.max(1, nextBid));
+            const canBid = canPlayerBid(turn) && canAct;
             $("#stageLabel").textContent = "lote em disputa";
             stage.innerHTML = `
             <div class="pokeball-orbit">
@@ -7767,14 +8132,14 @@
               <div><span class="bid-label">lance atual</span><strong class="bid-value">${state.auction.currentBid}<small> pt</small></strong></div>
               <div class="turn-message"><span class="bid-label">jogador da vez</span><br><strong>${player.name}</strong><br><span>${botThinking ? `<span class="thinking-label">BOT está pensando<span class="thinking-dots">...</span></span>` : canAct ? (state.auction.currentBid ? `cubra com ${nextBid} pt` : "faça o primeiro lance") : "aguarde a jogada"}</span></div>
             </div>
-           <div class="console-actions">
+           <div class="console-actions${canAct && turn === 0 ? " auction-bid-layout" : ""}">
+            ${canAct && turn === 0 ? `<div class="bid-controls"><button class="button ghost bid-step" type="button" data-action="bid-step" data-step="-1" ${canBid ? "" : "disabled"}>−1</button><input class="bid-input" id="bidInput${turn}" type="number" min="${nextBid}" max="${maximumBid}" step="1" value="${bidInputValue}" aria-label="Valor do lance" ${canBid ? "" : "disabled"}><button class="button ghost bid-step" type="button" data-action="bid-step" data-step="1" ${canBid ? "" : "disabled"}>+1</button></div><button class="button amber bid-submit" type="button" data-action="bid" data-player="${turn}" ${canBid ? "" : "disabled"}>DAR LANCE</button><div class="bid-limit">máximo disponível: ${maximumBid} pt</div>` : `<button class="button amber" type="button" data-action="bid" data-player="${turn}" ${canBid ? "" : "disabled"}>${actionLabel}</button>`}
             <div class="console-actions${canReroll || canSkip ? " with-lot-options" : ""}">
-             <button class="button amber" type="button" data-action="bid" data-player="${turn}" ${canPlayerBid(turn) && canAct ? "" : "disabled"}>${actionLabel}</button>
              <button class="button ghost" type="button" data-action="pass" data-player="${turn}" ${state.auction.leadingPlayer === null || !canAct ? "disabled" : ""}>Desistir</button>
-              ${canSkip ? '<button class="button ghost lot-option skip-button" type="button" data-action="skip">Pular lote</button>' : ""}
-              ${canReroll ? '<button class="button ghost lot-option reroll-button" type="button" data-action="reroll">Rolar outro · ' + state.rerollsRemaining + "x</button>" : ""}
+               ${canSkip ? '<button class="button ghost lot-option skip-button" type="button" data-action="skip">Pular lote</button>' : ""}
+               ${canReroll ? '<button class="button ghost lot-option reroll-button" type="button" data-action="reroll">Rolar outro · ' + state.rerollsRemaining + "x</button>" : ""}
            </div>
-            <div class="console-hint">O valor sobe de 1 em 1 · saldo de ${player.name}: ${player.points} pt${isOnline() ? ` · ${connectionRole === "host" ? "você é o Jogador 1" : "você é o Jogador 2"}` : ""}</div>
+             <div class="console-hint">saldo de ${player.name}: ${player.points} pt · reserve ${Math.max(0, MAX_TEAM_SIZE - player.team.length - 1)} pt para completar o time${isOnline() ? ` · ${connectionRole === "host" ? "você é o Jogador 1" : "você é o Jogador 2"}` : ""}</div>
             <div class="next-starter"><span class="spark"></span><span>Depois deste lote, ${state.players[state.nextStarter].name} abre a próxima rodada.</span></div>`;
           } else if (
             (state.phase === "battleSetup" ||
@@ -7905,7 +8270,30 @@
           const button = event.target.closest("button[data-action]");
           if (!button) return;
           const action = button.dataset.action;
-          if (action === "bid") placeBid(Number(button.dataset.player));
+          if (action === "bid") {
+            const playerIndex = Number(button.dataset.player);
+            const input = $(`#bidInput${playerIndex}`);
+            placeBid(
+              playerIndex,
+              false,
+              input ? Number(input.value) : null,
+            );
+          }
+          if (action === "bid-step") {
+            const playerIndex = state.auction?.turn ?? 0;
+            const input = $(`#bidInput${playerIndex}`);
+            if (input) {
+              const current = Number(input.value) || state.auction.currentBid + 1;
+              const maximum = getMaximumValidBid(
+                state.players[playerIndex],
+                state.auction.currentBid,
+              );
+              input.value = Math.min(
+                maximum,
+                Math.max(state.auction.currentBid + 1, current + Number(button.dataset.step || 0)),
+              );
+            }
+          }
           if (action === "pass") passAuction(Number(button.dataset.player));
           if (action === "skip") skipPokemon();
           if (action === "reroll") rerollPokemon();
