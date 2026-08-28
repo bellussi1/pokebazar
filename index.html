@@ -71,6 +71,39 @@
       z-index: 1;
     }
 
+    .app-shell.menu-mode .topbar,
+    .app-shell.menu-mode #gameView { display: none; }
+
+    .mode-view { display: grid; min-height: calc(100vh - 76px); place-items: center; padding: 24px 0 38px; }
+    .mode-inner { width: min(1080px, 100%); }
+    .mode-kicker { display: flex; justify-content: space-between; gap: 12px; align-items: center; color: var(--muted); font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .mode-kicker span:first-child { color: var(--amber); }
+    .mode-hero { display: flex; justify-content: space-between; gap: 30px; align-items: end; padding: 37px 2px 30px; }
+    .mode-hero h2 { max-width: 720px; margin-top: 9px; color: var(--white); font: 800 clamp(42px, 7vw, 82px)/.84 var(--display); letter-spacing: -.085em; }
+    .mode-hero p { max-width: 480px; margin-top: 17px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .mode-sigil { display: grid; place-items: center; width: 138px; height: 138px; position: relative; flex: 0 0 auto; border: 1px solid rgba(247, 183, 77, .35); border-radius: 50%; color: var(--amber); background: radial-gradient(circle, rgba(247, 183, 77, .23), transparent 63%); font: 800 49px var(--display); transform: rotate(8deg); box-shadow: 0 0 0 12px rgba(247, 183, 77, .035), 0 0 0 24px rgba(247, 183, 77, .02); }
+    .mode-sigil::after { content: ""; position: absolute; width: 192px; height: 64px; border: 1px solid rgba(127, 198, 239, .17); border-radius: 50%; transform: rotate(-25deg); }
+    .mode-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .mode-card { min-height: 190px; padding: 17px; border: 1px solid var(--line); border-radius: 16px; color: var(--paper); background: linear-gradient(145deg, rgba(31, 46, 68, .9), rgba(16, 24, 39, .94)); cursor: pointer; text-align: left; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease; }
+    .mode-card:hover { transform: translateY(-4px); border-color: rgba(248, 244, 236, .35); box-shadow: 0 16px 30px rgba(4, 8, 17, .25); }
+    .mode-card.selected { border-color: var(--amber); background: linear-gradient(145deg, rgba(247, 183, 77, .16), rgba(31, 46, 68, .92)); box-shadow: 0 0 0 1px rgba(247, 183, 77, .12), 0 16px 32px rgba(4, 8, 17, .22); }
+    .mode-card[data-mode="online"].selected { border-color: var(--blue); background: linear-gradient(145deg, rgba(127, 198, 239, .14), rgba(31, 46, 68, .92)); box-shadow: 0 0 0 1px rgba(127, 198, 239, .12), 0 16px 32px rgba(4, 8, 17, .22); }
+    .mode-card[data-mode="bot"].selected { border-color: var(--mint); background: linear-gradient(145deg, rgba(134, 214, 189, .13), rgba(31, 46, 68, .92)); box-shadow: 0 0 0 1px rgba(134, 214, 189, .12), 0 16px 32px rgba(4, 8, 17, .22); }
+    .mode-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; color: var(--ink); background: var(--amber); font: 800 19px var(--display); }
+    .mode-card[data-mode="online"] .mode-icon { background: var(--blue); }
+    .mode-card[data-mode="bot"] .mode-icon { background: var(--mint); }
+    .mode-card h3 { margin-top: 19px; color: var(--white); font: 700 21px var(--display); letter-spacing: -.04em; }
+    .mode-card p { min-height: 38px; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .mode-card-meta { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-top: 20px; padding-top: 10px; border-top: 1px solid var(--line); color: #7e8da1; font: 9px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+    .mode-card-meta strong { color: var(--paper-muted); font-weight: 500; }
+    .mode-footer { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-top: 17px; padding: 15px 2px 0; border-top: 1px solid var(--line); }
+    .mode-selection-hint { color: var(--muted); font-size: 11px; }
+    .mode-selection-hint strong { color: var(--paper); }
+    .mode-footer .button { min-width: 190px; }
+    .mode-tools { display: flex; gap: 14px; margin-top: 10px; }
+    .text-button { padding: 0; border: 0; color: var(--muted); background: transparent; cursor: pointer; font: 10px var(--mono); text-transform: uppercase; transition: color .18s ease; }
+    .text-button:hover { color: var(--amber); }
+
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -394,6 +427,12 @@
     .type-badge.type-water { color: #bfe4ff; background: rgba(127, 198, 239, .15); }
     .type-badge.type-grass { color: #c3f3de; background: rgba(134, 214, 189, .15); }
     .type-badge.type-electric { color: #ffe99f; background: rgba(247, 183, 77, .17); }
+    .pokemon-stat-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; max-width: 540px; margin: 15px auto 0; }
+    .pokemon-stat-grid div { padding: 6px 4px; border: 1px solid rgba(248, 244, 236, .1); border-radius: 7px; background: rgba(248, 244, 236, .05); }
+    .pokemon-stat-grid strong { display: block; color: var(--paper); font: 700 12px var(--display); }
+    .pokemon-stat-grid span { display: block; margin-top: 3px; color: var(--muted); font: 8px var(--mono); text-transform: uppercase; }
+    .pokemon-indicators { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 9px; color: var(--muted); font: 9px var(--mono); }
+    .pokemon-indicators strong { color: var(--amber); }
 
     .auction-console { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
     .auction-console.empty { border-top-color: transparent; }
@@ -424,6 +463,7 @@
     .history-icon { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 6px; color: var(--ink); background: var(--amber); font-size: 11px; font-weight: 800; }
     .history-item.bid .history-icon { background: var(--mint); }
     .history-item.win .history-icon { background: var(--coral); color: var(--white); }
+    .history-item.battle .history-icon { background: var(--mint); }
     .history-item.system .history-icon { background: var(--blue); }
     .history-time { color: #73849a; font: 9px var(--mono); }
     .history-empty { padding: 16px 0 3px; color: #73849a; font-size: 11px; }
@@ -466,6 +506,74 @@
     .result-empty { grid-column: 1 / -1; padding: 14px; color: #788392; border: 1px dashed rgba(16, 24, 39, .2); border-radius: 8px; font-size: 11px; text-align: center; }
     .result-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 20px; }
 
+    .battle-modal { width: min(1060px, 100%); max-height: min(860px, 94vh); overflow: auto; padding: 26px; border: 1px solid rgba(247, 183, 77, .42); border-radius: 24px; color: var(--paper); background: radial-gradient(circle at 50% -16%, rgba(127, 198, 239, .16), transparent 28rem), var(--ink-2); box-shadow: 0 30px 90px rgba(0, 0, 0, .52); animation: modal-in .42s both; }
+    .battle-header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .battle-header h2 { margin-top: 4px; color: var(--white); font: 800 clamp(29px, 5vw, 50px)/.86 var(--display); letter-spacing: -.075em; }
+    .battle-header p { max-width: 590px; margin-top: 10px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .battle-counter { flex: 0 0 auto; padding: 9px 11px; border: 1px solid rgba(247, 183, 77, .36); border-radius: 999px; color: var(--amber); background: rgba(247, 183, 77, .08); font: 500 10px var(--mono); text-transform: uppercase; }
+    .battle-order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+    .battle-order-card { padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: rgba(248, 244, 236, .035); }
+    .battle-order-card.bot-order { border-color: rgba(134, 214, 189, .32); }
+    .battle-order-heading { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .battle-order-heading h3 { color: var(--white); font: 700 18px var(--display); }
+    .battle-order-heading span { color: var(--muted); font: 10px var(--mono); text-transform: uppercase; }
+    .battle-order-note { min-height: 30px; margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .battle-pick-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 13px; }
+    .battle-pick { display: grid; grid-template-columns: 25px 32px minmax(0, 1fr); gap: 7px; align-items: center; min-width: 0; min-height: 48px; padding: 5px 8px 5px 5px; border: 1px solid rgba(248, 244, 236, .11); border-radius: 10px; color: var(--paper); background: rgba(248, 244, 236, .045); cursor: pointer; text-align: left; transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    .battle-pick:hover:not(:disabled) { transform: translateY(-2px); border-color: rgba(247, 183, 77, .6); background: rgba(247, 183, 77, .1); }
+    .battle-pick:disabled { cursor: default; opacity: .72; }
+    .battle-pick.selected { border-color: var(--amber); background: rgba(247, 183, 77, .14); box-shadow: inset 3px 0 var(--amber); }
+    .battle-pick.dragging { opacity: .42; transform: scale(.98); }
+    .battle-order-card.bot-order .battle-pick.selected { border-color: var(--mint); background: rgba(134, 214, 189, .12); box-shadow: inset 3px 0 var(--mint); }
+    .battle-pick img { width: 31px; height: 31px; object-fit: contain; }
+    .battle-pick strong { display: block; overflow: hidden; font-size: 10px; text-overflow: ellipsis; text-transform: capitalize; white-space: nowrap; }
+    .battle-pick small { display: block; margin-top: 3px; color: var(--muted); font: 9px var(--mono); }
+    .battle-slot { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 50%; color: #77869a; background: rgba(248, 244, 236, .08); font: 700 10px var(--mono); }
+    .battle-pick.selected .battle-slot { color: var(--ink); background: var(--amber); }
+    .battle-order-card.bot-order .battle-pick.selected .battle-slot { background: var(--mint); }
+    .battle-ready { display: flex; gap: 6px; align-items: center; min-height: 17px; margin-top: 12px; color: var(--muted); font: 10px var(--mono); }
+    .battle-ready::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--coral); }
+    .battle-ready.is-ready { color: var(--mint); }
+    .battle-ready.is-ready::before { background: var(--mint); box-shadow: 0 0 0 4px rgba(134, 214, 189, .1); }
+    .battle-help { display: flex; gap: 9px; align-items: flex-start; margin-top: 15px; padding: 11px 12px; border: 1px solid rgba(127, 198, 239, .18); border-radius: 10px; color: var(--muted); background: rgba(127, 198, 239, .06); font-size: 10px; line-height: 1.5; }
+    .battle-help strong { color: var(--paper); }
+    .battle-help-icon { color: var(--blue); font: 800 16px var(--display); }
+    .battle-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 18px; }
+    .battle-score { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 17px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 11px; color: var(--muted); background: rgba(248, 244, 236, .035); font: 10px var(--mono); text-transform: uppercase; }
+    .battle-score strong { color: var(--amber); font: 700 16px var(--display); text-transform: none; }
+    .battle-duel { display: grid; grid-template-columns: 1fr 76px 1fr; gap: 12px; align-items: center; margin-top: 15px; }
+    .fighter-card { min-height: 220px; padding: 15px; border: 1px solid rgba(247, 183, 77, .28); border-radius: 15px; background: linear-gradient(145deg, rgba(247, 183, 77, .1), rgba(248, 244, 236, .035)); }
+    .fighter-card.fighter-two { border-color: rgba(127, 198, 239, .28); background: linear-gradient(145deg, rgba(127, 198, 239, .09), rgba(248, 244, 236, .035)); }
+    .fighter-topline { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; color: var(--muted); font: 9px var(--mono); text-transform: uppercase; }
+    .fighter-topline strong { color: var(--paper); font: 700 14px var(--display); text-transform: capitalize; }
+    .fighter-art-row { display: flex; gap: 12px; align-items: center; margin-top: 7px; }
+    .fighter-card.fighter-two .fighter-art-row { flex-direction: row-reverse; }
+    .fighter-card img { width: 93px; height: 93px; object-fit: contain; filter: drop-shadow(0 12px 10px rgba(0,0,0,.3)); }
+    .fighter-card.fighter-two img { transform: scaleX(-1); }
+    .fighter-types { display: flex; gap: 5px; flex-wrap: wrap; }
+    .fighter-types .type-badge { padding: 4px 7px; font-size: 8px; }
+    .fighter-hp { height: 8px; margin-top: 9px; overflow: hidden; border-radius: 99px; background: rgba(248, 244, 236, .12); }
+    .fighter-hp-fill { height: 100%; border-radius: inherit; background: var(--mint); transition: width .35s ease, background .35s ease; }
+    .fighter-hp-fill.warning { background: var(--amber); }
+    .fighter-hp-fill.danger { background: var(--coral); }
+    .fighter-hp-label { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; color: var(--muted); font: 9px var(--mono); }
+    .fighter-status { display: inline-flex; min-height: 19px; align-items: center; margin-top: 8px; padding: 0 7px; border-radius: 999px; color: var(--ink); background: var(--paper-muted); font: 700 8px var(--mono); text-transform: uppercase; }
+    .fighter-status.status-burned { background: #f09b76; }
+    .fighter-status.status-poisoned { background: #cb9cdb; }
+    .fighter-status.status-paralyzed { background: #ffe087; }
+    .fighter-status.status-asleep { background: #b9c3d8; }
+    .fighter-status.status-frozen { background: #a6e7f3; }
+    .fighter-status.status-healthy { color: var(--muted); background: rgba(248,244,236,.08); }
+    .battle-vs { display: grid; place-items: center; width: 62px; height: 62px; justify-self: center; border: 1px solid rgba(247, 183, 77, .32); border-radius: 50%; color: var(--amber); background: rgba(247, 183, 77, .08); font: 800 20px var(--display); }
+    .battle-log { display: flex; flex-direction: column-reverse; gap: 0; max-height: 185px; overflow: auto; margin-top: 13px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 11px; background: rgba(5, 10, 18, .25); }
+    .battle-log-line { padding: 9px 0; border-bottom: 1px solid rgba(248, 244, 236, .07); color: var(--paper-muted); font-size: 10px; line-height: 1.45; }
+    .battle-log-line:last-child { border-bottom: 0; }
+    .battle-log-line strong { color: var(--white); text-transform: capitalize; }
+    .battle-log-line .super-effective { color: var(--mint); font-weight: 800; }
+    .battle-log-line .not-effective { color: var(--amber); font-weight: 800; }
+    .battle-log-line .status-effect { color: var(--blue); font-weight: 800; }
+    .battle-result-banner { margin-top: 15px; padding: 14px; border: 1px solid rgba(134, 214, 189, .35); border-radius: 11px; color: var(--ink); background: var(--mint); font-size: 12px; font-weight: 800; text-align: center; }
+
     .network-modal { width: min(720px, 100%); max-height: min(760px, 92vh); overflow: auto; padding: 25px; border: 1px solid rgba(247, 183, 77, .35); border-radius: 22px; color: var(--paper); background: var(--ink-2); box-shadow: 0 30px 90px rgba(0, 0, 0, .45); animation: modal-in .42s both; }
     .network-modal-header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
     .network-modal-header h2 { margin-top: 4px; color: var(--white); font: 800 clamp(26px, 5vw, 40px)/.88 var(--display); letter-spacing: -.07em; }
@@ -496,6 +604,25 @@
     .network-helper { margin-top: 13px; color: #7d8da2; font-size: 10px; line-height: 1.5; }
     .network-helper strong { color: var(--paper-muted); }
     .network-modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding-top: 17px; }
+    .settings-form { padding-top: 18px; }
+    .settings-form label { display: grid; gap: 7px; color: var(--paper); font-size: 11px; font-weight: 700; }
+    .settings-form input, .settings-form select { width: 100%; min-height: 40px; padding: 0 10px; border: 1px solid rgba(248, 244, 236, .15); border-radius: 8px; color: var(--paper); background: rgba(5, 10, 18, .45); font: 11px var(--body); }
+    .settings-form input:focus, .settings-form select:focus { outline: 2px solid rgba(247, 183, 77, .55); outline-offset: 2px; }
+    .settings-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .settings-checks { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; }
+    .settings-checks label { display: flex; grid-template-columns: auto 1fr; gap: 7px; align-items: center; color: var(--muted); font-weight: 500; }
+    .settings-checks input { width: 15px; min-height: 15px; accent-color: var(--amber); }
+    .help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; padding-top: 18px; }
+    .help-grid > div { display: grid; gap: 6px; padding: 13px; border: 1px solid var(--line); border-radius: 10px; background: rgba(248, 244, 236, .035); }
+    .help-grid b { color: var(--amber); font: 500 10px var(--mono); }
+    .help-grid span { color: var(--paper-muted); font-size: 11px; line-height: 1.5; }
+    .ranking-list { display: grid; gap: 7px; padding-top: 18px; }
+    .ranking-entry { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: rgba(248, 244, 236, .035); }
+    .ranking-entry > b { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 50%; color: var(--ink); background: var(--amber); font: 700 10px var(--mono); }
+    .ranking-entry strong { display: block; color: var(--paper); font-size: 11px; }
+    .ranking-entry span { display: block; margin-top: 3px; color: var(--muted); font: 9px var(--mono); }
+    .ranking-entry em { color: var(--mint); font: 800 17px var(--display); font-style: normal; }
+    .ranking-empty { padding: 18px; border: 1px dashed var(--line); color: var(--muted); font-size: 11px; text-align: center; }
 
     .loading-card { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 300px; color: var(--muted); text-align: center; }
     .loader-ring { width: 36px; height: 36px; border: 3px solid rgba(248, 244, 236, .15); border-top-color: var(--amber); border-radius: 50%; animation: spin .9s linear infinite; }
@@ -531,6 +658,10 @@
       .spotlight { grid-column: 1 / -1; grid-row: 1; min-height: 570px; }
       .player-card { min-height: 420px; }
       .lower-grid { grid-template-columns: 1fr; }
+      .mode-hero { align-items: start; flex-direction: column; }
+      .mode-sigil { width: 95px; height: 95px; font-size: 35px; }
+      .mode-options { grid-template-columns: 1fr; }
+      .mode-card { min-height: 150px; }
     }
 
     @media (max-width: 560px) {
@@ -552,14 +683,47 @@
       .result-teams { grid-template-columns: 1fr; }
       .result-actions { flex-direction: column-reverse; }
       .result-actions .button { width: 100%; }
+      .battle-modal { padding: 19px 14px; }
+      .battle-header { gap: 10px; }
+      .battle-counter { font-size: 8px; }
+      .battle-order-grid { grid-template-columns: 1fr; }
+      .battle-duel { grid-template-columns: 1fr; }
+      .battle-vs { width: 42px; height: 42px; font-size: 15px; }
+      .battle-actions { flex-direction: column-reverse; }
+      .battle-actions .button { width: 100%; }
+      .pokemon-stat-grid { grid-template-columns: repeat(3, 1fr); }
       .network-modal { padding: 19px 14px; }
       .network-modal-footer { flex-direction: column-reverse; }
       .network-modal-footer .button { width: 100%; }
+      .mode-view { min-height: calc(100vh - 30px); padding-top: 10px; }
+      .mode-kicker { align-items: flex-start; flex-direction: column; }
+      .mode-hero { padding-top: 24px; }
+      .mode-hero h2 { font-size: clamp(41px, 14vw, 66px); }
+      .mode-sigil { display: none; }
+      .mode-footer { align-items: stretch; flex-direction: column; }
+      .mode-footer .button { width: 100%; }
+      .mode-tools { justify-content: space-between; }
+      .settings-two-col, .help-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
+  <div class="app-shell menu-mode" id="appShell">
+    <section class="mode-view" id="modeView" aria-labelledby="modeTitle">
+      <div class="mode-inner">
+        <div class="mode-kicker"><span>PokéBazar · escolha sua mesa</span><span>uma arena, três jeitos de jogar</span></div>
+        <div class="mode-hero">
+          <div><div class="eyebrow">Leilão de equipes · modo de jogo</div><h2 id="modeTitle">Como você quer<br>jogar hoje?</h2><p>Monte um time com estratégia, leia o adversário e faça cada ponto valer. Escolha o ritmo da sua próxima disputa.</p></div>
+          <div class="mode-sigil" aria-hidden="true">PB</div>
+        </div>
+        <div class="mode-options" role="group" aria-label="Escolha do modo de jogo">
+          <button class="mode-card selected" type="button" data-mode="local" aria-pressed="true"><span class="mode-icon" aria-hidden="true">⇄</span><h3>Dois na mesa</h3><p>Dois jogadores no mesmo computador, alternando os lances.</p><div class="mode-card-meta"><span>Local</span><strong>sem conexão</strong></div></button>
+          <button class="mode-card" type="button" data-mode="online" aria-pressed="false"><span class="mode-icon" aria-hidden="true">↗</span><h3>Duelo online</h3><p>Cada jogador no seu computador, com conexão direta entre navegadores.</p><div class="mode-card-meta"><span>Online</span><strong>WebRTC</strong></div></button>
+          <button class="mode-card" type="button" data-mode="bot" aria-pressed="false"><span class="mode-icon" aria-hidden="true">◈</span><h3>Contra BOT</h3><p>Desafie uma máquina que lê os stats, monta o time e guarda pontos.</p><div class="mode-card-meta"><span>Solo</span><strong>rival automático</strong></div></button>
+        </div>
+        <div class="mode-footer"><div><p class="mode-selection-hint" id="modeSelectionHint"><strong>Dois na mesa</strong> · pronto para começar</p><div class="mode-tools"><button class="text-button" id="helpButton" type="button">Como jogar</button><button class="text-button" id="settingsButton" type="button">Configurações</button><button class="text-button" id="rankingButton" type="button">Ranking</button><button class="text-button is-hidden" id="continueButton" type="button">Continuar partida</button></div></div><button class="button amber" id="startModeButton" type="button">Entrar na mesa <span class="arrow">↗</span></button></div>
+      </div>
+    </section>
     <header class="topbar">
       <div class="brand-lockup">
         <div class="brand-mark" aria-hidden="true"></div>
@@ -572,6 +736,7 @@
       <div class="top-actions">
         <div class="api-status loading" id="apiStatus" aria-live="polite"><span class="status-dot"></span><span id="apiStatusText">Conectando à PokéAPI…</span></div>
         <div class="api-status network-status" id="networkStatus" aria-live="polite"><span class="status-dot"></span><span id="networkStatusText">Modo local</span></div>
+        <button class="button ghost" id="modeButton" type="button">Trocar modo</button>
         <button class="button ghost" id="connectButton" type="button">Jogar online</button>
         <button class="button ghost" id="finishButton" type="button">Finalizar partida</button>
         <button class="button" id="restartButton" type="button">Reiniciar</button>
@@ -655,6 +820,7 @@
             <div class="rule-row"><b>01</b><span><strong>Sortear</strong> revela um lote novo, sem repetição.</span></div>
             <div class="rule-row"><b>02</b><span><strong>Dar lance</strong> aumenta o valor em exatamente 1 ponto.</span></div>
             <div class="rule-row"><b>03</b><span><strong>Desistir</strong> entrega o lote ao outro pelo último lance.</span></div>
+            <div class="rule-row"><b>04</b><span><strong>Seis Pokémon</strong> liberam a batalha final e a escolha da ordem.</span></div>
           </div>
         </aside>
       </section>
@@ -662,6 +828,48 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="settingsBackdrop" hidden>
+    <section class="network-modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="network-modal-header"><div><div class="eyebrow">Preparar a partida</div><h2 id="settingsTitle">Configurações</h2><p>Escolha o tamanho da Pokédex, o orçamento e o ritmo do rival antes de entrar na mesa.</p></div><button class="network-close" id="closeSettingsButton" type="button" aria-label="Fechar configurações">×</button></div>
+      <form class="settings-form" id="settingsForm">
+        <label>Geração máxima<select id="generationSelect"></select></label>
+        <div class="settings-two-col"><label>Nome do Jogador 1<input id="playerOneName" maxlength="20" autocomplete="off"></label><label>Nome do Jogador 2<input id="playerTwoName" maxlength="20" autocomplete="off"></label></div>
+        <div class="settings-two-col"><label>Pontos iniciais<input id="startingPointsInput" type="number" min="10" max="50" step="1"></label><label>Dificuldade do BOT<select id="botDifficultySelect"><option value="easy">Fácil</option><option value="normal">Normal</option><option value="hard">Difícil</option></select></label></div>
+        <div class="settings-two-col"><label>Velocidade das animações<select id="animationSpeedSelect"><option value="normal">Normal</option><option value="fast">Rápida</option><option value="instant">Instantânea</option></select></label><label>Volume<input id="volumeInput" type="range" min="0" max="1" step="0.1"></label></div>
+        <div class="settings-checks"><label><input id="soundToggle" type="checkbox"> Sons de batalha</label><label><input id="musicToggle" type="checkbox"> Música de menu</label></div>
+        <div class="network-modal-footer"><button class="button ghost" id="cancelSettingsButton" type="button">Cancelar</button><button class="button amber" type="submit">Salvar configurações</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="helpBackdrop" hidden>
+    <section class="network-modal info-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="network-modal-header"><div><div class="eyebrow">Manual de campo</div><h2 id="helpTitle">Como jogar</h2><p>Monte um time completo sem deixar o caixa vazio. Depois, leia tipos e escolha a ordem.</p></div><button class="network-close" id="closeHelpButton" type="button" aria-label="Fechar ajuda">×</button></div><div class="help-grid"><div><b>01 · Draft</b><span>Sortee um Pokémon e dispute o lote com lances de um em um.</span></div><div><b>02 · Orçamento</b><span>Você precisa guardar pelo menos um ponto para cada espaço que ainda falta.</span></div><div><b>03 · Arena</b><span>O mais veloz age primeiro. Fraquezas, resistências, STAB e status alteram o dano.</span></div><div><b>04 · Campanha</b><span>No modo BOT, vencer libera oito Ginásios, quatro Elite Four e o Campeão.</span></div></div></section>
+  </div>
+
+  <div class="modal-backdrop" id="rankingBackdrop" hidden>
+    <section class="network-modal info-modal" role="dialog" aria-modal="true" aria-labelledby="rankingTitle"><div class="network-modal-header"><div><div class="eyebrow">Hall da fama local</div><h2 id="rankingTitle">Ranking</h2><p>As melhores campanhas ficam salvas neste navegador.</p></div><button class="network-close" id="closeRankingButton" type="button" aria-label="Fechar ranking">×</button></div><div class="ranking-list" id="rankingList"></div><div class="network-modal-footer"><button class="button ghost" id="clearRankingButton" type="button">Limpar ranking</button><button class="button" id="doneRankingButton" type="button">Fechar</button></div></section>
+  </div>
+
+  <div class="modal-backdrop" id="battleBackdrop" hidden>
+    <section class="battle-modal" role="dialog" aria-modal="true" aria-labelledby="battleTitle">
+      <div class="battle-header">
+        <div><div class="eyebrow">Fase final · arena de tipos</div><h2 id="battleTitle">Monte a ordem da batalha</h2><p id="battleIntro">Clique nos seis Pokémon na ordem em que cada um deve entrar. O vencedor continua em campo com o HP restante.</p></div>
+        <div class="battle-counter" id="battleCounter">0 / 12 prontos</div>
+      </div>
+      <div id="battleSetupView">
+        <div class="battle-order-grid" id="battleOrderGrid"></div>
+        <div class="battle-help"><span class="battle-help-icon">↗</span><span><strong>Como funciona:</strong> velocidade define quem ataca primeiro; moves representativos usam Attack ou Special Attack; tipos causam dano super efetivo ou reduzido; queimadura, veneno, paralisia, sono e congelamento mudam o duelo.</span></div>
+        <div class="battle-actions"><button class="button ghost" id="battleCloseSetupButton" type="button">Voltar à mesa</button><button class="button amber" id="battleStartButton" type="button" disabled>Começar batalha <span class="arrow">↗</span></button></div>
+      </div>
+      <div id="battleArenaView" class="is-hidden">
+        <div class="battle-score" id="battleScore"></div>
+        <div class="battle-duel" id="battleDuel"></div>
+        <div class="battle-log" id="battleLog"></div>
+        <div class="battle-actions"><button class="button ghost" id="battleCloseArenaButton" type="button">Fechar arena</button><button class="button amber" id="battleNextButton" type="button">Simular próximo turno <span class="arrow">↗</span></button></div>
+      </div>
+    </section>
+  </div>
 
   <div class="modal-backdrop" id="resultBackdrop" hidden>
     <section class="result-modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
@@ -707,12 +915,93 @@
     (() => {
       "use strict";
 
-      const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=649";
-      const MAX_POKEMON_ID = 649;
+      const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=721";
+      const MAX_POKEMON_ID = 721;
       const STORAGE_KEY = "pokebazar-auction-v1";
+      const SETTINGS_KEY = "pokebazar-settings-v1";
+      const RANKING_KEY = "pokebazar-ranking-v1";
+      const POKEMON_CACHE_KEY = "pokebazar-pokemon-cache-v2";
       const STARTING_POINTS = 20;
+      const MAX_TEAM_SIZE = 6;
+      const BOT_MIN_RESERVE = 3;
+      const GENERATION_OPTIONS = [
+        { value: 151, label: "Geração I · #001–#151" },
+        { value: 251, label: "Gerações I–II · #001–#251" },
+        { value: 386, label: "Gerações I–III · #001–#386" },
+        { value: 493, label: "Gerações I–IV · #001–#493" },
+        { value: 649, label: "Gerações I–V · #001–#649" },
+        { value: 721, label: "Gerações I–VI · #001–#721" }
+      ];
+      const DEFAULT_SETTINGS = {
+        generationMax: 721,
+        playerNames: ["Jogador 1", "Jogador 2"],
+        startingPoints: STARTING_POINTS,
+        botDifficulty: "normal",
+        animationSpeed: "normal",
+        soundOn: true,
+        musicOn: false,
+        volume: .7
+      };
+      const CAMPAIGN_STAGES = [
+        { kind: "Ginásio", number: 1, name: "Ginásio 1", reward: 100 },
+        { kind: "Ginásio", number: 2, name: "Ginásio 2", reward: 100 },
+        { kind: "Ginásio", number: 3, name: "Ginásio 3", reward: 100 },
+        { kind: "Ginásio", number: 4, name: "Ginásio 4", reward: 100 },
+        { kind: "Ginásio", number: 5, name: "Ginásio 5", reward: 100 },
+        { kind: "Ginásio", number: 6, name: "Ginásio 6", reward: 100 },
+        { kind: "Ginásio", number: 7, name: "Ginásio 7", reward: 100 },
+        { kind: "Ginásio", number: 8, name: "Ginásio 8", reward: 100 },
+        { kind: "Elite Four", number: 1, name: "Elite Four 1", reward: 250 },
+        { kind: "Elite Four", number: 2, name: "Elite Four 2", reward: 250 },
+        { kind: "Elite Four", number: 3, name: "Elite Four 3", reward: 250 },
+        { kind: "Elite Four", number: 4, name: "Elite Four 4", reward: 250 },
+        { kind: "Campeão", number: 1, name: "Campeão", reward: 500 }
+      ];
+      const MOVE_LIBRARY = {
+        normal: [{ name: "Investida", power: 40, category: "physical" }, { name: "Golpe Rápido", power: 45, category: "physical" }],
+        fire: [{ name: "Brasa", power: 40, category: "special", status: "burned", statusChance: .16 }, { name: "Lança-chamas", power: 75, category: "special", status: "burned", statusChance: .1 }],
+        water: [{ name: "Jato d'Água", power: 40, category: "special" }, { name: "Surf", power: 80, category: "special" }],
+        grass: [{ name: "Folha Navalha", power: 55, category: "physical" }, { name: "Energia Solar", power: 75, category: "special", status: "poisoned", statusChance: .08 }],
+        electric: [{ name: "Onda de Choque", power: 60, category: "special", status: "paralyzed", statusChance: .18 }, { name: "Faísca", power: 65, category: "physical", status: "paralyzed", statusChance: .12 }],
+        ice: [{ name: "Raio de Gelo", power: 65, category: "special", status: "frozen", statusChance: .08 }, { name: "Nevasca", power: 80, category: "special", status: "frozen", statusChance: .12 }],
+        fighting: [{ name: "Karate Chop", power: 55, category: "physical" }, { name: "Quebra-telha", power: 75, category: "physical" }],
+        poison: [{ name: "Picada Venenosa", power: 45, category: "physical", status: "poisoned", statusChance: .2 }, { name: "Bomba de Lodo", power: 75, category: "special", status: "poisoned", statusChance: .2 }],
+        ground: [{ name: "Cavar", power: 60, category: "physical" }, { name: "Terremoto", power: 80, category: "physical" }],
+        flying: [{ name: "Rajada de Vento", power: 40, category: "special" }, { name: "Asa de Aço", power: 70, category: "physical" }],
+        psychic: [{ name: "Confusão", power: 50, category: "special" }, { name: "Psíquico", power: 80, category: "special" }],
+        bug: [{ name: "Corte de Fúria", power: 40, category: "physical" }, { name: "Megachifre", power: 80, category: "physical" }],
+        rock: [{ name: "Arremesso de Rocha", power: 50, category: "physical" }, { name: "Avalanche", power: 75, category: "physical" }],
+        ghost: [{ name: "Lambida", power: 45, category: "physical", status: "paralyzed", statusChance: .12 }, { name: "Bola Sombria", power: 80, category: "special" }],
+        dragon: [{ name: "Garra de Dragão", power: 70, category: "physical" }, { name: "Pulso de Dragão", power: 80, category: "special" }],
+        dark: [{ name: "Mordida", power: 60, category: "physical" }, { name: "Pulso Sombrio", power: 80, category: "special" }],
+        steel: [{ name: "Garra de Metal", power: 50, category: "physical" }, { name: "Cabeça de Ferro", power: 80, category: "physical" }],
+        fairy: [{ name: "Vento de Fada", power: 50, category: "special" }, { name: "Brilho Mágico", power: 80, category: "special" }]
+      };
+      const TYPE_EFFECTIVENESS = {
+        normal: { rock: .5, ghost: 0, steel: .5 },
+        fire: { fire: .5, water: .5, grass: 2, ice: 2, bug: 2, rock: .5, dragon: .5, steel: 2 },
+        water: { fire: 2, water: .5, grass: .5, ground: 2, rock: 2, dragon: .5 },
+        electric: { water: 2, electric: .5, grass: .5, ground: 0, flying: 2, dragon: .5 },
+        grass: { fire: .5, water: 2, grass: .5, poison: .5, ground: 2, flying: .5, bug: .5, rock: 2, dragon: .5, steel: .5 },
+        ice: { fire: .5, water: .5, grass: 2, ice: .5, ground: 2, flying: 2, dragon: 2, steel: .5 },
+        fighting: { normal: 2, ice: 2, rock: 2, dark: 2, steel: 2, poison: .5, flying: .5, psychic: .5, bug: .5, fairy: .5, ghost: 0 },
+        poison: { grass: 2, poison: .5, ground: .5, rock: .5, ghost: .5, steel: 0, fairy: 2 },
+        ground: { fire: 2, electric: 2, grass: .5, poison: 2, flying: 0, bug: .5, rock: 2, steel: 2 },
+        flying: { electric: .5, grass: 2, fighting: 2, bug: 2, rock: .5, steel: .5 },
+        psychic: { fighting: 2, poison: 2, psychic: .5, steel: .5, dark: 0 },
+        bug: { fire: .5, grass: 2, fighting: .5, poison: .5, flying: .5, ghost: .5, steel: .5, fairy: .5, psychic: 2, dark: 2 },
+        rock: { fire: 2, ice: 2, flying: 2, bug: 2, fighting: .5, ground: .5, steel: .5 },
+        ghost: { normal: 0, psychic: 2, ghost: 2, dark: .5 },
+        dragon: { dragon: 2, steel: .5, fairy: 0 },
+        dark: { fighting: .5, ghost: 2, psychic: 2, dark: .5, fairy: .5 },
+        steel: { fire: .5, water: .5, electric: .5, ice: 2, rock: 2, steel: .5, fairy: 2 },
+        fairy: { fire: .5, poison: .5, steel: .5, fighting: 2, dragon: 2, dark: 2 }
+      };
+      const STATUS_LABELS = { healthy: "normal", burned: "queimado", poisoned: "envenenado", paralyzed: "paralisado", asleep: "adormecido", frozen: "congelado" };
       const $ = (selector) => document.querySelector(selector);
 
+      let settings = loadSettings();
+      let pokemonCache = loadPokemonCache();
       let state = createInitialState();
       let catalogue = [];
       let isApiReady = false;
@@ -722,11 +1011,17 @@
       let peerConnection = null;
       let dataChannel = null;
       let broadcastTimer = null;
+      let selectedMode = "local";
+      let gameMode = "local";
+      let botTimer = null;
+      let draggedBattle = null;
 
       function createInitialState() {
         return {
-          version: 1,
+          version: 2,
+          mode: "local",
           phase: "ready",
+          config: { ...settings, playerNames: [...settings.playerNames] },
           players: [createPlayer(0), createPlayer(1)],
           usedIds: [],
           currentPokemon: null,
@@ -735,12 +1030,66 @@
           nextStarter: 0,
           history: [],
           lastWinner: null,
-          lastPurchase: null
+          lastPurchase: null,
+          battle: null,
+          campaign: null,
+          startedAt: Date.now()
         };
       }
 
       function createPlayer(id) {
-        return { id, name: `Jogador ${id + 1}`, points: STARTING_POINTS, spent: 0, team: [] };
+        return { id, name: settings.playerNames[id] || `Jogador ${id + 1}`, points: settings.startingPoints, spent: 0, team: [] };
+      }
+
+      function loadSettings() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "null");
+          return {
+            ...DEFAULT_SETTINGS,
+            ...(saved && typeof saved === "object" ? saved : {}),
+            generationMax: GENERATION_OPTIONS.some((option) => option.value === Number(saved?.generationMax)) ? Number(saved.generationMax) : DEFAULT_SETTINGS.generationMax,
+            startingPoints: clampNumber(saved?.startingPoints ?? DEFAULT_SETTINGS.startingPoints, 10, 50),
+            playerNames: Array.isArray(saved?.playerNames) ? [String(saved.playerNames[0] || "Jogador 1").slice(0, 20), String(saved.playerNames[1] || "Jogador 2").slice(0, 20)] : [...DEFAULT_SETTINGS.playerNames],
+            botDifficulty: ["easy", "normal", "hard"].includes(saved?.botDifficulty) ? saved.botDifficulty : DEFAULT_SETTINGS.botDifficulty,
+            animationSpeed: ["normal", "fast", "instant"].includes(saved?.animationSpeed) ? saved.animationSpeed : DEFAULT_SETTINGS.animationSpeed,
+            soundOn: saved?.soundOn !== false,
+            musicOn: saved?.musicOn === true,
+            volume: clampNumber(saved?.volume ?? DEFAULT_SETTINGS.volume, 0, 1)
+          };
+        } catch (error) {
+          return { ...DEFAULT_SETTINGS, playerNames: [...DEFAULT_SETTINGS.playerNames] };
+        }
+      }
+
+      function saveSettings() {
+        try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+        catch (error) { console.warn("Não foi possível salvar as configurações.", error); }
+      }
+
+      function loadPokemonCache() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(POKEMON_CACHE_KEY) || "{}");
+          return saved && typeof saved === "object" ? saved : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function persistPokemonCache() {
+        try {
+          const entries = Object.entries(pokemonCache).slice(-180);
+          localStorage.setItem(POKEMON_CACHE_KEY, JSON.stringify(Object.fromEntries(entries)));
+        } catch (error) {
+          console.warn("Não foi possível salvar o cache da PokéAPI.", error);
+        }
+      }
+
+      function getMaxPokemonId() {
+        return Number(state.config?.generationMax || settings.generationMax || MAX_POKEMON_ID);
+      }
+
+      function getStartingPoints() {
+        return Number(state.config?.startingPoints || settings.startingPoints || STARTING_POINTS);
       }
 
       function loadState() {
@@ -750,17 +1099,24 @@
           const saved = JSON.parse(raw);
           if (!saved || !Array.isArray(saved.players) || saved.players.length !== 2) return;
           state = { ...createInitialState(), ...saved };
+          state.config = { ...settings, ...(saved.config || {}), playerNames: Array.isArray(saved.config?.playerNames) ? saved.config.playerNames : [...settings.playerNames] };
+          state.config.startingPoints = clampNumber(state.config.startingPoints, 10, 50);
+          state.config.generationMax = GENERATION_OPTIONS.some((option) => option.value === Number(state.config.generationMax)) ? Number(state.config.generationMax) : settings.generationMax;
           state.players = saved.players.map((player, index) => ({
             ...createPlayer(index),
             ...player,
-            points: clampNumber(player.points, 0, STARTING_POINTS),
-            spent: clampNumber(player.spent, 0, STARTING_POINTS),
-            team: Array.isArray(player.team) ? player.team : []
+            points: clampNumber(player.points, 0, state.config.startingPoints),
+            spent: clampNumber(player.spent, 0, state.config.startingPoints),
+            team: Array.isArray(player.team) ? player.team.slice(0, MAX_TEAM_SIZE) : []
           }));
           state.usedIds = Array.isArray(saved.usedIds) ? saved.usedIds : [];
           state.history = Array.isArray(saved.history) ? saved.history.slice(-80) : [];
           if (!state.auction || !state.currentPokemon || state.phase !== "auction") state.auction = null;
           if (state.phase === "loading") state.phase = "ready";
+          if (!["ready", "auction", "battleSetup", "battle", "complete", "campaignNext"].includes(state.phase)) state.phase = "ready";
+          gameMode = ["local", "online", "bot"].includes(state.mode) ? state.mode : "local";
+          selectedMode = gameMode;
+          if (gameMode === "bot") state.players[1].name = "BOT";
         } catch (error) {
           console.warn("Não foi possível ler o progresso salvo.", error);
           state = createInitialState();
@@ -784,6 +1140,134 @@
 
       function formatPokemonName(name) {
         return String(name || "").replace(/-/g, " ");
+      }
+
+      function renderModeSelection() {
+        const labels = { local: "Dois na mesa", online: "Duelo online", bot: "Contra BOT" };
+        document.querySelectorAll("[data-mode]").forEach((card) => {
+          const selected = card.dataset.mode === selectedMode;
+          card.classList.toggle("selected", selected);
+          card.setAttribute("aria-pressed", String(selected));
+        });
+        $("#modeSelectionHint").innerHTML = `<strong>${labels[selectedMode]}</strong> · ${selectedMode === "local" ? "dois jogadores no mesmo computador" : selectedMode === "online" ? "cada jogador no seu computador" : "a máquina joga como Jogador 2"}`;
+        $("#continueButton").classList.toggle("is-hidden", !(state.round > 0 || state.players.some((player) => player.team.length)));
+      }
+
+      function renderSettingsForm() {
+        $("#generationSelect").innerHTML = GENERATION_OPTIONS.map((option) => `<option value="${option.value}">${option.label}</option>`).join("");
+        $("#generationSelect").value = String(settings.generationMax);
+        $("#playerOneName").value = settings.playerNames[0];
+        $("#playerTwoName").value = settings.playerNames[1];
+        $("#startingPointsInput").value = String(settings.startingPoints);
+        $("#botDifficultySelect").value = settings.botDifficulty;
+        $("#animationSpeedSelect").value = settings.animationSpeed;
+        $("#soundToggle").checked = settings.soundOn;
+        $("#musicToggle").checked = settings.musicOn;
+        $("#volumeInput").value = String(settings.volume);
+      }
+
+      function openSettings() {
+        renderSettingsForm();
+        $("#settingsBackdrop").hidden = false;
+      }
+
+      function closeSettings() { $("#settingsBackdrop").hidden = true; }
+
+      function saveSettingsFromForm(event) {
+        event.preventDefault();
+        settings = {
+          ...settings,
+          generationMax: Number($("#generationSelect").value),
+          playerNames: [String($("#playerOneName").value || "Jogador 1").trim().slice(0, 20) || "Jogador 1", String($("#playerTwoName").value || "Jogador 2").trim().slice(0, 20) || "Jogador 2"],
+          startingPoints: clampNumber($("#startingPointsInput").value, 10, 50),
+          botDifficulty: $("#botDifficultySelect").value,
+          animationSpeed: $("#animationSpeedSelect").value,
+          soundOn: $("#soundToggle").checked,
+          musicOn: $("#musicToggle").checked,
+          volume: clampNumber($("#volumeInput").value, 0, 1)
+        };
+        saveSettings();
+        if (state.round === 0 && state.players.every((player) => !player.team.length)) {
+          state = createInitialState();
+          state.mode = gameMode;
+          state.players[1].name = gameMode === "bot" ? "BOT" : settings.playerNames[1];
+        }
+        if (gameMode !== "bot") state.players[1].name = settings.playerNames[1];
+        else state.players[1].name = "BOT";
+        render();
+        closeSettings();
+        loadCatalogue();
+        showToast("Configurações salvas para a próxima mesa.");
+      }
+
+      function loadRanking() {
+        try {
+          const ranking = JSON.parse(localStorage.getItem(RANKING_KEY) || "[]");
+          return Array.isArray(ranking) ? ranking.slice(0, 10) : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function saveRankingEntry(entry) {
+        const ranking = [entry, ...loadRanking()].sort((left, right) => right.score - left.score).slice(0, 10);
+        try { localStorage.setItem(RANKING_KEY, JSON.stringify(ranking)); } catch (error) { console.warn("Não foi possível salvar o ranking.", error); }
+      }
+
+      function renderRanking() {
+        const ranking = loadRanking();
+        $("#rankingList").innerHTML = ranking.length ? ranking.map((entry, index) => `<div class="ranking-entry"><b>${index + 1}</b><div><strong>${entry.name}</strong><span>${entry.date} · ${entry.generation} · ${entry.difficulty}</span></div><em>${entry.score}</em></div>`).join("") : `<div class="ranking-empty">Nenhuma campanha concluída ainda.<br>Vença o Campeão para entrar no Hall da Fama.</div>`;
+      }
+
+      function openRanking() {
+        renderRanking();
+        $("#rankingBackdrop").hidden = false;
+      }
+
+      function closeRanking() { $("#rankingBackdrop").hidden = true; }
+
+      function openHelp() { $("#helpBackdrop").hidden = false; }
+      function closeHelp() { $("#helpBackdrop").hidden = true; }
+
+      function applyGameMode(mode) {
+        if (mode !== "bot") clearTimeout(botTimer);
+        gameMode = mode;
+        state.mode = mode;
+        if (mode === "bot") state.players[1].name = "BOT";
+        else state.players[1].name = settings.playerNames[1] || "Jogador 2";
+        saveState();
+      }
+
+      function enterSelectedMode() {
+        if (selectedMode !== "online" && isOnline()) disconnectNetwork();
+        if (state.round === 0 && state.players.every((player) => !player.team.length)) {
+          state = createInitialState();
+        }
+        applyGameMode(selectedMode);
+        $("#appShell").classList.remove("menu-mode");
+        render();
+        if (selectedMode === "online") openNetworkModal();
+        if (selectedMode === "bot") {
+          showToast("O BOT está pronto. Faça o primeiro lance.");
+          scheduleBotTurn();
+        }
+      }
+
+      function continueSavedGame() {
+        selectedMode = gameMode;
+        applyGameMode(gameMode);
+        $("#appShell").classList.remove("menu-mode");
+        render();
+        if (["battleSetup", "battle", "campaignNext"].includes(state.phase)) openBattleModal();
+        if (state.phase === "complete" && state.battle?.finished) openResults();
+      }
+
+      function returnToModeSelection() {
+        clearTimeout(botTimer);
+        if (isOnline()) disconnectNetwork();
+        selectedMode = gameMode;
+        renderModeSelection();
+        $("#appShell").classList.add("menu-mode");
       }
 
       function setApiStatus(type, text) {
@@ -814,7 +1298,7 @@
       function isConnected() { return dataChannel?.readyState === "open"; }
       function isOnlineGuest() { return connectionRole === "guest"; }
       function canControlPlayer(playerIndex) {
-        if (!isOnline()) return true;
+        if (!isOnline()) return gameMode === "bot" ? playerIndex === 0 : true;
         return connectionRole === "host" ? playerIndex === 0 : playerIndex === 1;
       }
 
@@ -831,20 +1315,25 @@
       function canPlayerBid(playerIndex) {
         const player = state.players[playerIndex];
         const nextBid = state.auction?.currentBid ? state.auction.currentBid + 1 : 1;
-        return Boolean(player && player.points >= nextBid);
+        return Boolean(player && player.team.length < MAX_TEAM_SIZE && player.points >= nextBid);
       }
 
       function canStartAuction() {
         const catalogReady = isOnlineGuest() ? isConnected() : isApiReady;
-        return state.players.some((player) => player.points >= 1) && state.phase === "ready" && catalogReady && !isDrawing;
+        return state.players.some((player) => player.team.length < MAX_TEAM_SIZE && player.points >= 1) && state.phase === "ready" && catalogReady && !isDrawing;
       }
 
       function maybeFinishWhenNoBudget() {
-        if (!state.players.some((player) => player.points >= 1)) {
+        if (state.players.every((player) => player.team.length >= MAX_TEAM_SIZE)) {
+          beginBattleSetup();
+          return true;
+        }
+        const canStillBuild = state.players.some((player) => player.team.length < MAX_TEAM_SIZE && player.points >= 1);
+        if (!canStillBuild) {
           state.phase = "complete";
           state.auction = null;
           state.currentPokemon = null;
-          addHistory("A mesa encerrou: não há pontos suficientes para outro leilão.", "system");
+          addHistory("A mesa encerrou antes de formar os dois times completos.", "system");
           saveState();
           render();
           window.setTimeout(openResults, 300);
@@ -859,15 +1348,16 @@
           const response = await fetch(API_URL, { cache: "no-store" });
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const payload = await response.json();
-          catalogue = payload.results.map((entry) => ({ id: extractId(entry.url), name: entry.name, url: entry.url })).filter((entry) => entry.id && entry.id <= MAX_POKEMON_ID);
+          catalogue = payload.results.map((entry) => ({ id: extractId(entry.url), name: entry.name, url: entry.url })).filter((entry) => entry.id && entry.id <= getMaxPokemonId());
           if (!catalogue.length) throw new Error("catálogo vazio");
           isApiReady = true;
-          setApiStatus("ready", `${catalogue.length} Pokémon no catálogo`);
+          setApiStatus("ready", `${catalogue.length} Pokémon · #001–#${String(getMaxPokemonId()).padStart(3, "0")}`);
           if (!state.history.length) addHistory("A mesa está pronta. Jogador 1 começa o primeiro leilão.", "system");
           render();
         } catch (error) {
-          isApiReady = false;
-          setApiStatus("error", "PokéAPI indisponível");
+          catalogue = Object.values(pokemonCache).filter((pokemon) => pokemon.id <= getMaxPokemonId()).map((pokemon) => ({ id: pokemon.id, name: pokemon.name, url: `https://pokeapi.co/api/v2/pokemon/${pokemon.id}/` }));
+          isApiReady = catalogue.length > 0;
+          setApiStatus(isApiReady ? "ready" : "error", isApiReady ? `${catalogue.length} Pokémon em cache` : "PokéAPI indisponível");
           render();
           console.error("Falha ao carregar a PokéAPI:", error);
         }
@@ -876,6 +1366,17 @@
       function extractId(url) {
         const match = String(url).match(/\/pokemon\/(\d+)\/?$/);
         return match ? Number(match[1]) : null;
+      }
+
+      async function fetchPokemonData(entry) {
+        const cached = pokemonCache[String(entry.id)];
+        if (cached) return cached;
+        const response = await fetch(entry.url, { cache: "force-cache" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = normalizePokemon(await response.json());
+        pokemonCache[String(data.id)] = data;
+        persistPokemonCache();
+        return data;
       }
 
       async function drawPokemon() {
@@ -890,7 +1391,7 @@
           else if (!state.players.some((player) => player.points >= 1)) maybeFinishWhenNoBudget();
           return;
         }
-        const available = catalogue.filter((entry) => !state.usedIds.includes(entry.id));
+        const available = catalogue.filter((entry) => entry.id <= getMaxPokemonId() && !state.usedIds.includes(entry.id));
         if (!available.length) {
           state.phase = "complete";
           addHistory("Todos os Pokémon disponíveis foram leiloados.", "system");
@@ -904,9 +1405,7 @@
         render();
         const entry = available[Math.floor(Math.random() * available.length)];
         try {
-          const response = await fetch(entry.url, { cache: "force-cache" });
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const data = await response.json();
+          const data = await fetchPokemonData(entry);
           state.usedIds.push(data.id);
           state.round += 1;
           state.currentPokemon = normalizePokemon(data);
@@ -919,6 +1418,7 @@
           state.nextStarter = 1 - actualStarter;
           saveState();
           showToast(`${formatPokemonName(data.name)} entrou no palco.`);
+          scheduleBotTurn();
         } catch (error) {
           showToast("Não foi possível carregar este Pokémon. Tente sortear novamente.", "error");
           console.error("Falha ao carregar detalhes do Pokémon:", error);
@@ -931,14 +1431,93 @@
       function normalizePokemon(data) {
         const artwork = data.sprites?.other?.["official-artwork"]?.front_default || data.sprites?.other?.dream_world?.front_default || data.sprites?.front_default || "";
         const stats = (data.stats || []).reduce((result, item) => { result[item.stat.name] = item.base_stat; return result; }, {});
+        const types = (data.types || []).map((entry) => entry.type.name);
         return {
           id: data.id,
           name: data.name,
           image: artwork,
-          types: (data.types || []).map((entry) => entry.type.name),
+          sprite: data.sprites?.front_default || artwork,
+          types,
           stats,
-          baseTotal: Object.values(stats).reduce((sum, value) => sum + Number(value || 0), 0)
+          baseTotal: Object.values(stats).reduce((sum, value) => sum + Number(value || 0), 0),
+          abilities: (data.abilities || []).map((entry) => entry.ability.name),
+          moves: createRepresentativeMoves(types),
+          weight: data.weight || 0,
+          height: data.height || 0
         };
+      }
+
+      function createRepresentativeMoves(types = ["normal"]) {
+        const moves = types.flatMap((type) => (MOVE_LIBRARY[type] || MOVE_LIBRARY.normal).map((move) => ({ ...move, type })));
+        return [...new Map(moves.map((move) => [move.name, move])).values()].slice(0, 4);
+      }
+
+      function statValue(pokemon, key, fallback = 50) {
+        return Number(pokemon?.stats?.[key] || fallback);
+      }
+
+      function getPokemonPowerScore(pokemon, team = []) {
+        const hp = statValue(pokemon, "hp");
+        const attack = statValue(pokemon, "attack");
+        const defense = statValue(pokemon, "defense");
+        const specialAttack = statValue(pokemon, "special-attack");
+        const specialDefense = statValue(pokemon, "special-defense");
+        const speed = statValue(pokemon, "speed");
+        const raw = hp * .16 + Math.max(attack, specialAttack) * .22 + Math.max(defense, specialDefense) * .19 + speed * .19 + (pokemon?.baseTotal || 0) * .24;
+        const typeCoverage = new Set(team.flatMap((member) => member.types || [])).size;
+        return Math.max(1, Math.min(100, Math.round(raw / 6.2 + Math.min(5, typeCoverage) * 1.2)));
+      }
+
+      function getBotProfile() {
+        return {
+          easy: { evaluation: .82, patience: .55, randomness: .4 },
+          normal: { evaluation: 1, patience: .8, randomness: .2 },
+          hard: { evaluation: 1.08, patience: .95, randomness: .08 }
+        }[settings.botDifficulty] || { evaluation: 1, patience: .8, randomness: .2 };
+      }
+
+      function getBotBidCeiling(pokemon) {
+        const bot = state.players[1];
+        const profile = getBotProfile();
+        const remainingSlots = Math.max(0, MAX_TEAM_SIZE - bot.team.length);
+        const reserve = Math.max(BOT_MIN_RESERVE, remainingSlots - 1);
+        const spendable = Math.max(0, bot.points - reserve);
+        const score = Math.max(1, Math.min(100, Math.round(getPokemonPowerScore(pokemon, bot.team) * profile.evaluation)));
+        const marketCeiling = Math.max(1, Math.round(1 + score / 13 * profile.patience));
+        return { ceiling: Math.min(spendable, marketCeiling), score, reserve };
+      }
+
+      function chooseBotBattleOrder() {
+        return state.players[1].team.slice().sort((left, right) => {
+          const rightScore = getPokemonPowerScore(right, state.players[1].team) + statValue(right, "speed") * .08;
+          const leftScore = getPokemonPowerScore(left, state.players[1].team) + statValue(left, "speed") * .08;
+          return rightScore - leftScore;
+        }).map((pokemon) => pokemon.id);
+      }
+
+      function scheduleBotTurn() {
+        clearTimeout(botTimer);
+        if (gameMode !== "bot" || state.phase !== "auction" || state.auction?.turn !== 1) return;
+        botTimer = setTimeout(() => {
+          botTimer = null;
+          if (gameMode !== "bot" || state.phase !== "auction" || !state.auction || state.auction.turn !== 1) return;
+          const bot = state.players[1];
+          const nextBid = state.auction.currentBid + 1;
+          const decision = getBotBidCeiling(state.currentPokemon);
+          const profile = getBotProfile();
+          const hasLead = state.auction.leadingPlayer !== null;
+          const shouldBid = canPlayerBid(1) && nextBid <= decision.ceiling && (!hasLead || decision.score >= 48 || Math.random() > profile.randomness);
+          if (shouldBid) {
+            placeBid(1, true);
+            return;
+          }
+          if (hasLead) {
+            passAuction(1, true);
+            return;
+          }
+          if (canPlayerBid(1) && bot.points > decision.reserve) placeBid(1, true);
+          else resolveAutomaticWinner();
+        }, 560);
       }
 
       function setNetworkStatus(type, text) {
@@ -1045,6 +1624,9 @@
               if (message.action === "draw") drawPokemon();
               if (message.action === "bid" && message.playerIndex === 1) placeBid(1, true);
               if (message.action === "pass" && message.playerIndex === 1) passAuction(1, true);
+              if (message.action === "battle-order" && message.playerIndex === 1) updateBattleOrder(1, message.order, true);
+              if (message.action === "battle-start") startBattle(true);
+              if (message.action === "battle-next") simulateBattleTurn(true);
             }
           } else if (connectionRole === "guest" && message.type === "state" && message.state) {
             applyRemoteState(message.state);
@@ -1056,13 +1638,17 @@
 
       function applyRemoteState(remoteState) {
         const wasComplete = state.phase === "complete";
+        const wasBattle = state.phase === "battleSetup" || state.phase === "battle";
         state = { ...createInitialState(), ...remoteState };
         state.players = Array.isArray(remoteState.players) ? remoteState.players : [createPlayer(0), createPlayer(1)];
         state.usedIds = Array.isArray(remoteState.usedIds) ? remoteState.usedIds : [];
         state.history = Array.isArray(remoteState.history) ? remoteState.history.slice(-80) : [];
+        state.battle = remoteState.battle && typeof remoteState.battle === "object" ? remoteState.battle : null;
+        gameMode = state.mode === "bot" ? "bot" : state.mode === "online" ? "online" : "local";
         saveState();
         render();
-        if (state.phase === "complete" && !wasComplete) openResults();
+        if (state.phase === "complete" && !wasComplete && !state.battle?.finished) openResults();
+        if ((state.phase === "battleSetup" || state.phase === "battle" || state.battle?.finished) && !wasBattle) openBattleModal();
       }
 
       async function createInvite() {
@@ -1145,7 +1731,7 @@
       }
 
       function placeBid(playerIndex, fromNetwork = false) {
-        if (fromNetwork && connectionRole !== "host") return;
+        if (fromNetwork && connectionRole !== "host" && gameMode !== "bot") return;
         if (!fromNetwork && isOnlineGuest()) {
           if (playerIndex !== 1 || !isConnected()) { showToast("Aguarde a conexão com o anfitrião.", "error"); return; }
           sendNetworkMessage("action", { action: "bid", playerIndex });
@@ -1165,13 +1751,14 @@
         addHistory(`${player.name} deu lance de ${nextBid} ponto${nextBid === 1 ? "" : "s"}.`, "bid");
         saveState();
         render();
+        scheduleBotTurn();
         if (!canPlayerBid(state.auction.turn)) {
           window.setTimeout(resolveAutomaticWinner, 420);
         }
       }
 
       function passAuction(playerIndex, fromNetwork = false) {
-        if (fromNetwork && connectionRole !== "host") return;
+        if (fromNetwork && connectionRole !== "host" && gameMode !== "bot") return;
         if (!fromNetwork && isOnlineGuest()) {
           if (playerIndex !== 1 || !isConnected()) { showToast("Aguarde a conexão com o anfitrião.", "error"); return; }
           sendNetworkMessage("action", { action: "pass", playerIndex });
@@ -1245,31 +1832,475 @@
       function finishGame() {
         if (isOnlineGuest()) return;
         if (state.phase === "complete") { openResults(); return; }
+        if (state.players.some((player) => player.team.length < MAX_TEAM_SIZE)) {
+          showToast(`Monte seis Pokémon em cada time para liberar a batalha.`, "error");
+          return;
+        }
+        if (state.phase === "battleSetup" || state.phase === "battle" || state.phase === "campaignNext") { openBattleModal(); return; }
         if (state.phase === "auction") {
-          const proceed = window.confirm("O leilão atual será encerrado sem vencedor. Finalizar a partida mesmo assim?");
+          const proceed = window.confirm("O leilão atual será encerrado sem vencedor e a batalha final será preparada. Continuar?");
           if (!proceed) return;
           const name = state.currentPokemon ? formatPokemonName(state.currentPokemon.name) : "o lote atual";
           addHistory(`Partida finalizada manualmente; ${name} não foi vendido.`, "system");
-        } else {
-          addHistory("Partida finalizada manualmente pelos jogadores.", "system");
         }
-        state.phase = "complete";
-        state.auction = null;
-        state.currentPokemon = null;
-        saveState();
-        render();
-        openResults();
+        beginBattleSetup();
       }
 
       function restartGame() {
         if (isOnlineGuest()) return;
         if (!window.confirm("Reiniciar apaga o progresso e o histórico desta partida. Continuar?")) return;
+        clearTimeout(botTimer);
         state = createInitialState();
         saveState();
         closeResults();
+        closeBattleModal();
         addHistory("Nova partida criada. Jogador 1 começa.", "system");
         render();
         showToast("Mesa limpa. Boa sorte aos dois jogadores!");
+      }
+
+      function getBattleLocalPlayerIndex() {
+        if (!isOnline()) return null;
+        return connectionRole === "guest" ? 1 : 0;
+      }
+
+      function canControlBattlePlayer(playerIndex) {
+        if (gameMode === "bot") return playerIndex === 0;
+        const localPlayer = getBattleLocalPlayerIndex();
+        return localPlayer === null || localPlayer === playerIndex;
+      }
+
+      function createBattleSetupState() {
+        return {
+          orders: [[], []],
+          ready: [false, false],
+          teams: [null, null],
+          labels: [null, null],
+          campaignStage: null,
+          campaignPending: false,
+          started: false,
+          active: [0, 0],
+          maxHp: [[], []],
+          hp: [[], []],
+          statuses: [[], []],
+          statusTurns: [[], []],
+          log: [],
+          turn: 0,
+          winner: null,
+          finished: false
+        };
+      }
+
+      function createCampaignState() {
+        return { active: true, stage: 0, wins: 0, score: 0, startedAt: Date.now(), completed: false, defeated: false };
+      }
+
+      function createCampaignTeam(stageIndex, sourceTeam) {
+        const difficultyScale = { easy: .92, normal: 1, hard: 1.08 }[settings.botDifficulty] || 1;
+        const scale = (.82 + stageIndex * .045) * difficultyScale;
+        return sourceTeam.map((pokemon, index) => {
+          const stats = Object.fromEntries(Object.entries(pokemon.stats || {}).map(([key, value]) => [key, Math.max(1, Math.round(Number(value) * scale))]));
+          return { ...pokemon, id: 5000 + stageIndex * 10 + index, stats, baseTotal: Object.values(stats).reduce((sum, value) => sum + Number(value || 0), 0) };
+        });
+      }
+
+      function chooseTeamBattleOrder(team) {
+        return team.slice().sort((left, right) => getPokemonPowerScore(right, team) + statValue(right, "speed") * .08 - getPokemonPowerScore(left, team) - statValue(left, "speed") * .08).map((pokemon) => pokemon.id);
+      }
+
+      function getBattleTeam(playerIndex) {
+        return state.battle?.teams?.[playerIndex] || state.players[playerIndex]?.team || [];
+      }
+
+      function getBattlePlayerLabel(playerIndex) {
+        return state.battle?.labels?.[playerIndex] || state.players[playerIndex]?.name || `Jogador ${playerIndex + 1}`;
+      }
+
+      function beginBattleSetup() {
+        if (!state.players.every((player) => player.team.length >= MAX_TEAM_SIZE)) return false;
+        if (state.phase === "battleSetup" || state.phase === "battle") { openBattleModal(); return true; }
+        state.battle = createBattleSetupState();
+        state.phase = "battleSetup";
+        if (gameMode === "bot") {
+          state.campaign = state.campaign || createCampaignState();
+          state.battle.campaignStage = state.campaign.stage;
+          state.battle.teams = [state.players[0].team.map((pokemon) => ({ ...pokemon })), createCampaignTeam(state.campaign.stage, state.players[0].team)];
+          state.battle.labels = [state.players[0].name, CAMPAIGN_STAGES[state.campaign.stage].name];
+          state.battle.orders[1] = chooseTeamBattleOrder(state.battle.teams[1]);
+          state.battle.ready[1] = state.battle.orders[1].length === MAX_TEAM_SIZE;
+        }
+        addHistory("Os dois times estão completos. Escolham a ordem da batalha final.", "system");
+        saveState();
+        render();
+        openBattleModal();
+        return true;
+      }
+
+      function normalizeBattleOrder(playerIndex, order) {
+        const validIds = new Set(getBattleTeam(playerIndex).map((pokemon) => String(pokemon.id)));
+        return [...new Set((Array.isArray(order) ? order : []).map(String).filter((id) => validIds.has(id)))].slice(0, MAX_TEAM_SIZE);
+      }
+
+      function updateBattleOrder(playerIndex, order, fromNetwork = false) {
+        if (!state.battle || state.phase !== "battleSetup") return;
+        if (fromNetwork && connectionRole !== "host") return;
+        const normalized = normalizeBattleOrder(playerIndex, order);
+        state.battle.orders[playerIndex] = normalized;
+        state.battle.ready[playerIndex] = normalized.length === MAX_TEAM_SIZE;
+        saveState();
+        render();
+      }
+
+      function reorderBattlePokemon(playerIndex, draggedId, targetId) {
+        if (!state.battle || state.phase !== "battleSetup" || !canControlBattlePlayer(playerIndex)) return;
+        const order = (state.battle.orders[playerIndex] || []).map(String);
+        const from = order.indexOf(String(draggedId));
+        const to = order.indexOf(String(targetId));
+        if (from < 0 || to < 0 || from === to) return;
+        const [item] = order.splice(from, 1);
+        order.splice(to, 0, item);
+        updateBattleOrder(playerIndex, order);
+        if (isOnlineGuest()) sendNetworkMessage("action", { action: "battle-order", playerIndex, order });
+      }
+
+      function selectBattlePokemon(playerIndex, pokemonId) {
+        if (!state.battle || state.phase !== "battleSetup" || !canControlBattlePlayer(playerIndex)) return;
+        const order = state.battle.orders[playerIndex] || [];
+        const id = String(pokemonId);
+        const nextOrder = order.map(String).includes(id) ? order.filter((entry) => String(entry) !== id) : [...order, id];
+        if (isOnlineGuest()) {
+          state.battle.orders[playerIndex] = normalizeBattleOrder(playerIndex, nextOrder);
+          state.battle.ready[playerIndex] = state.battle.orders[playerIndex].length === MAX_TEAM_SIZE;
+          saveState();
+          render();
+          sendNetworkMessage("action", { action: "battle-order", playerIndex, order: state.battle.orders[playerIndex] });
+          return;
+        }
+        updateBattleOrder(playerIndex, nextOrder);
+      }
+
+      function getBattlePokemon(playerIndex, slot = state.battle?.active?.[playerIndex] ?? 0) {
+        const id = String(state.battle?.orders?.[playerIndex]?.[slot]);
+        return getBattleTeam(playerIndex).find((pokemon) => String(pokemon.id) === id) || null;
+      }
+
+      function calculateBattleMaxHp(pokemon) {
+        return Math.max(90, Math.round(62 + statValue(pokemon, "hp") * 1.18));
+      }
+
+      function startBattle(fromNetwork = false) {
+        if (fromNetwork && connectionRole !== "host") return;
+        if (!fromNetwork && isOnlineGuest()) {
+          if (!isConnected()) { showToast("A conexão ainda não está pronta.", "error"); return; }
+          sendNetworkMessage("action", { action: "battle-start" });
+          return;
+        }
+        if (!state.battle || !state.battle.ready.every(Boolean)) {
+          showToast("Cada jogador precisa escolher os seis Pokémon.", "error");
+          return;
+        }
+        state.battle.started = true;
+        state.battle.active = [0, 0];
+        state.battle.maxHp = state.battle.orders.map((order, playerIndex) => order.map((id) => calculateBattleMaxHp(getBattleTeam(playerIndex).find((pokemon) => String(pokemon.id) === String(id)))));
+        state.battle.hp = state.battle.maxHp.map((values) => values.slice());
+        state.battle.statuses = state.battle.orders.map((order) => order.map(() => "healthy"));
+        state.battle.statusTurns = state.battle.orders.map((order) => order.map(() => 0));
+        state.battle.log = [{ text: `A batalha começou: ${formatPokemonName(getBattlePokemon(0).name)} contra ${formatPokemonName(getBattlePokemon(1).name)}.`, tone: "system" }];
+        state.battle.turn = 0;
+        state.phase = "battle";
+        addHistory("A batalha final começou. O vencedor de cada duelo permanece em campo.", "system");
+        saveState();
+        render();
+        openBattleModal();
+      }
+
+      function getTypeMultiplier(attackType, defenderTypes = []) {
+        return defenderTypes.reduce((multiplier, defenderType) => multiplier * (TYPE_EFFECTIVENESS[attackType]?.[defenderType] ?? 1), 1);
+      }
+
+      function chooseAttackType(attacker, defender) {
+        const candidates = attacker.types?.length ? attacker.types : ["normal"];
+        return candidates.slice().sort((left, right) => getTypeMultiplier(right, defender.types) - getTypeMultiplier(left, defender.types))[0] || "normal";
+      }
+
+      function getEffectivenessText(multiplier) {
+        if (multiplier === 0) return "não teve efeito.";
+        if (multiplier > 1) return "<span class=\"super-effective\">super efetivo!</span>";
+        if (multiplier < 1) return "<span class=\"not-effective\">não é muito eficaz.</span>";
+        return "";
+      }
+
+      function chooseBattleMove(attacker, defender) {
+        const moves = (attacker.moves || []).filter((move) => Number(move.power) > 0);
+        if (!moves.length) return { name: "Investida", type: attacker.types?.[0] || "normal", power: 40, category: "physical" };
+        return moves.slice().sort((left, right) => {
+          const rightValue = Number(right.power) * getTypeMultiplier(right.type, defender.types);
+          const leftValue = Number(left.power) * getTypeMultiplier(left.type, defender.types);
+          return rightValue - leftValue;
+        })[0];
+      }
+
+      function calculateBattleDamage(attacker, defender, move, attackerStatus) {
+        const specialTypes = new Set(["fire", "water", "grass", "electric", "ice", "psychic", "ghost", "dragon", "dark", "fairy"]);
+        const attackType = move.type || attacker.types?.[0] || "normal";
+        const isSpecial = move.category === "special" || (move.category !== "physical" && specialTypes.has(attackType));
+        const attack = statValue(attacker, isSpecial ? "special-attack" : "attack") * (attackerStatus === "burned" ? .85 : 1);
+        const defense = statValue(defender, isSpecial ? "special-defense" : "defense");
+        const base = (((2 * 50 / 5 + 2) * Number(move.power || 40) * attack / Math.max(1, defense)) / 50) + 2;
+        const stab = attacker.types?.includes(attackType) ? 1.5 : 1;
+        const multiplier = getTypeMultiplier(attackType, defender.types);
+        const critical = Math.random() < .06 ? 1.5 : 1;
+        const randomFactor = .9 + Math.random() * .1;
+        return { damage: multiplier === 0 ? 0 : Math.max(1, Math.round(base * stab * multiplier * critical * randomFactor)), multiplier, critical: critical > 1 };
+      }
+
+      function applyStatusEffect(attacker, targetIndex, targetSlot, move, messages) {
+        const statusByType = { fire: "burned", poison: "poisoned", electric: "paralyzed", ghost: "asleep" };
+        const attackType = move.type || "normal";
+        const nextStatus = move.status || statusByType[attackType];
+        const currentStatus = state.battle.statuses[targetIndex][targetSlot];
+        const chanceByType = { fire: .16, poison: .2, electric: .18, ghost: .1 };
+        const chance = Number(move.statusChance || chanceByType[attackType] || 0);
+        if (!nextStatus || currentStatus !== "healthy" || Math.random() > chance) return;
+        state.battle.statuses[targetIndex][targetSlot] = nextStatus;
+        state.battle.statusTurns[targetIndex][targetSlot] = ["asleep", "frozen"].includes(nextStatus) ? 1 : 0;
+        messages.push(`<strong>${formatPokemonName(attacker.name)}</strong> deixou o rival <span class="status-effect">${STATUS_LABELS[nextStatus]}!</span>`);
+      }
+
+      function advanceBattleActive(playerIndex, messages) {
+        const battle = state.battle;
+        while (battle.active[playerIndex] < battle.orders[playerIndex].length && battle.hp[playerIndex][battle.active[playerIndex]] <= 0) {
+          const fallen = getBattlePokemon(playerIndex);
+          if (fallen) messages.push(`<strong>${formatPokemonName(fallen.name)}</strong> de ${getBattlePlayerLabel(playerIndex)} foi derrotado.`);
+          battle.active[playerIndex] += 1;
+        }
+        if (battle.active[playerIndex] >= battle.orders[playerIndex].length) {
+          finishBattle(1 - playerIndex, messages);
+          return;
+        }
+        const next = getBattlePokemon(playerIndex);
+        if (next) messages.push(`${getBattlePlayerLabel(playerIndex)} envia <strong>${formatPokemonName(next.name)}</strong>.`);
+      }
+
+      function finishBattle(winnerIndex, messages) {
+        if (state.battle.finished) return;
+        state.battle.finished = true;
+        state.battle.winner = winnerIndex;
+        messages.push(`<span class="super-effective">${getBattlePlayerLabel(winnerIndex)} venceu a batalha!</span>`);
+        if (gameMode === "bot" && state.campaign?.active && state.battle.campaignStage !== null && winnerIndex === 0) {
+          const stage = CAMPAIGN_STAGES[state.battle.campaignStage];
+          state.campaign.wins = state.battle.campaignStage + 1;
+          state.campaign.score += stage.reward;
+          if (state.battle.campaignStage < CAMPAIGN_STAGES.length - 1) {
+            state.phase = "campaignNext";
+            state.battle.campaignPending = true;
+            addHistory(`${stage.name} vencido. Próximo desafio liberado.`, "battle");
+            return;
+          }
+          state.campaign.completed = true;
+          state.campaign.score += state.players[0].points * 5 + Math.max(0, MAX_TEAM_SIZE - state.battle.active[0]) * 25;
+          state.phase = "complete";
+          addHistory("Campeão derrotado. A campanha foi concluída!", "battle");
+          saveRankingEntry({ name: state.players[0].name, score: state.campaign.score, date: new Date().toLocaleDateString("pt-BR"), generation: `#${getMaxPokemonId()}`, difficulty: { easy: "Fácil", normal: "Normal", hard: "Difícil" }[settings.botDifficulty] });
+          return;
+        }
+        state.phase = "complete";
+        if (gameMode === "bot" && state.campaign?.active) state.campaign.defeated = true;
+        addHistory(`${getBattlePlayerLabel(winnerIndex)} venceu a batalha final.`, "battle");
+      }
+
+      function advanceCampaign() {
+        if (state.phase !== "campaignNext" || !state.campaign || !state.battle?.campaignPending) return;
+        const previousOrder = state.battle.orders[0] || [];
+        state.campaign.stage += 1;
+        const stage = CAMPAIGN_STAGES[state.campaign.stage];
+        state.battle = createBattleSetupState();
+        state.battle.campaignStage = state.campaign.stage;
+        state.battle.teams = [state.players[0].team.map((pokemon) => ({ ...pokemon })), createCampaignTeam(state.campaign.stage, state.players[0].team)];
+        state.battle.labels = [state.players[0].name, stage.name];
+        state.battle.orders[0] = normalizeBattleOrder(0, previousOrder);
+        state.battle.ready[0] = state.battle.orders[0].length === MAX_TEAM_SIZE;
+        state.battle.orders[1] = chooseTeamBattleOrder(state.battle.teams[1]);
+        state.battle.ready[1] = true;
+        state.phase = "battleSetup";
+        addHistory(`${stage.name} está pronto. Você pode revisar sua ordem.`, "system");
+        saveState();
+        render();
+        openBattleModal();
+      }
+
+      function applyBattleStatusDamage(playerIndex, messages) {
+        const battle = state.battle;
+        const slot = battle.active[playerIndex];
+        const pokemon = getBattlePokemon(playerIndex);
+        if (!pokemon || battle.hp[playerIndex][slot] <= 0) return;
+        const status = battle.statuses[playerIndex][slot];
+        if (status !== "burned" && status !== "poisoned") return;
+        const damage = Math.max(1, Math.round(battle.maxHp[playerIndex][slot] * (status === "burned" ? .04 : .05)));
+        battle.hp[playerIndex][slot] = Math.max(0, battle.hp[playerIndex][slot] - damage);
+        messages.push(`<strong>${formatPokemonName(pokemon.name)}</strong> sofreu ${damage} de dano por estar ${STATUS_LABELS[status]}.`);
+        if (battle.hp[playerIndex][slot] <= 0) advanceBattleActive(playerIndex, messages);
+      }
+
+      function performBattleAttack(attackerIndex, actorId, targetId, messages) {
+        const battle = state.battle;
+        const attackerSlot = battle.active[attackerIndex];
+        const targetIndex = 1 - attackerIndex;
+        const targetSlot = battle.active[targetIndex];
+        const attacker = getBattlePokemon(attackerIndex);
+        const defender = getBattlePokemon(targetIndex);
+        if (!attacker || !defender || String(attacker.id) !== String(actorId) || String(defender.id) !== String(targetId)) return 0;
+        const attackerStatus = battle.statuses[attackerIndex][attackerSlot];
+        if (["asleep", "frozen"].includes(attackerStatus)) {
+          const turns = battle.statusTurns[attackerIndex][attackerSlot];
+          if (attackerStatus === "frozen" && Math.random() < .35) {
+            battle.statuses[attackerIndex][attackerSlot] = "healthy";
+          } else if (turns > 0) {
+            battle.statusTurns[attackerIndex][attackerSlot] = turns - 1;
+            messages.push(`<strong>${formatPokemonName(attacker.name)}</strong> está ${STATUS_LABELS[attackerStatus]} e perdeu a vez.`);
+            return 0;
+          }
+          else battle.statuses[attackerIndex][attackerSlot] = "healthy";
+        }
+        if (attackerStatus === "paralyzed" && Math.random() < .2) {
+          messages.push(`<strong>${formatPokemonName(attacker.name)}</strong> está paralisado e não conseguiu agir.`);
+          return 0;
+        }
+        const move = chooseBattleMove(attacker, defender);
+        const attackType = move.type || "normal";
+        const result = calculateBattleDamage(attacker, defender, move, attackerStatus);
+        battle.hp[targetIndex][targetSlot] = Math.max(0, battle.hp[targetIndex][targetSlot] - result.damage);
+        const effectiveness = getEffectivenessText(result.multiplier);
+        const criticalText = result.critical ? " crítico" : "";
+        messages.push(`<strong>${formatPokemonName(attacker.name)}</strong> usou ${move.name} (${attackType}) e causou <strong>${result.damage} de dano${criticalText}</strong> em ${formatPokemonName(defender.name)}. ${effectiveness}`);
+        if (result.damage > 0 && battle.hp[targetIndex][targetSlot] > 0) applyStatusEffect(attacker, targetIndex, targetSlot, move, messages);
+        if (battle.hp[targetIndex][targetSlot] <= 0) advanceBattleActive(targetIndex, messages);
+        return result.damage;
+      }
+
+      function simulateBattleTurn(fromNetwork = false) {
+        if (fromNetwork && connectionRole !== "host") return;
+        if (!fromNetwork && isOnlineGuest()) {
+          sendNetworkMessage("action", { action: "battle-next" });
+          return;
+        }
+        const battle = state.battle;
+        if (!battle?.started || battle.finished) return;
+        const messages = [`Turno ${battle.turn + 1}:`];
+        applyBattleStatusDamage(0, messages);
+        applyBattleStatusDamage(1, messages);
+        if (battle.finished) {
+          battle.turn += 1;
+          battle.log = [...battle.log, ...messages.map((text) => ({ text, tone: "system" }))].slice(-70);
+          saveState();
+          render();
+          return;
+        }
+        const activeAtStart = battle.active.slice();
+        const actorIds = activeAtStart.map((slot, playerIndex) => String(battle.orders[playerIndex][slot]));
+        const attackOrder = [0, 1].sort((left, right) => {
+          const leftPokemon = getBattlePokemon(left, activeAtStart[left]);
+          const rightPokemon = getBattlePokemon(right, activeAtStart[right]);
+          const leftSpeed = statValue(leftPokemon, "speed") * (battle.statuses[left][activeAtStart[left]] === "paralyzed" ? .5 : 1);
+          const rightSpeed = statValue(rightPokemon, "speed") * (battle.statuses[right][activeAtStart[right]] === "paralyzed" ? .5 : 1);
+          return rightSpeed - leftSpeed || left - right;
+        });
+        let totalDamage = 0;
+        attackOrder.forEach((attackerIndex) => {
+          if (battle.finished) return;
+          const targetIndex = 1 - attackerIndex;
+          if (battle.active[attackerIndex] !== activeAtStart[attackerIndex] || battle.active[targetIndex] !== activeAtStart[targetIndex]) return;
+          totalDamage += performBattleAttack(attackerIndex, actorIds[attackerIndex], actorIds[targetIndex], messages);
+        });
+        if (!battle.finished && totalDamage === 0) {
+          const attackerIndex = attackOrder[0];
+          const targetIndex = 1 - attackerIndex;
+          const targetSlot = battle.active[targetIndex];
+          if (battle.hp[targetIndex][targetSlot] > 0) {
+            battle.hp[targetIndex][targetSlot] = Math.max(0, battle.hp[targetIndex][targetSlot] - 1);
+            messages.push("Os tipos se anularam; a disputa causou 1 de dano residual.");
+            if (battle.hp[targetIndex][targetSlot] <= 0) advanceBattleActive(targetIndex, messages);
+          }
+        }
+        battle.turn += 1;
+        battle.log = [...battle.log, ...messages.map((text) => ({ text, tone: text.includes("super efetivo") ? "effective" : "system" }))].slice(-70);
+        saveState();
+        render();
+      }
+
+      function renderBattleModal() {
+        if (!state.battle) return;
+        const setup = state.phase === "battleSetup" && !state.battle.started;
+        $("#battleSetupView").classList.toggle("is-hidden", !setup);
+        $("#battleArenaView").classList.toggle("is-hidden", setup);
+        if (setup) renderBattleSetup();
+        else renderBattleArena();
+      }
+
+      function renderBattleSetup() {
+        const battle = state.battle;
+        const totalChosen = battle.orders.reduce((total, order) => total + order.length, 0);
+        $("#battleCounter").textContent = `${totalChosen} / ${MAX_TEAM_SIZE * 2} escolhidos`;
+        $("#battleOrderGrid").innerHTML = state.players.map((player, playerIndex) => {
+          const team = getBattleTeam(playerIndex);
+          const order = battle.orders[playerIndex] || [];
+          const canChoose = canControlBattlePlayer(playerIndex);
+          const isBot = gameMode === "bot" && playerIndex === 1;
+          const note = isBot ? "O adversário organiza a equipe pelos stats e aumenta de força a cada desafio." : canChoose ? "Clique na sequência desejada. Clique novamente para retirar um Pokémon." : "Aguardando o outro jogador escolher a própria ordem.";
+          return `<section class="battle-order-card${isBot ? " bot-order" : ""}"><div class="battle-order-heading"><h3>${getBattlePlayerLabel(playerIndex)}</h3><span>${order.length}/${MAX_TEAM_SIZE} selecionados</span></div><p class="battle-order-note">${note}</p><div class="battle-pick-list">${team.map((pokemon) => {
+            const position = order.map(String).indexOf(String(pokemon.id));
+            return `<button class="battle-pick${position >= 0 ? " selected" : ""}" type="button" draggable="${canChoose}" data-battle-player="${playerIndex}" data-battle-id="${pokemon.id}" ${canChoose ? "" : "disabled"}><span class="battle-slot">${position >= 0 ? position + 1 : "·"}</span><img src="${pokemon.image}" alt="" loading="lazy"><span><strong>${formatPokemonName(pokemon.name)}</strong><small>total ${pokemon.baseTotal || "—"} · vel ${statValue(pokemon, "speed")}</small></span></button>`;
+          }).join("")}</div><div class="battle-ready${battle.ready[playerIndex] ? " is-ready" : ""}">${battle.ready[playerIndex] ? "ordem confirmada" : "escolha os seis para confirmar"}</div></section>`;
+        }).join("");
+        const allReady = battle.ready.every(Boolean);
+        $("#battleStartButton").disabled = !allReady || (isOnline() && connectionRole !== "host");
+        $("#battleStartButton").textContent = isOnlineGuest() ? "Aguardando anfitrião" : allReady ? "Começar batalha ↗" : "Escolha os 6 Pokémon";
+      }
+
+      function renderFighterCard(playerIndex) {
+        const battle = state.battle;
+        const slot = battle.active[playerIndex];
+        const pokemon = getBattlePokemon(playerIndex);
+        const fighterClass = playerIndex === 1 ? "fighter-two" : "fighter-one";
+        if (!pokemon) return `<article class="fighter-card ${fighterClass}"><div class="fighter-topline"><span>${getBattlePlayerLabel(playerIndex)}</span><span>time derrotado</span></div><div class="stage-placeholder"><div class="placeholder-mark">×</div><p>Sem Pokémon restantes.</p></div></article>`;
+        const maxHp = battle.maxHp[playerIndex][slot] || calculateBattleMaxHp(pokemon);
+        const hp = Math.max(0, battle.hp[playerIndex][slot] ?? maxHp);
+        const ratio = Math.round((hp / maxHp) * 100);
+        const status = battle.statuses[playerIndex][slot] || "healthy";
+        const hpClass = ratio <= 25 ? "danger" : ratio <= 50 ? "warning" : "";
+        return `<article class="fighter-card ${fighterClass}"><div class="fighter-topline"><strong>${formatPokemonName(pokemon.name)}</strong><span>${getBattlePlayerLabel(playerIndex)} · ${slot + 1}/${MAX_TEAM_SIZE}</span></div><div class="fighter-art-row"><img src="${pokemon.image}" alt="${formatPokemonName(pokemon.name)}"><div class="fighter-types">${pokemon.types.map((type) => `<span class="type-badge type-${type}">${type}</span>`).join("")}</div></div><div class="fighter-hp"><div class="fighter-hp-fill ${hpClass}" style="width:${ratio}%"></div></div><div class="fighter-hp-label"><span>HP</span><strong>${hp} / ${maxHp}</strong></div><span class="fighter-status status-${status}">${STATUS_LABELS[status]}</span></article>`;
+      }
+
+      function renderBattleArena() {
+        const battle = state.battle;
+        const winner = battle.finished ? ` · vencedor: ${getBattlePlayerLabel(battle.winner)}` : "";
+        $("#battleCounter").textContent = battle.finished ? "batalha concluída" : `turno ${battle.turn + 1}`;
+        $("#battleScore").innerHTML = `<span>${getBattlePlayerLabel(0)} <strong>${Math.max(0, MAX_TEAM_SIZE - battle.active[0])}</strong> restantes</span><strong>${battle.finished ? `${getBattlePlayerLabel(battle.winner)} venceu` : `duelo ${battle.turn + 1}${winner}`}</strong><span><strong>${Math.max(0, MAX_TEAM_SIZE - battle.active[1])}</strong> restantes ${getBattlePlayerLabel(1)}</span>`;
+        $("#battleDuel").innerHTML = `${renderFighterCard(0)}<div class="battle-vs">VS</div>${renderFighterCard(1)}`;
+        $("#battleLog").innerHTML = battle.log.slice().reverse().map((entry) => `<div class="battle-log-line ${entry.tone || "system"}">${entry.text}</div>`).join("");
+        $("#battleNextButton").disabled = (battle.finished && !battle.campaignPending) || isOnlineGuest();
+        $("#battleNextButton").textContent = battle.campaignPending ? "Próximo desafio ↗" : battle.finished ? "Batalha concluída" : isOnlineGuest() ? "Aguardando anfitrião" : "Simular próximo turno ↗";
+        $("#battleCloseArenaButton").textContent = battle.campaignPending ? "Fechar arena" : battle.finished ? "Ver resumo" : "Fechar arena";
+        $("#battleTitle").textContent = battle.campaignPending ? "Vitória! Próximo desafio" : battle.finished ? "A arena tem um vencedor" : "Batalha final";
+        $("#battleIntro").textContent = battle.campaignPending ? `${getBattlePlayerLabel(battle.winner)} venceu. A campanha continua em ${CAMPAIGN_STAGES[state.campaign.stage + 1].name}.` : battle.finished ? `${getBattlePlayerLabel(battle.winner)} venceu. O Pokémon que sobrevive permanece até o próximo confronto.` : "O mais veloz ataca primeiro. O vencedor permanece em campo com o HP restante.";
+      }
+
+      function openBattleModal() {
+        $("#battleBackdrop").hidden = false;
+        renderBattleModal();
+      }
+
+      function closeBattleModal() { $("#battleBackdrop").hidden = true; }
+
+      function closeBattleArena() {
+        const finished = state.battle?.finished && !state.battle?.campaignPending;
+        closeBattleModal();
+        if (finished) openResults();
+      }
+
+      function advanceBattleAction() {
+        if (state.phase === "campaignNext") advanceCampaign();
+        else simulateBattleTurn();
       }
 
       function render() {
@@ -1277,6 +2308,7 @@
         renderSpotlight();
         renderHistory();
         renderResult();
+        renderBattleModal();
         $("#finishButton").disabled = state.phase === "complete" || isOnlineGuest();
         $("#finishButton").textContent = state.phase === "complete" ? "Partida finalizada" : "Finalizar partida";
         $("#restartButton").disabled = isOnlineGuest();
@@ -1289,11 +2321,12 @@
           const active = state.phase === "auction" && state.auction?.turn === index;
           card.classList.toggle("active", active);
           card.classList.toggle("player-two", index === 1);
+          card.querySelector(".player-name").textContent = player.name;
           $(`#points${index}`).textContent = player.points;
           $(`#spent${index}`).textContent = player.spent;
           $(`#count${index}`).textContent = player.team.length;
           $(`#teamLabel${index}`).textContent = `${player.team.length} adquirido${player.team.length === 1 ? "" : "s"}`;
-          $(`#budgetFill${index}`).style.width = `${(player.points / STARTING_POINTS) * 100}%`;
+          $(`#budgetFill${index}`).style.width = `${(player.points / getStartingPoints()) * 100}%`;
           const list = $(`#teamList${index}`);
           if (!player.team.length) {
             list.innerHTML = `<div class="team-empty">Nenhum Pokémon ainda.<br>O primeiro lote pode mudar tudo.</div>`;
@@ -1330,6 +2363,8 @@
               <div class="pokemon-number">POKÉDEX · #${String(pokemon.id).padStart(3, "0")}</div>
               <h2 class="pokemon-name">${formatPokemonName(pokemon.name)}</h2>
               <div class="type-list">${pokemon.types.map((type) => `<span class="type-badge type-${type}">${type}</span>`).join("")}</div>
+              <div class="pokemon-stat-grid">${[["hp", "HP"], ["attack", "ATK"], ["defense", "DEF"], ["special-attack", "SATK"], ["special-defense", "SDEF"], ["speed", "VEL"]].map(([key, label]) => `<div><strong>${statValue(pokemon, key)}</strong><span>${label}</span></div>`).join("")}</div>
+              <div class="pokemon-indicators"><span>força <strong>${getPokemonPowerScore(pokemon)}</strong></span><span>versatilidade <strong>${Math.min(100, 38 + pokemon.types.length * 28)}</strong></span><span>BST <strong>${pokemon.baseTotal}</strong></span></div>
             </div>`;
           consoleNode.className = `auction-console${turn === 1 ? " player-two-turn" : ""}`;
           consoleNode.innerHTML = `
@@ -1343,6 +2378,16 @@
             </div>
             <div class="console-hint">O valor sobe de 1 em 1 · saldo de ${player.name}: ${player.points} pt${isOnline() ? ` · ${connectionRole === "host" ? "você é o Jogador 1" : "você é o Jogador 2"}` : ""}</div>
             <div class="next-starter"><span class="spark"></span><span>Depois deste lote, ${state.players[state.nextStarter].name} abre a próxima rodada.</span></div>`;
+        } else if ((state.phase === "battleSetup" || state.phase === "battle" || state.phase === "campaignNext") && state.battle) {
+          $("#stageLabel").textContent = state.phase === "battle" ? "batalha em andamento" : state.phase === "campaignNext" ? "próximo desafio" : "ordem da batalha";
+          stage.innerHTML = `<div class="stage-placeholder"><div class="placeholder-mark">VS</div><p>${state.phase === "battle" ? "A arena está ativa.<br>Abra a janela para simular o próximo turno." : state.phase === "campaignNext" ? `Vitória registrada.<br>${CAMPAIGN_STAGES[state.campaign.stage + 1].name} aguarda.` : "Os dois times estão completos.<br>Escolham a ordem para começar."}</p></div>`;
+          consoleNode.className = "auction-console empty";
+          consoleNode.innerHTML = `<button class="button amber wide" type="button" data-action="battle">${state.phase === "battle" ? "ABRIR ARENA" : state.phase === "campaignNext" ? "PRÓXIMO DESAFIO" : "ESCOLHER ORDEM"} <span class="arrow">↗</span></button>`;
+        } else if (state.phase === "complete" && state.battle?.finished) {
+          $("#stageLabel").textContent = "batalha finalizada";
+          stage.innerHTML = `<div class="stage-placeholder"><div class="placeholder-mark">★</div><p>${state.players[state.battle.winner].name} venceu a arena.<br>Abra o resumo para rever os times.</p></div>`;
+          consoleNode.className = "auction-console empty";
+          consoleNode.innerHTML = `<button class="button amber wide" type="button" data-action="battle">REVER BATALHA <span class="arrow">↗</span></button>`;
         } else if (state.phase === "complete") {
           $("#stageLabel").textContent = "mesa encerrada";
           stage.innerHTML = `<div class="stage-placeholder"><div class="placeholder-mark">✓</div><p>A partida terminou.<br>Abra o fechamento para comparar os dois times.</p></div>`;
@@ -1368,7 +2413,7 @@
           list.innerHTML = `<div class="history-empty">O diário começa quando o primeiro lote for sorteado.</div>`;
           return;
         }
-        const icon = { bid: "↗", win: "★", system: "•" };
+        const icon = { bid: "↗", win: "★", battle: "⚔", system: "•" };
         list.innerHTML = state.history.slice().reverse().slice(0, 9).map((entry) => `
           <div class="history-item ${entry.type}"><span class="history-icon">${icon[entry.type] || "•"}</span><span>${entry.text}</span><time class="history-time">${entry.time || "—"}</time></div>`).join("");
       }
@@ -1376,9 +2421,14 @@
       function renderResult() {
         const totalRounds = state.history.filter((entry) => entry.type === "win").length;
         const totalPokemon = state.players.reduce((sum, player) => sum + player.team.length, 0);
+        const battleResult = state.battle?.finished ? getBattlePlayerLabel(state.battle.winner) : state.players.every((player) => player.team.length >= MAX_TEAM_SIZE) ? "ordem pendente" : "não realizada";
+        const campaignResult = state.campaign?.active ? `${state.campaign.score} pts · ${state.campaign.wins}/13` : "—";
+        $("#resultTitle").textContent = state.campaign?.completed ? "CAMPEÃO!" : state.campaign?.defeated ? "DERROTA" : "Partida encerrada";
         $("#resultSummary").innerHTML = `
           <div class="result-metric"><span>lotes vendidos</span><strong>${totalRounds}</strong></div>
           <div class="result-metric"><span>Pokémon na mesa</span><strong>${totalPokemon}</strong></div>
+          <div class="result-metric"><span>batalha final</span><strong>${battleResult}</strong></div>
+          <div class="result-metric"><span>campanha</span><strong>${campaignResult}</strong></div>
           <div class="result-metric"><span>Jogador 1 · gasto</span><strong>${state.players[0].spent} pt</strong></div>
           <div class="result-metric"><span>Jogador 2 · gasto</span><strong>${state.players[1].spent} pt</strong></div>`;
         $("#resultTeams").innerHTML = state.players.map((player, index) => `
@@ -1403,6 +2453,7 @@
         if (action === "bid") placeBid(Number(button.dataset.player));
         if (action === "pass") passAuction(Number(button.dataset.player));
         if (action === "results") openResults();
+        if (action === "battle") openBattleModal();
       }
 
       $("#gameView").addEventListener("click", handleAction);
@@ -1417,7 +2468,60 @@
       $("#closeResultButton").addEventListener("click", closeResults);
       $("#closeResultButton2").addEventListener("click", closeResults);
       $("#resultBackdrop").addEventListener("click", (event) => { if (event.target.id === "resultBackdrop") closeResults(); });
+      $("#battleOrderGrid").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-battle-id]");
+        if (!button) return;
+        selectBattlePokemon(Number(button.dataset.battlePlayer), Number(button.dataset.battleId));
+      });
+      $("#battleOrderGrid").addEventListener("dragstart", (event) => {
+        const button = event.target.closest("button[data-battle-id]");
+        if (!button || button.disabled) return;
+        draggedBattle = { playerIndex: Number(button.dataset.battlePlayer), pokemonId: button.dataset.battleId };
+        button.classList.add("dragging");
+      });
+      $("#battleOrderGrid").addEventListener("dragover", (event) => {
+        if (event.target.closest("button[data-battle-id]")) event.preventDefault();
+      });
+      $("#battleOrderGrid").addEventListener("dragend", () => { draggedBattle = null; });
+      $("#battleOrderGrid").addEventListener("drop", (event) => {
+        event.preventDefault();
+        const button = event.target.closest("button[data-battle-id]");
+        if (!button || !draggedBattle) return;
+        const playerIndex = Number(button.dataset.battlePlayer);
+        reorderBattlePokemon(playerIndex, draggedBattle.pokemonId, button.dataset.battleId);
+        draggedBattle = null;
+      });
+      $("#battleStartButton").addEventListener("click", () => startBattle());
+      $("#battleNextButton").addEventListener("click", advanceBattleAction);
+      $("#battleCloseSetupButton").addEventListener("click", closeBattleModal);
+      $("#battleCloseArenaButton").addEventListener("click", closeBattleArena);
+      $("#battleBackdrop").addEventListener("click", (event) => { if (event.target.id === "battleBackdrop") closeBattleModal(); });
       $("#connectButton").addEventListener("click", openNetworkModal);
+      $("#modeButton").addEventListener("click", returnToModeSelection);
+      $("#startModeButton").addEventListener("click", enterSelectedMode);
+      $("#continueButton").addEventListener("click", continueSavedGame);
+      $("#helpButton").addEventListener("click", openHelp);
+      $("#settingsButton").addEventListener("click", openSettings);
+      $("#rankingButton").addEventListener("click", openRanking);
+      $("#closeSettingsButton").addEventListener("click", closeSettings);
+      $("#cancelSettingsButton").addEventListener("click", closeSettings);
+      $("#settingsForm").addEventListener("submit", saveSettingsFromForm);
+      $("#settingsBackdrop").addEventListener("click", (event) => { if (event.target.id === "settingsBackdrop") closeSettings(); });
+      $("#closeHelpButton").addEventListener("click", closeHelp);
+      $("#helpBackdrop").addEventListener("click", (event) => { if (event.target.id === "helpBackdrop") closeHelp(); });
+      $("#closeRankingButton").addEventListener("click", closeRanking);
+      $("#doneRankingButton").addEventListener("click", closeRanking);
+      $("#rankingBackdrop").addEventListener("click", (event) => { if (event.target.id === "rankingBackdrop") closeRanking(); });
+      $("#clearRankingButton").addEventListener("click", () => {
+        if (!loadRanking().length || !window.confirm("Limpar todas as pontuações do ranking local?")) return;
+        localStorage.removeItem(RANKING_KEY);
+        renderRanking();
+        showToast("Ranking limpo.");
+      });
+      document.querySelectorAll("[data-mode]").forEach((card) => card.addEventListener("click", () => {
+        selectedMode = card.dataset.mode;
+        renderModeSelection();
+      }));
       $("#closeNetworkButton").addEventListener("click", closeNetworkModal);
       $("#doneNetworkButton").addEventListener("click", closeNetworkModal);
       $("#disconnectButton").addEventListener("click", disconnectNetwork);
@@ -1437,6 +2541,7 @@
       document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("#networkBackdrop").hidden) closeNetworkModal(); });
 
       loadState();
+      renderModeSelection();
       render();
       loadCatalogue();
     })();
