@@ -309,25 +309,28 @@
       }
       .support-card {
         display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 18px;
+        grid-template-columns: 1fr;
+        gap: 14px;
         align-items: center;
+        justify-items: center;
         margin-top: 18px;
-        padding: 16px 18px;
+        padding: 19px 18px 20px;
         border: 1px solid rgba(246, 183, 74, 0.28);
         border-radius: 14px;
         background: linear-gradient(110deg, rgba(246,183,74,.11), rgba(255,255,255,.025));
         box-shadow: 0 12px 30px rgba(0,0,0,.12);
       }
-      .support-card-copy { display: grid; gap: 5px; }
+      .support-card-copy { display: grid; gap: 5px; text-align: center; }
       .support-card-copy strong { color: var(--paper); font-size: 14px; }
       .support-card-copy span { color: var(--muted); font-size: 11px; line-height: 1.45; }
-      .support-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-      .support-actions .button { min-width: auto; white-space: nowrap; }
-      .pix-button { border-color: rgba(125, 211, 252, .35); color: #bceaff; }
+      .support-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+      .support-actions .button { min-width: 170px; min-height: 44px; white-space: nowrap; box-shadow: 0 8px 18px rgba(0,0,0,.14); }
+      .support-actions .button:hover:not(:disabled) { box-shadow: 0 11px 24px rgba(0,0,0,.25); }
+      .pix-button { border: 1px solid rgba(125, 211, 252, .35); color: #bceaff; background: rgba(127,198,239,.1); }
       @media (max-width: 640px) {
-        .support-card { grid-template-columns: 1fr; }
-        .support-actions { justify-content: flex-start; }
+        .support-card { padding-inline: 12px; }
+        .support-actions { width: 100%; }
+        .support-actions .button { flex: 1 1 150px; min-width: 0; }
       }
       .mode-tools {
         display: flex;
