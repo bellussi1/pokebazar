@@ -307,6 +307,28 @@
       .mode-footer .button {
         min-width: 190px;
       }
+      .support-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        align-items: center;
+        margin-top: 18px;
+        padding: 16px 18px;
+        border: 1px solid rgba(246, 183, 74, 0.28);
+        border-radius: 14px;
+        background: linear-gradient(110deg, rgba(246,183,74,.11), rgba(255,255,255,.025));
+        box-shadow: 0 12px 30px rgba(0,0,0,.12);
+      }
+      .support-card-copy { display: grid; gap: 5px; }
+      .support-card-copy strong { color: var(--paper); font-size: 14px; }
+      .support-card-copy span { color: var(--muted); font-size: 11px; line-height: 1.45; }
+      .support-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+      .support-actions .button { min-width: auto; white-space: nowrap; }
+      .pix-button { border-color: rgba(125, 211, 252, .35); color: #bceaff; }
+      @media (max-width: 640px) {
+        .support-card { grid-template-columns: 1fr; }
+        .support-actions { justify-content: flex-start; }
+      }
       .mode-tools {
         display: flex;
         gap: 14px;
@@ -3132,6 +3154,16 @@
               Entrar na mesa <span class="arrow">↗</span>
             </button>
           </div>
+          <aside class="support-card" aria-label="Apoie o desenvolvimento">
+            <div class="support-card-copy">
+              <strong>Curtiu a aventura?</strong>
+              <span>Uma doação ajuda a manter o PokéBazar e trazer novas gerações, modos e melhorias.</span>
+            </div>
+            <div class="support-actions">
+              <a class="button amber" href="https://buymeacoffee.com/SEU_USUARIO" target="_blank" rel="noopener noreferrer">☕ Buy Me a Coffee</a>
+              <button class="button pix-button" id="pixSupportButton" type="button" data-pix-key="COLOQUE_SUA_CHAVE_PIX_AQUI">▣ Copiar Pix</button>
+            </div>
+          </aside>
         </div>
       </section>
       <section
@@ -7903,6 +7935,20 @@
         $("#helpButton").addEventListener("click", openHelp);
         $("#settingsButton").addEventListener("click", openSettings);
         $("#rankingButton").addEventListener("click", openRanking);
+        $("#pixSupportButton").addEventListener("click", async (event) => {
+          const button = event.currentTarget;
+          const key = button.dataset.pixKey;
+          if (!key || key.includes("COLOQUE_SUA")) {
+            showToast("Configure sua chave Pix no index.html.", "error");
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(key);
+            showToast("Chave Pix copiada. Obrigado pelo apoio!");
+          } catch {
+            showToast("Não foi possível copiar a chave Pix.", "error");
+          }
+        });
         $("#configBackButton").addEventListener("click", closeAdventureConfig);
         $("#adventureForm").addEventListener("submit", startAdventure);
         $("#previousOnboardingButton").addEventListener("click", () => {
