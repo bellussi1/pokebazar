@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>PokéBazar — leilão de equipes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #101827;
+      --ink-2: #182438;
+      --ink-3: #25344a;
+      --paper: #f8f4ec;
+      --paper-muted: #e7e0d2;
+      --paper-soft: #fbf9f4;
+      --amber: #f7b74d;
+      --amber-deep: #c97824;
+      --coral: #f06e5d;
+      --mint: #86d6bd;
+      --blue: #7fc6ef;
+      --white: #fffdf8;
+      --muted: #9caabe;
+      --line: rgba(248, 244, 236, .14);
+      --shadow: 0 24px 64px rgba(4, 8, 17, .28);
+      --display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+      --body: "Manrope", "Trebuchet MS", sans-serif;
+      --mono: "DM Mono", "Courier New", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-width: 320px; background: var(--ink); }
+
+    body {
+      margin: 0;
+      color: var(--paper);
+      font-family: var(--body);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(71, 117, 164, .28), transparent 34rem),
+        radial-gradient(circle at 8% 30%, rgba(247, 183, 77, .09), transparent 22rem),
+        var(--ink);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+      z-index: 20;
+    }
+
+    button { font: inherit; }
+
+    button:focus-visible {
+      outline: 3px solid var(--amber);
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      width: min(1540px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      padding: 4px 2px 28px;
+    }
+
+    .brand-lockup { display: flex; gap: 14px; align-items: center; }
+
+    .brand-mark {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--amber);
+      border-radius: 50%;
+      background: var(--paper);
+      box-shadow: 5px 5px 0 rgba(247, 183, 77, .18);
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      top: 21px;
+      height: 4px;
+      background: var(--ink);
+      border-top: 2px solid var(--amber);
+      border-bottom: 2px solid var(--amber);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 16px;
+      left: 16px;
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      background: var(--amber);
+      z-index: 1;
+    }
+
+    .eyebrow,
+    .mono-label {
+      color: var(--amber);
+      font: 500 10px/1.2 var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy .eyebrow { margin-bottom: 4px; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      color: var(--paper);
+      font: 800 clamp(28px, 3.2vw, 48px)/.9 var(--display);
+      letter-spacing: -.06em;
+    }
+
+    .tagline {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .01em;
+    }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .api-status {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      min-height: 37px;
+      padding: 0 12px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--mint);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(134, 214, 189, .12);
+    }
+
+    .api-status.loading .status-dot { background: var(--amber); animation: pulse-dot 1.1s ease-in-out infinite; }
+    .api-status.error .status-dot { background: var(--coral); box-shadow: 0 0 0 4px rgba(240, 110, 93, .12); }
+
+    .network-status .status-dot { background: var(--muted); box-shadow: 0 0 0 4px rgba(156, 170, 190, .1); }
+    .network-status.connected .status-dot { background: var(--mint); box-shadow: 0 0 0 4px rgba(134, 214, 189, .12); }
+    .network-status.connecting .status-dot { background: var(--amber); animation: pulse-dot 1.1s ease-in-out infinite; }
+    .network-status.error .status-dot { background: var(--coral); box-shadow: 0 0 0 4px rgba(240, 110, 93, .12); }
+
+    .button {
+      border: 0;
+      min-height: 42px;
+      border-radius: 11px;
+      padding: 0 15px;
+      color: var(--ink);
+      background: var(--paper);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, opacity .18s ease;
+    }
+
+    .button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0, 0, 0, .18); }
+    .button:active:not(:disabled) { transform: translateY(0); }
+    .button:disabled { opacity: .34; cursor: not-allowed; }
+
+    .button.ghost { color: var(--paper); background: transparent; border: 1px solid var(--line); }
+    .button.ghost:hover:not(:disabled) { background: rgba(248, 244, 236, .08); }
+    .button.amber { color: var(--ink); background: var(--amber); }
+    .button.coral { color: var(--white); background: var(--coral); }
+    .button.wide { width: 100%; min-height: 54px; font-size: 14px; }
+    .button .arrow { margin-left: 6px; font-size: 16px; vertical-align: -1px; }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: minmax(220px, .83fr) minmax(420px, 1.6fr) minmax(220px, .83fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .player-card,
+    .spotlight,
+    .history-card,
+    .rules-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(31, 46, 68, .86), rgba(16, 24, 39, .9));
+      box-shadow: var(--shadow);
+    }
+
+    .player-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 530px;
+      padding: 22px 20px 18px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .player-card::before {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      top: -82px;
+      right: -60px;
+      border: 1px solid rgba(247, 183, 77, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 14px rgba(247, 183, 77, .035), 0 0 0 28px rgba(247, 183, 77, .025);
+    }
+
+    .player-card.player-two::before { border-color: rgba(127, 198, 239, .18); }
+
+    .player-card.active {
+      border-color: rgba(247, 183, 77, .72);
+      box-shadow: 0 0 0 1px rgba(247, 183, 77, .15), 0 24px 64px rgba(4, 8, 17, .34), 0 0 32px rgba(247, 183, 77, .06);
+    }
+
+    .player-card.player-two.active { border-color: rgba(127, 198, 239, .72); box-shadow: 0 0 0 1px rgba(127, 198, 239, .14), var(--shadow), 0 0 32px rgba(127, 198, 239, .05); }
+
+    .player-card-header { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; position: relative; }
+
+    .player-identity { display: flex; gap: 11px; align-items: center; }
+
+    .player-token {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      color: var(--ink);
+      background: var(--amber);
+      font: 800 15px var(--display);
+    }
+
+    .player-two .player-token { background: var(--blue); }
+
+    .player-name { font: 700 18px/1 var(--display); letter-spacing: -.03em; }
+
+    .turn-chip {
+      display: none;
+      padding: 6px 8px;
+      color: var(--ink);
+      background: var(--amber);
+      border-radius: 5px;
+      font: 500 9px var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .player-two .turn-chip { background: var(--blue); }
+    .player-card.active .turn-chip { display: inline-block; animation: chip-in .35s both; }
+
+    .budget-block { padding: 28px 0 22px; position: relative; }
+
+    .budget-number {
+      display: block;
+      margin-top: 5px;
+      font: 800 clamp(44px, 4vw, 68px)/.8 var(--display);
+      letter-spacing: -.08em;
+      color: var(--paper);
+    }
+
+    .budget-unit { color: var(--muted); font-size: 11px; }
+
+    .budget-rule { height: 4px; margin-top: 18px; overflow: hidden; background: rgba(248, 244, 236, .1); border-radius: 99px; }
+    .budget-fill { height: 100%; width: 100%; background: var(--amber); border-radius: inherit; transition: width .45s cubic-bezier(.22, 1, .36, 1); }
+    .player-two .budget-fill { background: var(--blue); }
+
+    .mini-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+
+    .mini-stat { display: flex; flex-direction: column; gap: 4px; }
+    .mini-stat strong { font: 700 17px/1 var(--display); color: var(--paper); }
+    .mini-stat span { color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+
+    .team-heading { display: flex; justify-content: space-between; align-items: baseline; padding: 19px 0 11px; }
+    .team-heading span:last-child { color: var(--muted); font: 10px var(--mono); }
+
+    .team-list { display: flex; flex-direction: column; gap: 7px; min-height: 105px; overflow: auto; padding-right: 3px; }
+
+    .team-empty { display: grid; place-items: center; min-height: 105px; padding: 14px; color: #718096; border: 1px dashed rgba(248, 244, 236, .16); border-radius: 9px; text-align: center; font-size: 11px; line-height: 1.45; }
+
+    .team-item { display: grid; grid-template-columns: 33px 1fr auto; gap: 8px; align-items: center; min-height: 46px; padding: 5px 8px 5px 5px; border: 1px solid rgba(248, 244, 236, .1); border-radius: 9px; background: rgba(248, 244, 236, .04); animation: item-in .42s both; }
+    .team-item img { width: 33px; height: 33px; object-fit: contain; }
+    .team-item-name { font-size: 11px; font-weight: 700; text-transform: capitalize; }
+    .team-item-number { margin-top: 3px; color: var(--muted); font: 9px var(--mono); }
+    .team-item-price { color: var(--amber); font: 500 10px var(--mono); }
+    .player-two .team-item-price { color: var(--blue); }
+
+    .player-note { margin-top: auto; padding-top: 17px; color: #7d8da2; font-size: 10px; line-height: 1.5; }
+    .player-note strong { color: var(--paper-muted); font-weight: 600; }
+
+    .spotlight {
+      min-height: 530px;
+      padding: 20px 24px 22px;
+      border-color: rgba(247, 183, 77, .27);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(247, 183, 77, .16), transparent 16rem),
+        linear-gradient(145deg, rgba(38, 52, 75, .96), rgba(16, 24, 39, .97));
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+    }
+
+    .spotlight::before,
+    .spotlight::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .spotlight::before {
+      width: 88%;
+      height: 88%;
+      left: 6%;
+      top: 8%;
+      border: 1px solid rgba(247, 183, 77, .12);
+      border-radius: 50%;
+      transform: rotate(-9deg) scaleX(.82);
+    }
+
+    .spotlight::after {
+      width: 45%;
+      height: 1px;
+      top: 54%;
+      left: 27%;
+      background: linear-gradient(90deg, transparent, rgba(247, 183, 77, .55), transparent);
+      box-shadow: 0 0 24px rgba(247, 183, 77, .5);
+    }
+
+    .spotlight-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 6px; }
+    .round-label { color: var(--muted); font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .round-label strong { color: var(--paper); }
+
+    .lot-stage { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; min-height: 315px; text-align: center; }
+
+    .pokeball-orbit { position: relative; display: grid; place-items: center; width: min(290px, 70vw); height: 215px; }
+    .pokeball-orbit::before, .pokeball-orbit::after { content: ""; position: absolute; border: 1px solid rgba(247, 183, 77, .2); border-radius: 50%; transform: rotate(13deg); }
+    .pokeball-orbit::before { inset: 9px 0; }
+    .pokeball-orbit::after { inset: 22px -14px; transform: rotate(-17deg); border-color: rgba(127, 198, 239, .14); }
+
+    .pokemon-art {
+      width: min(235px, 62vw);
+      height: 235px;
+      object-fit: contain;
+      filter: drop-shadow(0 23px 20px rgba(0, 0, 0, .38));
+      animation: float-art 4.6s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .pokemon-art.is-empty { width: 80px; height: 80px; opacity: .38; filter: none; animation: none; }
+
+    .stage-placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--muted); z-index: 1; }
+    .stage-placeholder .placeholder-mark { width: 64px; height: 64px; display: grid; place-items: center; border: 1px solid rgba(247, 183, 77, .35); border-radius: 50%; color: var(--amber); font: 700 23px var(--display); }
+    .stage-placeholder p { max-width: 250px; font-size: 12px; line-height: 1.5; }
+
+    .pokemon-meta { animation: rise-in .55s both; }
+    .pokemon-number { color: var(--amber); font: 500 11px var(--mono); letter-spacing: .16em; }
+    .pokemon-name { margin-top: 5px; color: var(--white); font: 800 clamp(34px, 4.4vw, 58px)/.86 var(--display); letter-spacing: -.075em; text-transform: capitalize; }
+    .type-list { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-top: 13px; }
+    .type-badge { padding: 5px 9px; border: 1px solid rgba(248, 244, 236, .12); border-radius: 999px; color: var(--paper); background: rgba(248, 244, 236, .08); font: 500 10px var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+    .type-badge.type-fire { color: #ffd3a5; background: rgba(240, 110, 93, .15); }
+    .type-badge.type-water { color: #bfe4ff; background: rgba(127, 198, 239, .15); }
+    .type-badge.type-grass { color: #c3f3de; background: rgba(134, 214, 189, .15); }
+    .type-badge.type-electric { color: #ffe99f; background: rgba(247, 183, 77, .17); }
+
+    .auction-console { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
+    .auction-console.empty { border-top-color: transparent; }
+    .auction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: end; }
+    .bid-label { color: var(--muted); font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    .bid-value { display: block; margin-top: 4px; color: var(--amber); font: 800 32px/.9 var(--display); letter-spacing: -.06em; }
+    .bid-value small { color: var(--muted); font: 500 11px var(--mono); letter-spacing: 0; }
+    .turn-message { text-align: right; color: var(--paper); font-size: 12px; line-height: 1.35; }
+    .turn-message strong { color: var(--amber); font-weight: 800; }
+    .player-two-turn .turn-message strong { color: var(--blue); }
+    .console-actions { display: grid; grid-template-columns: 1.3fr .8fr; gap: 9px; margin-top: 14px; }
+    .console-hint { margin-top: 10px; min-height: 15px; color: var(--muted); text-align: center; font-size: 10px; }
+
+    .next-starter { display: flex; gap: 7px; align-items: center; margin-top: 12px; color: var(--muted); font-size: 10px; }
+    .next-starter strong { color: var(--paper); }
+    .next-starter .spark { width: 5px; height: 5px; border-radius: 50%; background: var(--amber); }
+
+    .lower-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 16px; margin-top: 16px; }
+
+    .history-card, .rules-card { border-radius: 16px; padding: 18px 20px; }
+    .lower-heading { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+    .lower-heading h2 { color: var(--paper); font: 700 16px var(--display); letter-spacing: -.03em; }
+    .lower-heading span { color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+
+    .history-list { display: flex; flex-direction: column; gap: 0; max-height: 150px; overflow: auto; padding-right: 4px; }
+    .history-item { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: start; padding: 11px 0; border-bottom: 1px solid rgba(248, 244, 236, .07); color: var(--paper-muted); font-size: 11px; line-height: 1.35; }
+    .history-item:last-child { border-bottom: 0; }
+    .history-icon { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 6px; color: var(--ink); background: var(--amber); font-size: 11px; font-weight: 800; }
+    .history-item.bid .history-icon { background: var(--mint); }
+    .history-item.win .history-icon { background: var(--coral); color: var(--white); }
+    .history-item.system .history-icon { background: var(--blue); }
+    .history-time { color: #73849a; font: 9px var(--mono); }
+    .history-empty { padding: 16px 0 3px; color: #73849a; font-size: 11px; }
+
+    .rules-card { background: linear-gradient(145deg, rgba(247, 183, 77, .1), rgba(31, 46, 68, .86)); }
+    .rules-list { display: grid; gap: 10px; padding-top: 15px; }
+    .rule-row { display: grid; grid-template-columns: 23px 1fr; gap: 9px; align-items: start; color: var(--paper-muted); font-size: 11px; line-height: 1.4; }
+    .rule-row b { display: grid; place-items: center; width: 21px; height: 21px; color: var(--ink); background: var(--amber); border-radius: 50%; font: 700 10px var(--mono); }
+    .rule-row strong { color: var(--paper); font-weight: 700; }
+
+    .toast { position: fixed; left: 50%; bottom: 26px; z-index: 30; width: min(460px, calc(100% - 32px)); padding: 13px 16px; border: 1px solid rgba(247, 183, 77, .4); border-radius: 11px; color: var(--ink); background: var(--amber); box-shadow: 0 15px 35px rgba(0, 0, 0, .25); font-size: 12px; font-weight: 800; text-align: center; transform: translate(-50%, 130%); transition: transform .3s cubic-bezier(.22, 1, .36, 1); }
+    .toast.show { transform: translate(-50%, 0); }
+    .toast.error { color: var(--white); background: var(--coral); border-color: rgba(255,255,255,.2); }
+
+    .modal-backdrop { display: grid; place-items: center; position: fixed; inset: 0; z-index: 25; padding: 20px; background: rgba(8, 12, 20, .84); backdrop-filter: blur(10px); animation: fade-in .25s both; }
+    .modal-backdrop[hidden] { display: none; }
+    .result-modal { width: min(920px, 100%); max-height: min(760px, 92vh); overflow: auto; padding: 26px; border: 1px solid rgba(247, 183, 77, .35); border-radius: 22px; background: var(--paper); color: var(--ink); box-shadow: 0 30px 90px rgba(0, 0, 0, .45); animation: modal-in .42s both; }
+    .result-header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; padding-bottom: 20px; border-bottom: 1px solid rgba(16, 24, 39, .12); }
+    .result-header .eyebrow { color: var(--amber-deep); }
+    .result-header h2 { margin-top: 4px; font: 800 clamp(28px, 5vw, 48px)/.86 var(--display); letter-spacing: -.07em; }
+    .result-header p { max-width: 400px; margin-top: 9px; color: #657083; font-size: 12px; line-height: 1.5; }
+    .result-close { width: 37px; min-height: 37px; padding: 0; border: 1px solid rgba(16, 24, 39, .16); border-radius: 50%; color: var(--ink); background: transparent; cursor: pointer; font-size: 19px; }
+    .result-close:hover { background: rgba(16, 24, 39, .08); }
+    .result-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 18px 0; }
+    .result-metric { padding: 11px 12px; border-radius: 10px; background: #ebe5d9; }
+    .result-metric span { display: block; color: #707b8a; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .07em; }
+    .result-metric strong { display: block; margin-top: 7px; font: 800 24px/.9 var(--display); letter-spacing: -.05em; }
+    .result-teams { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .result-team { padding: 16px; border: 1px solid rgba(16, 24, 39, .1); border-radius: 13px; background: var(--paper-soft); }
+    .result-team.team-two { border-top: 3px solid #66a8d0; }
+    .result-team.team-one { border-top: 3px solid var(--amber-deep); }
+    .result-team h3 { font: 700 18px var(--display); }
+    .result-team-meta { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; color: #738091; font: 10px var(--mono); }
+    .result-team-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 7px; margin-top: 15px; }
+    .result-team-item { display: flex; gap: 6px; align-items: center; min-height: 44px; padding: 4px 7px; border-radius: 8px; background: #eee9df; }
+    .result-team-item img { width: 32px; height: 32px; object-fit: contain; }
+    .result-team-item div { min-width: 0; }
+    .result-team-item strong { display: block; overflow: hidden; font-size: 10px; text-overflow: ellipsis; text-transform: capitalize; white-space: nowrap; }
+    .result-team-item span { display: block; margin-top: 3px; color: #6d7787; font: 9px var(--mono); }
+    .result-empty { grid-column: 1 / -1; padding: 14px; color: #788392; border: 1px dashed rgba(16, 24, 39, .2); border-radius: 8px; font-size: 11px; text-align: center; }
+    .result-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 20px; }
+
+    .network-modal { width: min(720px, 100%); max-height: min(760px, 92vh); overflow: auto; padding: 25px; border: 1px solid rgba(247, 183, 77, .35); border-radius: 22px; color: var(--paper); background: var(--ink-2); box-shadow: 0 30px 90px rgba(0, 0, 0, .45); animation: modal-in .42s both; }
+    .network-modal-header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .network-modal-header h2 { margin-top: 4px; color: var(--white); font: 800 clamp(26px, 5vw, 40px)/.88 var(--display); letter-spacing: -.07em; }
+    .network-modal-header p { max-width: 560px; margin-top: 9px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .network-modal .eyebrow { color: var(--amber); }
+    .network-close { width: 37px; min-height: 37px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--paper); background: transparent; cursor: pointer; font-size: 19px; }
+    .network-close:hover { background: rgba(248, 244, 236, .08); }
+    .network-status-line { display: flex; gap: 8px; align-items: center; min-height: 23px; margin-top: 15px; color: var(--paper-muted); font-size: 11px; }
+    .network-status-line .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+    .network-status-line.connected .status-dot { background: var(--mint); }
+    .network-status-line.connecting .status-dot { background: var(--amber); animation: pulse-dot 1.1s ease-in-out infinite; }
+    .network-status-line.error .status-dot { background: var(--coral); }
+    .network-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 17px 0 14px; }
+    .network-mode { min-height: 47px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); background: transparent; cursor: pointer; font-size: 11px; font-weight: 800; text-align: left; transition: border-color .18s ease, background .18s ease, color .18s ease; }
+    .network-mode:hover, .network-mode.active { border-color: rgba(247, 183, 77, .55); color: var(--paper); background: rgba(247, 183, 77, .1); }
+    .network-panel { padding: 16px; border: 1px solid var(--line); border-radius: 13px; background: rgba(248, 244, 236, .035); }
+    .network-panel h3 { color: var(--white); font: 700 17px var(--display); letter-spacing: -.03em; }
+    .network-panel p { margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .network-step { display: grid; grid-template-columns: 24px 1fr; gap: 9px; margin-top: 14px; }
+    .network-step > b { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: var(--ink); background: var(--amber); font: 700 10px var(--mono); }
+    .network-step > div { min-width: 0; }
+    .network-step label { display: block; margin-bottom: 6px; color: var(--paper); font-size: 11px; font-weight: 700; }
+    .signal-field { display: block; width: 100%; min-height: 64px; resize: vertical; padding: 9px 10px; border: 1px solid rgba(248, 244, 236, .15); border-radius: 8px; color: var(--paper); background: rgba(5, 10, 18, .45); font: 10px/1.4 var(--mono); }
+    .signal-field::placeholder { color: #6f7e92; }
+    .signal-field:focus { outline: 2px solid rgba(247, 183, 77, .55); outline-offset: 2px; }
+    .network-inline { display: flex; gap: 7px; margin-top: 7px; flex-wrap: wrap; }
+    .network-inline .button { min-height: 37px; padding-inline: 11px; font-size: 10px; }
+    .network-helper { margin-top: 13px; color: #7d8da2; font-size: 10px; line-height: 1.5; }
+    .network-helper strong { color: var(--paper-muted); }
+    .network-modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding-top: 17px; }
+
+    .loading-card { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 300px; color: var(--muted); text-align: center; }
+    .loader-ring { width: 36px; height: 36px; border: 3px solid rgba(248, 244, 236, .15); border-top-color: var(--amber); border-radius: 50%; animation: spin .9s linear infinite; }
+    .error-message { max-width: 330px; margin: 0 auto; color: #ffb3a8; font-size: 12px; line-height: 1.55; }
+
+    .is-hidden { display: none !important; }
+
+    @keyframes pulse-dot { 50% { opacity: .35; transform: scale(.75); } }
+    @keyframes chip-in { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes float-art { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-9px) rotate(1deg); } }
+    @keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes item-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes modal-in { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+
+    @media (max-width: 1120px) {
+      .board-grid { grid-template-columns: minmax(205px, .75fr) minmax(390px, 1.5fr) minmax(205px, .75fr); }
+      .player-card { padding-inline: 15px; }
+      .spotlight { padding-inline: 18px; }
+    }
+
+    @media (max-width: 890px) {
+      .app-shell { width: min(100% - 28px, 700px); padding-top: 18px; }
+      .topbar { align-items: center; }
+      .top-actions { max-width: 220px; }
+      .api-status { order: 3; width: 100%; justify-content: center; }
+      .board-grid { grid-template-columns: 1fr 1fr; }
+      .spotlight { grid-column: 1 / -1; grid-row: 1; min-height: 570px; }
+      .player-card { min-height: 420px; }
+      .lower-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .app-shell { width: min(100% - 20px, 460px); padding-bottom: 25px; }
+      .topbar { align-items: flex-start; flex-direction: column; gap: 18px; }
+      .top-actions { max-width: none; width: 100%; justify-content: flex-start; }
+      .top-actions .api-status { order: initial; width: auto; }
+      .top-actions .button { flex: 1; }
+      .board-grid { grid-template-columns: 1fr; }
+      .spotlight { grid-column: auto; min-height: 570px; padding: 17px 15px 19px; }
+      .player-card { min-height: 345px; }
+      .budget-block { padding: 20px 0 17px; }
+      .team-list { min-height: 70px; }
+      .team-empty { min-height: 70px; }
+      .player-note { display: none; }
+      .result-modal { padding: 19px 14px; }
+      .result-header { gap: 10px; }
+      .result-summary { grid-template-columns: 1fr 1fr; }
+      .result-teams { grid-template-columns: 1fr; }
+      .result-actions { flex-direction: column-reverse; }
+      .result-actions .button { width: 100%; }
+      .network-modal { padding: 19px 14px; }
+      .network-modal-footer { flex-direction: column-reverse; }
+      .network-modal-footer .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <div class="eyebrow">Leilão de equipes · 2 jogadores</div>
+          <h1>PokéBazar</h1>
+          <p class="tagline">Escolha bem. Dê o lance certo. Monte sua lenda.</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="api-status loading" id="apiStatus" aria-live="polite"><span class="status-dot"></span><span id="apiStatusText">Conectando à PokéAPI…</span></div>
+        <div class="api-status network-status" id="networkStatus" aria-live="polite"><span class="status-dot"></span><span id="networkStatusText">Modo local</span></div>
+        <button class="button ghost" id="connectButton" type="button">Jogar online</button>
+        <button class="button ghost" id="finishButton" type="button">Finalizar partida</button>
+        <button class="button" id="restartButton" type="button">Reiniciar</button>
+      </div>
+    </header>
+
+    <main id="gameView">
+      <section class="board-grid" aria-label="Mesa de leilão">
+        <article class="player-card player-one" id="playerCard0">
+          <div class="player-card-header">
+            <div class="player-identity">
+              <div class="player-token" aria-hidden="true">01</div>
+              <div><div class="eyebrow">Loteador</div><h2 class="player-name">Jogador 1</h2></div>
+            </div>
+            <span class="turn-chip">sua vez</span>
+          </div>
+          <div class="budget-block">
+            <span class="mono-label">saldo disponível</span>
+            <strong class="budget-number" id="points0">20</strong>
+            <span class="budget-unit">pontos restantes</span>
+            <div class="budget-rule"><div class="budget-fill" id="budgetFill0"></div></div>
+          </div>
+          <div class="mini-stats">
+            <div class="mini-stat"><strong id="spent0">0</strong><span>gastos</span></div>
+            <div class="mini-stat"><strong id="count0">0</strong><span>pokémon</span></div>
+          </div>
+          <div class="team-heading"><span class="mono-label">time adquirido</span><span id="teamLabel0">0 adquiridos</span></div>
+          <div class="team-list" id="teamList0"></div>
+          <p class="player-note"><strong>Estratégia:</strong> cada ponto importa. O lance mínimo é 1 e sobe de um em um.</p>
+        </article>
+
+        <section class="spotlight" id="spotlight" aria-live="polite">
+          <div class="spotlight-topline">
+            <span class="mono-label" id="stageLabel">aguardando o próximo lote</span>
+            <span class="round-label">rodada <strong id="roundNumber">—</strong></span>
+          </div>
+          <div class="lot-stage" id="lotStage">
+            <div class="stage-placeholder">
+              <div class="placeholder-mark">PB</div>
+              <p>O palco está livre.<br>Quando a mesa estiver pronta, sorteie um Pokémon.</p>
+            </div>
+          </div>
+          <div class="auction-console empty" id="auctionConsole">
+            <button class="button amber wide" id="drawButton" type="button" disabled>SORTEAR POKÉMON <span class="arrow">↗</span></button>
+            <div class="next-starter"><span class="spark"></span><span id="nextStarterText">O próximo leilão começa com Jogador 1.</span></div>
+          </div>
+        </section>
+
+        <article class="player-card player-two" id="playerCard1">
+          <div class="player-card-header">
+            <div class="player-identity">
+              <div class="player-token" aria-hidden="true">02</div>
+              <div><div class="eyebrow">Loteador</div><h2 class="player-name">Jogador 2</h2></div>
+            </div>
+            <span class="turn-chip">sua vez</span>
+          </div>
+          <div class="budget-block">
+            <span class="mono-label">saldo disponível</span>
+            <strong class="budget-number" id="points1">20</strong>
+            <span class="budget-unit">pontos restantes</span>
+            <div class="budget-rule"><div class="budget-fill" id="budgetFill1"></div></div>
+          </div>
+          <div class="mini-stats">
+            <div class="mini-stat"><strong id="spent1">0</strong><span>gastos</span></div>
+            <div class="mini-stat"><strong id="count1">0</strong><span>pokémon</span></div>
+          </div>
+          <div class="team-heading"><span class="mono-label">time adquirido</span><span id="teamLabel1">0 adquiridos</span></div>
+          <div class="team-list" id="teamList1"></div>
+          <p class="player-note"><strong>Estratégia:</strong> observe o adversário. Às vezes, o melhor lance é guardar recursos.</p>
+        </article>
+      </section>
+
+      <section class="lower-grid">
+        <section class="history-card" aria-labelledby="historyTitle">
+          <div class="lower-heading"><h2 id="historyTitle">Diário da mesa</h2><span>últimos acontecimentos</span></div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+        <aside class="rules-card" aria-labelledby="rulesTitle">
+          <div class="lower-heading"><h2 id="rulesTitle">Como jogar</h2><span>leilão limpo</span></div>
+          <div class="rules-list">
+            <div class="rule-row"><b>01</b><span><strong>Sortear</strong> revela um lote novo, sem repetição.</span></div>
+            <div class="rule-row"><b>02</b><span><strong>Dar lance</strong> aumenta o valor em exatamente 1 ponto.</span></div>
+            <div class="rule-row"><b>03</b><span><strong>Desistir</strong> entrega o lote ao outro pelo último lance.</span></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="resultBackdrop" hidden>
+    <section class="result-modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+      <div class="result-header">
+        <div><div class="eyebrow">Fechamento da mesa</div><h2 id="resultTitle">Partida encerrada</h2><p>Os times ficam lado a lado para que vocês decidam a melhor estratégia. Aqui, a vitória é de quem fez as escolhas certas.</p></div>
+        <button class="result-close" id="closeResultButton" type="button" aria-label="Fechar resultado">×</button>
+      </div>
+      <div class="result-summary" id="resultSummary"></div>
+      <div class="result-teams" id="resultTeams"></div>
+      <div class="result-actions"><button class="button ghost" id="closeResultButton2" type="button">Voltar para a mesa</button><button class="button amber" id="resultRestartButton" type="button">Nova partida <span class="arrow">↗</span></button></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="networkBackdrop" hidden>
+    <section class="network-modal" role="dialog" aria-modal="true" aria-labelledby="networkTitle">
+      <div class="network-modal-header">
+        <div><div class="eyebrow">Mesa remota · conexão direta</div><h2 id="networkTitle">Jogar em dois computadores</h2><p>Conecte os dois navegadores sem servidor de jogo. O anfitrião controla o catálogo e o estado; cada pessoa joga no próprio computador.</p></div>
+        <button class="network-close" id="closeNetworkButton" type="button" aria-label="Fechar conexão">×</button>
+      </div>
+      <div class="network-status-line" id="networkModalStatus"><span class="status-dot"></span><span>Escolha um papel para começar o pareamento.</span></div>
+      <div class="network-modes">
+        <button class="network-mode active" type="button" data-network-mode="host">Eu sou o anfitrião</button>
+        <button class="network-mode" type="button" data-network-mode="guest">Eu vou entrar</button>
+      </div>
+      <div class="network-panel" id="hostPanel">
+        <h3>Anfitrião · Jogador 1</h3>
+        <p>Crie um convite e envie o texto para seu amigo por qualquer canal que vocês já usem.</p>
+        <div class="network-step"><b>01</b><div><label for="offerOutput">Convite da sala</label><textarea class="signal-field" id="offerOutput" readonly placeholder="Clique em criar convite para gerar o código…"></textarea><div class="network-inline"><button class="button amber" id="createInviteButton" type="button">Criar convite</button><button class="button ghost" id="copyOfferButton" type="button" disabled>Copiar convite</button></div></div></div>
+        <div class="network-step"><b>02</b><div><label for="answerInput">Resposta do seu amigo</label><textarea class="signal-field" id="answerInput" placeholder="Cole aqui a resposta que ele enviar…"></textarea><div class="network-inline"><button class="button" id="applyAnswerButton" type="button">Conectar amigo</button></div></div></div>
+      </div>
+      <div class="network-panel is-hidden" id="guestPanel">
+        <h3>Convidado · Jogador 2</h3>
+        <p>Cole o convite do anfitrião, gere sua resposta e devolva o texto para ele.</p>
+        <div class="network-step"><b>01</b><div><label for="offerInput">Convite do anfitrião</label><textarea class="signal-field" id="offerInput" placeholder="Cole aqui o convite recebido…"></textarea><div class="network-inline"><button class="button amber" id="createAnswerButton" type="button">Ler convite e responder</button></div></div></div>
+        <div class="network-step"><b>02</b><div><label for="answerOutput">Sua resposta</label><textarea class="signal-field" id="answerOutput" readonly placeholder="Sua resposta aparecerá aqui…"></textarea><div class="network-inline"><button class="button ghost" id="copyAnswerButton" type="button" disabled>Copiar resposta</button></div></div></div>
+      </div>
+      <p class="network-helper"><strong>Nota:</strong> a conexão usa WebRTC e um servidor público de descoberta de rede. Nenhum lance passa por um servidor do jogo. Se a rede bloquear conexões diretas, será preciso tentar outra rede ou adicionar um servidor TURN.</p>
+      <div class="network-modal-footer"><button class="button ghost" id="disconnectButton" type="button" disabled>Desconectar</button><button class="button" id="doneNetworkButton" type="button">Fechar</button></div>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=649";
+      const MAX_POKEMON_ID = 649;
+      const STORAGE_KEY = "pokebazar-auction-v1";
+      const STARTING_POINTS = 20;
+      const $ = (selector) => document.querySelector(selector);
+
+      let state = createInitialState();
+      let catalogue = [];
+      let isApiReady = false;
+      let isDrawing = false;
+      let toastTimer = null;
+      let connectionRole = "local";
+      let peerConnection = null;
+      let dataChannel = null;
+      let broadcastTimer = null;
+
+      function createInitialState() {
+        return {
+          version: 1,
+          phase: "ready",
+          players: [createPlayer(0), createPlayer(1)],
+          usedIds: [],
+          currentPokemon: null,
+          auction: null,
+          round: 0,
+          nextStarter: 0,
+          history: [],
+          lastWinner: null,
+          lastPurchase: null
+        };
+      }
+
+      function createPlayer(id) {
+        return { id, name: `Jogador ${id + 1}`, points: STARTING_POINTS, spent: 0, team: [] };
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const saved = JSON.parse(raw);
+          if (!saved || !Array.isArray(saved.players) || saved.players.length !== 2) return;
+          state = { ...createInitialState(), ...saved };
+          state.players = saved.players.map((player, index) => ({
+            ...createPlayer(index),
+            ...player,
+            points: clampNumber(player.points, 0, STARTING_POINTS),
+            spent: clampNumber(player.spent, 0, STARTING_POINTS),
+            team: Array.isArray(player.team) ? player.team : []
+          }));
+          state.usedIds = Array.isArray(saved.usedIds) ? saved.usedIds : [];
+          state.history = Array.isArray(saved.history) ? saved.history.slice(-80) : [];
+          if (!state.auction || !state.currentPokemon || state.phase !== "auction") state.auction = null;
+          if (state.phase === "loading") state.phase = "ready";
+        } catch (error) {
+          console.warn("Não foi possível ler o progresso salvo.", error);
+          state = createInitialState();
+        }
+      }
+
+      function saveState() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+        catch (error) { console.warn("Não foi possível salvar o progresso.", error); }
+        if (connectionRole === "host" && dataChannel?.readyState === "open") {
+          clearTimeout(broadcastTimer);
+          broadcastTimer = setTimeout(broadcastState, 90);
+        }
+      }
+
+      function clampNumber(value, min, max) {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return min;
+        return Math.min(max, Math.max(min, number));
+      }
+
+      function formatPokemonName(name) {
+        return String(name || "").replace(/-/g, " ");
+      }
+
+      function setApiStatus(type, text) {
+        const node = $("#apiStatus");
+        node.className = `api-status ${type}`;
+        $("#apiStatusText").textContent = text;
+      }
+
+      function addHistory(text, type = "system") {
+        state.history.push({ text, type, time: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) });
+        state.history = state.history.slice(-80);
+        saveState();
+      }
+
+      function showToast(message, type = "success") {
+        const node = $("#toast");
+        node.textContent = message;
+        node.className = `toast show${type === "error" ? " error" : ""}`;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { node.className = "toast"; }, 3600);
+      }
+
+      function getCurrentTurn() {
+        return state.auction?.turn ?? null;
+      }
+
+      function isOnline() { return connectionRole === "host" || connectionRole === "guest"; }
+      function isConnected() { return dataChannel?.readyState === "open"; }
+      function isOnlineGuest() { return connectionRole === "guest"; }
+      function canControlPlayer(playerIndex) {
+        if (!isOnline()) return true;
+        return connectionRole === "host" ? playerIndex === 0 : playerIndex === 1;
+      }
+
+      function sendNetworkMessage(type, payload = {}) {
+        if (!isConnected()) return false;
+        dataChannel.send(JSON.stringify({ type, ...payload }));
+        return true;
+      }
+
+      function broadcastState() {
+        sendNetworkMessage("state", { state });
+      }
+
+      function canPlayerBid(playerIndex) {
+        const player = state.players[playerIndex];
+        const nextBid = state.auction?.currentBid ? state.auction.currentBid + 1 : 1;
+        return Boolean(player && player.points >= nextBid);
+      }
+
+      function canStartAuction() {
+        const catalogReady = isOnlineGuest() ? isConnected() : isApiReady;
+        return state.players.some((player) => player.points >= 1) && state.phase === "ready" && catalogReady && !isDrawing;
+      }
+
+      function maybeFinishWhenNoBudget() {
+        if (!state.players.some((player) => player.points >= 1)) {
+          state.phase = "complete";
+          state.auction = null;
+          state.currentPokemon = null;
+          addHistory("A mesa encerrou: não há pontos suficientes para outro leilão.", "system");
+          saveState();
+          render();
+          window.setTimeout(openResults, 300);
+          return true;
+        }
+        return false;
+      }
+
+      async function loadCatalogue() {
+        setApiStatus("loading", "Conectando à PokéAPI…");
+        try {
+          const response = await fetch(API_URL, { cache: "no-store" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const payload = await response.json();
+          catalogue = payload.results.map((entry) => ({ id: extractId(entry.url), name: entry.name, url: entry.url })).filter((entry) => entry.id && entry.id <= MAX_POKEMON_ID);
+          if (!catalogue.length) throw new Error("catálogo vazio");
+          isApiReady = true;
+          setApiStatus("ready", `${catalogue.length} Pokémon no catálogo`);
+          if (!state.history.length) addHistory("A mesa está pronta. Jogador 1 começa o primeiro leilão.", "system");
+          render();
+        } catch (error) {
+          isApiReady = false;
+          setApiStatus("error", "PokéAPI indisponível");
+          render();
+          console.error("Falha ao carregar a PokéAPI:", error);
+        }
+      }
+
+      function extractId(url) {
+        const match = String(url).match(/\/pokemon\/(\d+)\/?$/);
+        return match ? Number(match[1]) : null;
+      }
+
+      async function drawPokemon() {
+        if (isOnlineGuest()) {
+          if (!isConnected()) { showToast("Conecte-se ao anfitrião antes de sortear.", "error"); return; }
+          sendNetworkMessage("action", { action: "draw" });
+          showToast("Pedido enviado ao anfitrião.");
+          return;
+        }
+        if (!canStartAuction()) {
+          if (!isApiReady) showToast("A lista de Pokémon ainda não está disponível.", "error");
+          else if (!state.players.some((player) => player.points >= 1)) maybeFinishWhenNoBudget();
+          return;
+        }
+        const available = catalogue.filter((entry) => !state.usedIds.includes(entry.id));
+        if (!available.length) {
+          state.phase = "complete";
+          addHistory("Todos os Pokémon disponíveis foram leiloados.", "system");
+          saveState();
+          render();
+          openResults();
+          return;
+        }
+
+        isDrawing = true;
+        render();
+        const entry = available[Math.floor(Math.random() * available.length)];
+        try {
+          const response = await fetch(entry.url, { cache: "force-cache" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          state.usedIds.push(data.id);
+          state.round += 1;
+          state.currentPokemon = normalizePokemon(data);
+          state.phase = "auction";
+          const scheduledStarter = state.nextStarter;
+          const actualStarter = canPlayerBid(scheduledStarter) ? scheduledStarter : 1 - scheduledStarter;
+          state.auction = { starter: actualStarter, currentBid: 0, leadingPlayer: null, turn: actualStarter };
+          addHistory(`${state.players[actualStarter].name} iniciou o leilão de ${formatPokemonName(data.name)}.`, "system");
+          if (actualStarter !== scheduledStarter) addHistory(`${state.players[scheduledStarter].name} está sem pontos; ${state.players[actualStarter].name} começa automaticamente.`, "system");
+          state.nextStarter = 1 - actualStarter;
+          saveState();
+          showToast(`${formatPokemonName(data.name)} entrou no palco.`);
+        } catch (error) {
+          showToast("Não foi possível carregar este Pokémon. Tente sortear novamente.", "error");
+          console.error("Falha ao carregar detalhes do Pokémon:", error);
+        } finally {
+          isDrawing = false;
+          render();
+        }
+      }
+
+      function normalizePokemon(data) {
+        const artwork = data.sprites?.other?.["official-artwork"]?.front_default || data.sprites?.other?.dream_world?.front_default || data.sprites?.front_default || "";
+        const stats = (data.stats || []).reduce((result, item) => { result[item.stat.name] = item.base_stat; return result; }, {});
+        return {
+          id: data.id,
+          name: data.name,
+          image: artwork,
+          types: (data.types || []).map((entry) => entry.type.name),
+          stats,
+          baseTotal: Object.values(stats).reduce((sum, value) => sum + Number(value || 0), 0)
+        };
+      }
+
+      function setNetworkStatus(type, text) {
+        const node = $("#networkStatus");
+        node.className = `api-status network-status${type ? ` ${type}` : ""}`;
+        $("#networkStatusText").textContent = text;
+        const modalStatus = $("#networkModalStatus");
+        modalStatus.className = `network-status-line${type ? ` ${type}` : ""}`;
+        modalStatus.querySelector("span:last-child").textContent = text;
+      }
+
+      function encodeSignal(value) {
+        const bytes = new TextEncoder().encode(JSON.stringify(value));
+        let binary = "";
+        bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+        return btoa(binary);
+      }
+
+      function decodeSignal(value) {
+        const binary = atob(String(value || "").replace(/\s/g, ""));
+        const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes));
+      }
+
+      function waitForIceGathering(connection) {
+        if (connection.iceGatheringState === "complete") return Promise.resolve();
+        return new Promise((resolve) => {
+          let finished = false;
+          const finish = () => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timeout);
+            connection.removeEventListener("icegatheringstatechange", checkState);
+            resolve();
+          };
+          const checkState = () => { if (connection.iceGatheringState === "complete") finish(); };
+          const timeout = setTimeout(finish, 9000);
+          connection.addEventListener("icegatheringstatechange", checkState);
+        });
+      }
+
+      function closePeerConnection() {
+        clearTimeout(broadcastTimer);
+        if (dataChannel) dataChannel.close();
+        if (peerConnection) peerConnection.close();
+        dataChannel = null;
+        peerConnection = null;
+      }
+
+      function attachDataChannel(channel) {
+        dataChannel = channel;
+        dataChannel.onopen = () => {
+          setNetworkStatus("connected", connectionRole === "host" ? "Sala conectada · Jogador 1" : "Conectado · Jogador 2");
+          $("#disconnectButton").disabled = false;
+          if (connectionRole === "host") broadcastState();
+          else sendNetworkMessage("request-state");
+          render();
+        };
+        dataChannel.onclose = () => {
+          if (connectionRole !== "local") setNetworkStatus("error", "Conexão encerrada");
+          $("#disconnectButton").disabled = true;
+          render();
+        };
+        dataChannel.onerror = () => setNetworkStatus("error", "Falha no canal de jogo");
+        dataChannel.onmessage = (event) => handleNetworkMessage(event.data);
+      }
+
+      function createPeerConnection(role) {
+        if (!("RTCPeerConnection" in window)) {
+          showToast("Este navegador não oferece conexão direta WebRTC.", "error");
+          return null;
+        }
+        closePeerConnection();
+        connectionRole = role;
+        peerConnection = new RTCPeerConnection({
+          iceServers: [
+            { urls: "stun:stun.l.google.com:19302" },
+            { urls: "stun:stun.cloudflare.com:3478" }
+          ]
+        });
+        peerConnection.ondatachannel = (event) => attachDataChannel(event.channel);
+        peerConnection.onconnectionstatechange = () => {
+          const status = peerConnection.connectionState;
+          if (status === "connected") setNetworkStatus("connected", role === "host" ? "Sala conectada · Jogador 1" : "Conectado · Jogador 2");
+          else if (status === "failed") setNetworkStatus("error", "Rede bloqueou a conexão direta");
+          else if (status === "connecting" || status === "new") setNetworkStatus("connecting", "Tentando conectar…");
+          render();
+        };
+        peerConnection.oniceconnectionstatechange = () => {
+          if (["failed", "disconnected"].includes(peerConnection.iceConnectionState)) setNetworkStatus("error", "Conexão instável ou bloqueada");
+        };
+        if (role === "host") attachDataChannel(peerConnection.createDataChannel("pokebazar"));
+        setNetworkStatus("connecting", role === "host" ? "Convite pronto · aguardando amigo" : "Preparando conexão…");
+        render();
+        return peerConnection;
+      }
+
+      function handleNetworkMessage(rawMessage) {
+        try {
+          const message = JSON.parse(rawMessage);
+          if (connectionRole === "host") {
+            if (message.type === "request-state" || message.type === "hello") broadcastState();
+            if (message.type === "action") {
+              if (message.action === "draw") drawPokemon();
+              if (message.action === "bid" && message.playerIndex === 1) placeBid(1, true);
+              if (message.action === "pass" && message.playerIndex === 1) passAuction(1, true);
+            }
+          } else if (connectionRole === "guest" && message.type === "state" && message.state) {
+            applyRemoteState(message.state);
+          }
+        } catch (error) {
+          console.warn("Mensagem de conexão inválida.", error);
+        }
+      }
+
+      function applyRemoteState(remoteState) {
+        const wasComplete = state.phase === "complete";
+        state = { ...createInitialState(), ...remoteState };
+        state.players = Array.isArray(remoteState.players) ? remoteState.players : [createPlayer(0), createPlayer(1)];
+        state.usedIds = Array.isArray(remoteState.usedIds) ? remoteState.usedIds : [];
+        state.history = Array.isArray(remoteState.history) ? remoteState.history.slice(-80) : [];
+        saveState();
+        render();
+        if (state.phase === "complete" && !wasComplete) openResults();
+      }
+
+      async function createInvite() {
+        const connection = createPeerConnection("host");
+        if (!connection) return;
+        try {
+          const offer = await connection.createOffer();
+          await connection.setLocalDescription(offer);
+          await waitForIceGathering(connection);
+          $("#offerOutput").value = encodeSignal(connection.localDescription);
+          $("#copyOfferButton").disabled = false;
+          setNetworkStatus("connecting", "Convite pronto · aguardando amigo");
+          showToast("Convite criado. Envie o código para seu amigo.");
+        } catch (error) {
+          setNetworkStatus("error", "Não foi possível criar o convite");
+          showToast("Não foi possível criar o convite.", "error");
+          console.error("Falha ao criar convite:", error);
+        }
+      }
+
+      async function applyAnswer() {
+        if (!peerConnection || connectionRole !== "host") { showToast("Crie um convite antes de conectar o amigo.", "error"); return; }
+        try {
+          const answer = decodeSignal($("#answerInput").value);
+          await peerConnection.setRemoteDescription(answer);
+          setNetworkStatus("connecting", "Resposta aceita · conectando…");
+          showToast("Resposta aceita. Aguardando conexão direta.");
+        } catch (error) {
+          showToast("Resposta inválida. Cole o código completo recebido.", "error");
+        }
+      }
+
+      async function createAnswer() {
+        try {
+          const offer = decodeSignal($("#offerInput").value);
+          const connection = createPeerConnection("guest");
+          if (!connection) return;
+          await connection.setRemoteDescription(offer);
+          const answer = await connection.createAnswer();
+          await connection.setLocalDescription(answer);
+          await waitForIceGathering(connection);
+          $("#answerOutput").value = encodeSignal(connection.localDescription);
+          $("#copyAnswerButton").disabled = false;
+          setNetworkStatus("connecting", "Resposta pronta · devolva ao anfitrião");
+          showToast("Resposta criada. Envie o código ao anfitrião.");
+        } catch (error) {
+          setNetworkStatus("error", "Convite inválido");
+          showToast("Convite inválido. Cole o código completo recebido.", "error");
+        }
+      }
+
+      async function copySignal(selector) {
+        const value = $(selector).value;
+        if (!value) return;
+        try {
+          await navigator.clipboard.writeText(value);
+          showToast("Código copiado para a área de transferência.");
+        } catch (error) {
+          $(selector).focus();
+          $(selector).select();
+          document.execCommand("copy");
+          showToast("Código selecionado para copiar manualmente.");
+        }
+      }
+
+      function openNetworkModal() {
+        $("#networkBackdrop").hidden = false;
+        if (!isOnline()) setNetworkStatus("", "Escolha um papel para começar o pareamento.");
+      }
+
+      function closeNetworkModal() { $("#networkBackdrop").hidden = true; }
+
+      function disconnectNetwork() {
+        closePeerConnection();
+        connectionRole = "local";
+        $("#disconnectButton").disabled = true;
+        setNetworkStatus("", "Modo local");
+        render();
+        showToast("Conexão encerrada. A mesa voltou ao modo local.");
+      }
+
+      function placeBid(playerIndex, fromNetwork = false) {
+        if (fromNetwork && connectionRole !== "host") return;
+        if (!fromNetwork && isOnlineGuest()) {
+          if (playerIndex !== 1 || !isConnected()) { showToast("Aguarde a conexão com o anfitrião.", "error"); return; }
+          sendNetworkMessage("action", { action: "bid", playerIndex });
+          return;
+        }
+        if (!fromNetwork && !canControlPlayer(playerIndex)) return;
+        if (state.phase !== "auction" || !state.auction || state.auction.turn !== playerIndex) return;
+        const player = state.players[playerIndex];
+        const nextBid = state.auction.currentBid + 1;
+        if (player.points < nextBid) {
+          resolveAutomaticWinner();
+          return;
+        }
+        state.auction.currentBid = nextBid;
+        state.auction.leadingPlayer = playerIndex;
+        state.auction.turn = 1 - playerIndex;
+        addHistory(`${player.name} deu lance de ${nextBid} ponto${nextBid === 1 ? "" : "s"}.`, "bid");
+        saveState();
+        render();
+        if (!canPlayerBid(state.auction.turn)) {
+          window.setTimeout(resolveAutomaticWinner, 420);
+        }
+      }
+
+      function passAuction(playerIndex, fromNetwork = false) {
+        if (fromNetwork && connectionRole !== "host") return;
+        if (!fromNetwork && isOnlineGuest()) {
+          if (playerIndex !== 1 || !isConnected()) { showToast("Aguarde a conexão com o anfitrião.", "error"); return; }
+          sendNetworkMessage("action", { action: "pass", playerIndex });
+          return;
+        }
+        if (!fromNetwork && !canControlPlayer(playerIndex)) return;
+        if (state.phase !== "auction" || !state.auction || state.auction.turn !== playerIndex || state.auction.leadingPlayer === null) return;
+        const player = state.players[playerIndex];
+        const winner = 1 - playerIndex;
+        addHistory(`${player.name} desistiu do lote.`, "system");
+        settleAuction(winner);
+      }
+
+      function resolveAutomaticWinner() {
+        if (state.phase !== "auction" || !state.auction) return;
+        const { leadingPlayer, turn, currentBid } = state.auction;
+        if (leadingPlayer === null) {
+          if (canPlayerBid(turn)) return;
+          const other = 1 - turn;
+          if (canPlayerBid(other)) {
+            state.auction.turn = other;
+            addHistory(`${state.players[turn].name} não tem pontos para abrir; ${state.players[other].name} pode iniciar.`, "system");
+            saveState();
+            render();
+          } else {
+            finalizeUnsoldLot();
+          }
+          return;
+        }
+        if (state.players[turn].points < currentBid + 1) {
+          addHistory(`${state.players[turn].name} não consegue cobrir ${currentBid + 1} pontos.`, "system");
+          settleAuction(leadingPlayer);
+        }
+      }
+
+      function settleAuction(winnerIndex) {
+        if (state.phase !== "auction" || !state.auction || !state.currentPokemon) return;
+        const pokemon = state.currentPokemon;
+        const price = state.auction.currentBid;
+        const winner = state.players[winnerIndex];
+        if (price < 1 || winner.points < price) {
+          finalizeUnsoldLot();
+          return;
+        }
+        winner.points -= price;
+        winner.spent += price;
+        winner.team.push({ ...pokemon, price });
+        state.lastWinner = winnerIndex;
+        state.lastPurchase = { player: winnerIndex, pokemon: pokemon.name, price };
+        addHistory(`${winner.name} adquiriu ${formatPokemonName(pokemon.name)} por ${price} ponto${price === 1 ? "" : "s"}.`, "win");
+        state.auction = null;
+        state.currentPokemon = null;
+        state.phase = "ready";
+        saveState();
+        render();
+        showToast(`${winner.name} adquiriu ${formatPokemonName(pokemon.name)} por ${price} ponto${price === 1 ? "" : "s"}!`);
+        if (!maybeFinishWhenNoBudget()) render();
+      }
+
+      function finalizeUnsoldLot() {
+        const name = state.currentPokemon ? formatPokemonName(state.currentPokemon.name) : "o lote atual";
+        addHistory(`${name} saiu da mesa sem vencedor.`, "system");
+        state.auction = null;
+        state.currentPokemon = null;
+        state.phase = "ready";
+        saveState();
+        render();
+        showToast("O lote ficou sem vencedor.", "error");
+      }
+
+      function finishGame() {
+        if (isOnlineGuest()) return;
+        if (state.phase === "complete") { openResults(); return; }
+        if (state.phase === "auction") {
+          const proceed = window.confirm("O leilão atual será encerrado sem vencedor. Finalizar a partida mesmo assim?");
+          if (!proceed) return;
+          const name = state.currentPokemon ? formatPokemonName(state.currentPokemon.name) : "o lote atual";
+          addHistory(`Partida finalizada manualmente; ${name} não foi vendido.`, "system");
+        } else {
+          addHistory("Partida finalizada manualmente pelos jogadores.", "system");
+        }
+        state.phase = "complete";
+        state.auction = null;
+        state.currentPokemon = null;
+        saveState();
+        render();
+        openResults();
+      }
+
+      function restartGame() {
+        if (isOnlineGuest()) return;
+        if (!window.confirm("Reiniciar apaga o progresso e o histórico desta partida. Continuar?")) return;
+        state = createInitialState();
+        saveState();
+        closeResults();
+        addHistory("Nova partida criada. Jogador 1 começa.", "system");
+        render();
+        showToast("Mesa limpa. Boa sorte aos dois jogadores!");
+      }
+
+      function render() {
+        renderPlayers();
+        renderSpotlight();
+        renderHistory();
+        renderResult();
+        $("#finishButton").disabled = state.phase === "complete" || isOnlineGuest();
+        $("#finishButton").textContent = state.phase === "complete" ? "Partida finalizada" : "Finalizar partida";
+        $("#restartButton").disabled = isOnlineGuest();
+        $("#connectButton").textContent = isConnected() ? "Online" : isOnline() ? "Pareando…" : "Jogar online";
+      }
+
+      function renderPlayers() {
+        state.players.forEach((player, index) => {
+          const card = $(`#playerCard${index}`);
+          const active = state.phase === "auction" && state.auction?.turn === index;
+          card.classList.toggle("active", active);
+          card.classList.toggle("player-two", index === 1);
+          $(`#points${index}`).textContent = player.points;
+          $(`#spent${index}`).textContent = player.spent;
+          $(`#count${index}`).textContent = player.team.length;
+          $(`#teamLabel${index}`).textContent = `${player.team.length} adquirido${player.team.length === 1 ? "" : "s"}`;
+          $(`#budgetFill${index}`).style.width = `${(player.points / STARTING_POINTS) * 100}%`;
+          const list = $(`#teamList${index}`);
+          if (!player.team.length) {
+            list.innerHTML = `<div class="team-empty">Nenhum Pokémon ainda.<br>O primeiro lote pode mudar tudo.</div>`;
+          } else {
+            list.innerHTML = player.team.slice().reverse().map((pokemon) => `
+              <div class="team-item">
+                <img src="${pokemon.image}" alt="" loading="lazy">
+                <div><div class="team-item-name">${formatPokemonName(pokemon.name)}</div><div class="team-item-number">#${String(pokemon.id).padStart(3, "0")}</div></div>
+                <div class="team-item-price">${pokemon.price} pt</div>
+              </div>`).join("");
+          }
+        });
+      }
+
+      function renderSpotlight() {
+        $("#roundNumber").textContent = state.round || "—";
+        const consoleNode = $("#auctionConsole");
+        const stage = $("#lotStage");
+        const nextStarterTextNode = $("#nextStarterText");
+        if (nextStarterTextNode) nextStarterTextNode.textContent = `O próximo leilão começa com ${state.players[state.nextStarter].name}.`;
+        if (state.phase === "auction" && state.currentPokemon && state.auction) {
+          const pokemon = state.currentPokemon;
+          const turn = state.auction.turn;
+          const player = state.players[turn];
+          const nextBid = state.auction.currentBid + 1;
+          const canAct = canControlPlayer(turn) && (connectionRole !== "guest" || isConnected());
+          const actionLabel = canAct ? `Dar lance · ${nextBid} pt` : `Aguardando ${player.name}`;
+          $("#stageLabel").textContent = "lote em disputa";
+          stage.innerHTML = `
+            <div class="pokeball-orbit">
+              <img class="pokemon-art" src="${pokemon.image}" alt="${formatPokemonName(pokemon.name)}" onerror="this.style.visibility='hidden'">
+            </div>
+            <div class="pokemon-meta">
+              <div class="pokemon-number">POKÉDEX · #${String(pokemon.id).padStart(3, "0")}</div>
+              <h2 class="pokemon-name">${formatPokemonName(pokemon.name)}</h2>
+              <div class="type-list">${pokemon.types.map((type) => `<span class="type-badge type-${type}">${type}</span>`).join("")}</div>
+            </div>`;
+          consoleNode.className = `auction-console${turn === 1 ? " player-two-turn" : ""}`;
+          consoleNode.innerHTML = `
+            <div class="auction-grid">
+              <div><span class="bid-label">lance atual</span><strong class="bid-value">${state.auction.currentBid}<small> pt</small></strong></div>
+              <div class="turn-message"><span class="bid-label">jogador da vez</span><br><strong>${player.name}</strong><br><span>${canAct ? (state.auction.currentBid ? `cubra com ${nextBid} pt` : "faça o primeiro lance") : "aguarde a jogada"}</span></div>
+            </div>
+            <div class="console-actions">
+              <button class="button amber" type="button" data-action="bid" data-player="${turn}" ${canPlayerBid(turn) && canAct ? "" : "disabled"}>${actionLabel}</button>
+              <button class="button ghost" type="button" data-action="pass" data-player="${turn}" ${state.auction.leadingPlayer === null || !canAct ? "disabled" : ""}>Desistir</button>
+            </div>
+            <div class="console-hint">O valor sobe de 1 em 1 · saldo de ${player.name}: ${player.points} pt${isOnline() ? ` · ${connectionRole === "host" ? "você é o Jogador 1" : "você é o Jogador 2"}` : ""}</div>
+            <div class="next-starter"><span class="spark"></span><span>Depois deste lote, ${state.players[state.nextStarter].name} abre a próxima rodada.</span></div>`;
+        } else if (state.phase === "complete") {
+          $("#stageLabel").textContent = "mesa encerrada";
+          stage.innerHTML = `<div class="stage-placeholder"><div class="placeholder-mark">✓</div><p>A partida terminou.<br>Abra o fechamento para comparar os dois times.</p></div>`;
+          consoleNode.className = "auction-console empty";
+          consoleNode.innerHTML = `<button class="button amber wide" type="button" data-action="results">VER RESULTADO <span class="arrow">↗</span></button>`;
+        } else if (isDrawing) {
+          $("#stageLabel").textContent = "preparando o lote";
+          stage.innerHTML = `<div class="loading-card"><div class="loader-ring"></div><p>Sorteando um Pokémon inédito…</p></div>`;
+          consoleNode.className = "auction-console empty";
+          consoleNode.innerHTML = `<button class="button amber wide" type="button" disabled>CARREGANDO…</button>`;
+        } else {
+          $("#stageLabel").textContent = isApiReady ? "aguardando o próximo lote" : "catálogo indisponível";
+          stage.innerHTML = isApiReady ? `<div class="stage-placeholder"><div class="placeholder-mark">PB</div><p>O palco está livre.<br>Sorteie um Pokémon para abrir a próxima disputa.</p></div>` : `<div class="stage-placeholder"><div class="placeholder-mark">!</div><p class="error-message">A PokéAPI não respondeu. Verifique sua conexão e tente carregar o catálogo novamente.</p></div>`;
+          consoleNode.className = "auction-console empty";
+          const unavailableLabel = isOnlineGuest() && !isConnected() ? "AGUARDANDO CONEXÃO" : isApiReady ? "SORTEAR POKÉMON" : "TENTAR NOVAMENTE";
+          consoleNode.innerHTML = `<button class="button amber wide" id="drawButton" type="button" ${isApiReady && !canStartAuction() ? "disabled" : ""}>${unavailableLabel} <span class="arrow">↗</span></button><div class="next-starter"><span class="spark"></span><span id="nextStarterText">O próximo leilão começa com ${state.players[state.nextStarter].name}.</span></div>`;
+        }
+      }
+
+      function renderHistory() {
+        const list = $("#historyList");
+        if (!state.history.length) {
+          list.innerHTML = `<div class="history-empty">O diário começa quando o primeiro lote for sorteado.</div>`;
+          return;
+        }
+        const icon = { bid: "↗", win: "★", system: "•" };
+        list.innerHTML = state.history.slice().reverse().slice(0, 9).map((entry) => `
+          <div class="history-item ${entry.type}"><span class="history-icon">${icon[entry.type] || "•"}</span><span>${entry.text}</span><time class="history-time">${entry.time || "—"}</time></div>`).join("");
+      }
+
+      function renderResult() {
+        const totalRounds = state.history.filter((entry) => entry.type === "win").length;
+        const totalPokemon = state.players.reduce((sum, player) => sum + player.team.length, 0);
+        $("#resultSummary").innerHTML = `
+          <div class="result-metric"><span>lotes vendidos</span><strong>${totalRounds}</strong></div>
+          <div class="result-metric"><span>Pokémon na mesa</span><strong>${totalPokemon}</strong></div>
+          <div class="result-metric"><span>Jogador 1 · gasto</span><strong>${state.players[0].spent} pt</strong></div>
+          <div class="result-metric"><span>Jogador 2 · gasto</span><strong>${state.players[1].spent} pt</strong></div>`;
+        $("#resultTeams").innerHTML = state.players.map((player, index) => `
+          <section class="result-team ${index === 1 ? "team-two" : "team-one"}">
+            <h3>${player.name}</h3>
+            <div class="result-team-meta"><span>${player.points} pt restantes</span><span>${player.team.length} Pokémon</span></div>
+            <div class="result-team-list">${player.team.length ? player.team.map((pokemon) => `<div class="result-team-item"><img src="${pokemon.image}" alt="" loading="lazy"><div><strong>${formatPokemonName(pokemon.name)}</strong><span>${pokemon.price} pt · #${String(pokemon.id).padStart(3, "0")}</span></div></div>`).join("") : `<div class="result-empty">Nenhum Pokémon adquirido.</div>`}</div>
+          </section>`).join("");
+      }
+
+      function openResults() {
+        renderResult();
+        $("#resultBackdrop").hidden = false;
+      }
+
+      function closeResults() { $("#resultBackdrop").hidden = true; }
+
+      function handleAction(event) {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === "bid") placeBid(Number(button.dataset.player));
+        if (action === "pass") passAuction(Number(button.dataset.player));
+        if (action === "results") openResults();
+      }
+
+      $("#gameView").addEventListener("click", handleAction);
+      $("#auctionConsole").addEventListener("click", (event) => {
+        if (!event.target.closest("#drawButton")) return;
+        if (isOnlineGuest() || isApiReady) drawPokemon();
+        else loadCatalogue();
+      });
+      $("#finishButton").addEventListener("click", finishGame);
+      $("#restartButton").addEventListener("click", restartGame);
+      $("#resultRestartButton").addEventListener("click", restartGame);
+      $("#closeResultButton").addEventListener("click", closeResults);
+      $("#closeResultButton2").addEventListener("click", closeResults);
+      $("#resultBackdrop").addEventListener("click", (event) => { if (event.target.id === "resultBackdrop") closeResults(); });
+      $("#connectButton").addEventListener("click", openNetworkModal);
+      $("#closeNetworkButton").addEventListener("click", closeNetworkModal);
+      $("#doneNetworkButton").addEventListener("click", closeNetworkModal);
+      $("#disconnectButton").addEventListener("click", disconnectNetwork);
+      $("#createInviteButton").addEventListener("click", createInvite);
+      $("#applyAnswerButton").addEventListener("click", applyAnswer);
+      $("#createAnswerButton").addEventListener("click", createAnswer);
+      $("#copyOfferButton").addEventListener("click", () => copySignal("#offerOutput"));
+      $("#copyAnswerButton").addEventListener("click", () => copySignal("#answerOutput"));
+      $("#networkBackdrop").addEventListener("click", (event) => { if (event.target.id === "networkBackdrop") closeNetworkModal(); });
+      document.querySelectorAll("[data-network-mode]").forEach((button) => button.addEventListener("click", () => {
+        const mode = button.dataset.networkMode;
+        document.querySelectorAll("[data-network-mode]").forEach((item) => item.classList.toggle("active", item === button));
+        $("#hostPanel").classList.toggle("is-hidden", mode !== "host");
+        $("#guestPanel").classList.toggle("is-hidden", mode !== "guest");
+      }));
+      document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("#resultBackdrop").hidden) closeResults(); });
+      document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("#networkBackdrop").hidden) closeNetworkModal(); });
+
+      loadState();
+      render();
+      loadCatalogue();
+    })();
+  </script>
+</body>
+</html>
