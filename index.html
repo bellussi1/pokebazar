@@ -327,6 +327,14 @@
       .support-actions .button { min-width: 170px; min-height: 44px; white-space: nowrap; box-shadow: 0 8px 18px rgba(0,0,0,.14); }
       .support-actions .button:hover:not(:disabled) { box-shadow: 0 11px 24px rgba(0,0,0,.25); }
       .pix-button { border: 1px solid rgba(125, 211, 252, .35); color: #bceaff; background: rgba(127,198,239,.1); }
+      .support-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        vertical-align: -3px;
+        fill: currentColor;
+      }
+      .support-topbar .support-icon { width: 14px; height: 14px; }
       @media (max-width: 640px) {
         .support-card { padding-inline: 12px; }
         .support-actions { width: 100%; }
@@ -3195,8 +3203,8 @@
               <span>Uma doação ajuda a manter o PokéBazar e trazer novas gerações, modos e melhorias.</span>
             </div>
             <div class="support-actions">
-              <a class="button amber" href="https://www.buymeacoffee.com/bellussi" target="_blank" rel="noopener noreferrer">☕ Buy Me a Coffee</a>
-              <button class="button pix-button" id="pixSupportButton" type="button" data-pix-key="6d639344-ce33-48ff-b2ba-649096353372">▣ Copiar Pix</button>
+              <a class="button amber" href="https://www.buymeacoffee.com/bellussi" target="_blank" rel="noopener noreferrer"><svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h13v6.5A5.5 5.5 0 0 1 11.5 19H9.5A5.5 5.5 0 0 1 4 13.5V7Zm13 2v3.5a3.5 3.5 0 0 0 0-7V9Zm-9-7h2v3H8V2Zm4 0h2v3h-2V2ZM2 21h17v2H2v-2Z"/></svg>Buy Me a Coffee</a>
+              <button class="button pix-button" id="pixSupportButton" type="button" data-pix-key="6d639344-ce33-48ff-b2ba-649096353372"><svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7.2 3 4.8 4.8L16.8 3h1.4a2.8 2.8 0 0 1 2 4.8l-4.8 4.8 4.8 4.8a2.8 2.8 0 0 1-2 4.8h-1.4L12 17.4 7.2 22H5.8a2.8 2.8 0 0 1-2-4.8l4.8-4.8-4.8-4.8A2.8 2.8 0 0 1 5.8 3h1.4Zm0 2H5.8a.8.8 0 0 0-.6 1.4l6.8 6.8-6.8 6.8a.8.8 0 0 0 .6 1.4h1.4l4.8-4.8 4.8 4.8h1.4a.8.8 0 0 0 .6-1.4L12 13.2 18.8 6.4a.8.8 0 0 0-.6-1.4h-1.4L12 9.8 7.2 5Z"/></svg>Copiar Pix</button>
             </div>
           </aside>
         </div>
@@ -3306,8 +3314,8 @@
         </div>
         <aside class="support-topbar" aria-label="Apoie o PokéBazar">
           <span class="support-topbar-label">Apoie o projeto</span>
-          <a class="button amber" href="https://www.buymeacoffee.com/bellussi" target="_blank" rel="noopener noreferrer">☕ Apoiar</a>
-          <button class="button pix-button" type="button" data-pix-key="6d639344-ce33-48ff-b2ba-649096353372">▣ Pix</button>
+          <a class="button amber" href="https://www.buymeacoffee.com/bellussi" target="_blank" rel="noopener noreferrer"><svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h13v6.5A5.5 5.5 0 0 1 11.5 19H9.5A5.5 5.5 0 0 1 4 13.5V7Zm13 2v3.5a3.5 3.5 0 0 0 0-7V9Zm-9-7h2v3H8V2Zm4 0h2v3h-2V2ZM2 21h17v2H2v-2Z"/></svg>Apoiar</a>
+          <button class="button pix-button" type="button" data-pix-key="6d639344-ce33-48ff-b2ba-649096353372"><svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7.2 3 4.8 4.8L16.8 3h1.4a2.8 2.8 0 0 1 2 4.8l-4.8 4.8 4.8 4.8a2.8 2.8 0 0 1-2 4.8h-1.4L12 17.4 7.2 22H5.8a2.8 2.8 0 0 1-2-4.8l4.8-4.8-4.8-4.8A2.8 2.8 0 0 1 5.8 3h1.4Zm0 2H5.8a.8.8 0 0 0-.6 1.4l6.8 6.8-6.8 6.8a.8.8 0 0 0 .6 1.4h1.4l4.8-4.8 4.8 4.8h1.4a.8.8 0 0 0 .6-1.4L12 13.2 18.8 6.4a.8.8 0 0 0-.6-1.4h-1.4L12 9.8 7.2 5Z"/></svg>Pix</button>
         </aside>
         <div class="top-actions">
           <div class="api-status loading" id="apiStatus" aria-live="polite">
